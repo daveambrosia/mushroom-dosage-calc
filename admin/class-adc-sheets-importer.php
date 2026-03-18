@@ -330,18 +330,6 @@ class ADC_Sheets_Importer {
             }
         }
 
-        // For edibles: convert total package values to per-piece values
-        if ($type === 'edible') {
-            $pieces = max(1, intval($data['pieces_per_package'] ?? 1));
-            if ($pieces > 1) {
-                foreach ($numeric_fields as $field) {
-                    if (isset($data[$field]) && $data[$field] > 0 && !in_array($field, array('pieces_per_package', 'total_mg'))) {
-                        $data[$field] = (int) round($data[$field] / $pieces);
-                    }
-                }
-            }
-        }
-
         // Handle is_active
         if (isset($data['is_active'])) {
             $val = strtolower(trim($data['is_active']));
