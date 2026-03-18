@@ -650,7 +650,7 @@
             name,
             brand: modal.querySelector('#adc-modal-edible-brand').value.trim(),
             psilocybin: Math.round(totalPsilocybin / pieces),
-            psilocin: parseInt(modal.querySelector('#adc-modal-edible-psilocin').value) || 0,
+            psilocin: Math.round((parseInt(modal.querySelector('#adc-modal-edible-psilocin').value) || 0) / pieces),
             norpsilocin: Math.round((parseInt(modal.querySelector('#adc-modal-edible-norpsilocin').value) || 0) / pieces),
             baeocystin: Math.round((parseInt(modal.querySelector('#adc-modal-edible-baeocystin').value) || 0) / pieces),
             norbaeocystin: Math.round((parseInt(modal.querySelector('#adc-modal-edible-norbaeocystin').value) || 0) / pieces),
