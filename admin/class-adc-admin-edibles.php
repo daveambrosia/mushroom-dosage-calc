@@ -109,10 +109,10 @@ class ADC_Admin_Edibles {
             
             $data = array(
                 'name' => sanitize_text_field(wp_unslash($_POST['name'])),
-                'short_code' => sanitize_text_field($_POST['short_code']),
+                'short_code' => sanitize_text_field(wp_unslash($_POST['short_code'])),
                 'brand' => sanitize_text_field(wp_unslash($_POST['brand'])),
-                'product_type' => sanitize_key($_POST['product_type']),
-                'batch_number' => sanitize_text_field($_POST['batch_number']),
+                'product_type' => sanitize_key(wp_unslash($_POST['product_type'])),
+                'batch_number' => sanitize_text_field(wp_unslash($_POST['batch_number'])),
                 'pieces_per_package' => max(1, absint($_POST['pieces_per_package'])),
                 'psilocybin' => absint($_POST['psilocybin'] ?? 0),
                 'psilocin' => absint($_POST['psilocin'] ?? 0),

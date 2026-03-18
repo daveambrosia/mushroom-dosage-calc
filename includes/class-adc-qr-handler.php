@@ -154,7 +154,7 @@ class ADC_QR_Handler {
             return null;
         }
         
-        $parsed = self::parse_legacy_url($_GET);
+        $parsed = self::parse_legacy_url(wp_unslash($_GET));
         
         // Auto-submit to review queue if enabled
         if (ADC_DB::get_setting('auto_submit_unknown_qr', true)) {

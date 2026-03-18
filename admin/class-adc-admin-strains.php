@@ -107,9 +107,9 @@ class ADC_Admin_Strains {
             
             $data = array(
                 'name' => sanitize_text_field(wp_unslash($_POST['name'])),
-                'short_code' => sanitize_text_field($_POST['short_code']),
-                'batch_number' => sanitize_text_field($_POST['batch_number']),
-                'category' => sanitize_key($_POST['category']),
+                'short_code' => sanitize_text_field(wp_unslash($_POST['short_code'])),
+                'batch_number' => sanitize_text_field(wp_unslash($_POST['batch_number'])),
+                'category' => sanitize_key(wp_unslash($_POST['category'])),
                 'psilocybin' => absint($_POST['psilocybin']),
                 'psilocin' => absint($_POST['psilocin']),
                 'norpsilocin' => absint($_POST['norpsilocin']),
