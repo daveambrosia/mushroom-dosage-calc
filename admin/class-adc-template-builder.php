@@ -1163,8 +1163,11 @@ class ADC_Template_Builder {
 
                     echo '<div class="adc-color-card">';
                     echo '<label for="' . esc_attr($post_key) . '" class="adc-color-label">' . esc_html($label) . '</label>';
-                    echo '<input type="text" id="' . esc_attr($post_key) . '" name="' . esc_attr($post_key) . '" value="' . esc_attr($current_val) . '" class="adc-color-picker-input" data-key="' . esc_attr($key) . '" data-default-color="">';
-                    echo '<label for="' . esc_attr($post_key) . '" class="screen-reader-text">' . esc_html($label) . '</label>';
+                    echo '<div class="adc-pickr-row">';
+                    echo '<div class="adc-pickr-trigger" data-for="' . esc_attr($post_key) . '"></div>';
+                    echo '<input type="text" id="' . esc_attr($post_key) . '" name="' . esc_attr($post_key) . '" value="' . esc_attr($current_val) . '" class="adc-color-picker-input" data-key="' . esc_attr($key) . '" placeholder="#000000">';
+                    echo '</div>';
+                    echo '<div class="adc-harmony-toolbar" data-for="' . esc_attr($post_key) . '"></div>';
                     if ($desc) {
                         echo '<p class="description">' . esc_html($desc) . '</p>';
                     }
