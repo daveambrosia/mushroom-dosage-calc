@@ -58,6 +58,7 @@
         updateAll();
         initCollapsible();
         initLevelCollapse();
+        initResizeListener();
         if (DEBUG) console.log('ADC Calculator v' + (typeof adcData !== 'undefined' ? adcData.version : '2.1') + ' initialized');
     }
 

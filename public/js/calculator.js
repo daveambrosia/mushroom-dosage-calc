@@ -760,16 +760,19 @@
         });
     }
 
-    // Re-check bullets on window resize
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            ['adc-mushroom-results', 'adc-edible-results'].forEach(id => {
-                updateCollapsedBullets(document.getElementById(id));
-            });
-        }, 100);
-    });
+    // Re-check bullets on window resize (called from init)
+    function initResizeListener() {
+        if (!document.getElementById('adc-calculator')) return;
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                ['adc-mushroom-results', 'adc-edible-results'].forEach(id => {
+                    updateCollapsedBullets(document.getElementById(id));
+                });
+            }, 100);
+        });
+    }
 
     /**
      * Render tolerance/sensitivity adjustment summary into a target element.
@@ -2300,6 +2303,7 @@
         updateAll();
         initCollapsible();
         initLevelCollapse();
+        initResizeListener();
         if (DEBUG) console.log('ADC Calculator v' + (typeof adcData !== 'undefined' ? adcData.version : '2.1') + ' initialized');
     }
 
