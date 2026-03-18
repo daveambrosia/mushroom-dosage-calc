@@ -339,11 +339,13 @@ class ADC_Strains {
         }
         
         // Check unique short code
-        $existing = $wpdb->get_var($wpdb->prepare(
-            "SELECT id FROM $table WHERE short_code = %s" . ($exclude_id ? " AND id != %d" : ""),
-            $data['short_code'],
-            $exclude_id
-        ));
+        $sql = "SELECT id FROM $table WHERE short_code = %s";
+        $args = array($data['short_code']);
+        if ($exclude_id) {
+            $sql .= " AND id != %d";
+            $args[] = $exclude_id;
+        }
+        $existing = $wpdb->get_var($wpdb->prepare($sql, ...$args));
         
         if ($existing) {
             return new WP_Error('validation_error', 'Short code already exists');
