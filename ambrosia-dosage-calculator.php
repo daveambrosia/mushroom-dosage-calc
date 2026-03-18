@@ -137,7 +137,19 @@ class Ambrosia_Dosage_Calculator {
     public function check_db_update() {
         $current_db_version = get_option('adc_db_version', '1.0.0');
         if (version_compare($current_db_version, ADC_DB_VERSION, '<')) {
+            $last_attempt = get_transient('adc_db_update_attempt');
+            if ($last_attempt) {
+                return;
+            }
+            set_transient('adc_db_update_attempt', time(), HOUR_IN_SECONDS);
             ADC_Activator::activate();
+
+            $updated_version = get_option('adc_db_version', '1.0.0');
+            if (version_compare($updated_version, ADC_DB_VERSION, '<')) {
+                add_action('admin_notices', function() {
+                    echo '<div class="notice notice-error"><p><strong>Ambrosia Dosage Calculator:</strong> Database update failed. Please deactivate and reactivate the plugin.</p></div>';
+                });
+            }
         }
     }
     
