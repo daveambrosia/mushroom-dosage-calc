@@ -133,6 +133,9 @@
     window.adcAlert = function(message, options) {
         options = options || {};
         return new Promise(function(resolve) {
+            if (resolveCallback) {
+                resolveCallback(false);
+            }
             resolveCallback = resolve;
             showDialog({
                 type: 'alert',
@@ -149,6 +152,9 @@
     window.adcConfirm = function(message, options) {
         options = options || {};
         return new Promise(function(resolve) {
+            if (resolveCallback) {
+                resolveCallback(false);
+            }
             resolveCallback = resolve;
             showDialog({
                 type: 'confirm',
@@ -166,6 +172,9 @@
     window.adcPrompt = function(message, options) {
         options = options || {};
         return new Promise(function(resolve) {
+            if (resolveCallback) {
+                resolveCallback(false);
+            }
             resolveCallback = resolve;
             showDialog({
                 type: 'prompt',
@@ -196,7 +205,7 @@
     };
     
     // Sync versions for onclick handlers (shows dialog, returns true to allow navigation if confirmed)
-    window.adcConfirmSync = function(message, options) {
+    window.adcConfirmSync = function(event, message, options) {
         // For simple onclick="return adcConfirmSync('message')" usage
         // This is a workaround - shows confirm and prevents default, then navigates if confirmed
         event.preventDefault();

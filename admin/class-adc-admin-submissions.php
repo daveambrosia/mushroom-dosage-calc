@@ -155,7 +155,7 @@ class ADC_Admin_Submissions {
                                                     <?php wp_nonce_field('adc_blacklist', 'adc_blacklist_nonce'); ?>
                                                     <input type="hidden" name="blacklist_action" value="remove">
                                                     <input type="hidden" name="bl_id" value="<?php echo $entry['id']; ?>">
-                                                    <button type="submit" class="button button-small adc-btn-delete" onclick="return adcConfirmSync('Remove this entry from the blacklist?', { title: 'Remove from Blacklist', confirmText: 'Remove', danger: true });">Remove</button>
+                                                    <button type="submit" class="button button-small adc-btn-delete" onclick="return adcConfirmSync(event,'Remove this entry from the blacklist?', { title: 'Remove from Blacklist', confirmText: 'Remove', danger: true });">Remove</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -285,8 +285,8 @@ class ADC_Admin_Submissions {
                                                 <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=approve&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-approve">Approve</a>
                                                 <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=reject&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-reject">Reject</a>
                                             <?php endif; ?>
-                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=block&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-warning" onclick="return adcConfirmSync('Block this submitter (IP + email) and reject their submission?', { title: 'Block Submitter', confirmText: 'Block', danger: true });" title="Block IP &amp; Email">Block</a>
-                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=delete&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-delete" onclick="return adcConfirmSync('Delete this submission? This cannot be undone.', { title: 'Delete Submission', confirmText: 'Delete', danger: true });">Delete</a>
+                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=block&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-warning" onclick="return adcConfirmSync(event,'Block this submitter (IP + email) and reject their submission?', { title: 'Block Submitter', confirmText: 'Block', danger: true });" title="Block IP &amp; Email">Block</a>
+                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=delete&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button button-small adc-btn-delete" onclick="return adcConfirmSync(event,'Delete this submission? This cannot be undone.', { title: 'Delete Submission', confirmText: 'Delete', danger: true });">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -362,9 +362,9 @@ class ADC_Admin_Submissions {
                                         <?php if ($sub['status'] === 'pending'): ?>
                                             <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=approve&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-approve">Approve</a>
                                             <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=reject&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-reject">Reject</a>
-                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=block&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-warning" onclick="return adcConfirmSync('Block this submitter (IP + email)?', { title: 'Block Submitter', confirmText: 'Block', danger: true });">Block</a>
+                                            <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=block&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-warning" onclick="return adcConfirmSync(event,'Block this submitter (IP + email)?', { title: 'Block Submitter', confirmText: 'Block', danger: true });">Block</a>
                                         <?php endif; ?>
-                                        <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=delete&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-delete" onclick="return adcConfirmSync('Delete this submission? This cannot be undone.', { title: 'Delete Submission', confirmText: 'Delete', danger: true });">Delete</a>
+                                        <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=dosage-calculator-submissions&action=delete&id=' . $sub['id'] . '&status=' . $status), 'adc_submission_action'); ?>" class="button adc-btn-delete" onclick="return adcConfirmSync(event,'Delete this submission? This cannot be undone.', { title: 'Delete Submission', confirmText: 'Delete', danger: true });">Delete</a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

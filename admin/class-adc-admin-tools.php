@@ -439,7 +439,7 @@ class ADC_Admin_Tools {
                                                     <?php wp_nonce_field('adc_save_product_type', 'adc_product_type_nonce'); ?>
                                                     <input type="hidden" name="pt_action" value="delete">
                                                     <input type="hidden" name="pt_id" value="<?php echo intval($pt['id']); ?>">
-                                                    <button type="submit" class="button button-small adc-btn-delete" onclick="return adcConfirmSync('Delete this product type?', { title: 'Delete Product Type', confirmText: 'Delete', danger: true });">Delete</button>
+                                                    <button type="submit" class="button button-small adc-btn-delete" onclick="return adcConfirmSync(event, 'Delete this product type?', { title: 'Delete Product Type', confirmText: 'Delete', danger: true });">Delete</button>
                                                 </form>
                                             </div>
                                         </td>
