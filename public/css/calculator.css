@@ -2249,49 +2249,6 @@
        matching the section collapse button pattern */
 
     /* ============================================================================
-       21. MOBILE UX PASS (v2.12.22)
-       Touch targets, typography, layout, overflow fixes for 375px+ screens
-       ============================================================================ */
-
-    /* --- Global mobile: ensure minimum touch targets (44px iOS HIG) --- */
-
-    /* Collapse buttons: too small at 26px/22px — bump to 40px on touch devices */
-
-    /* --- Stack two-column input grid on narrow phones --- */
-
-    /* --- Level name row: prevent overflow on 375px screens --- */
-
-    /* --- Tabs: ensure full-width, adequate tap targets --- */
-
-    /* --- Sensitivity slider: larger touch area on mobile --- */
-
-    /* --- Weight input + LBS/KG toggle: ensure 44px+ tap targets --- */
-
-    /* --- Quick converter: stack inputs vertically & full-width on mobile --- */
-
-    /* --- Card action buttons (Share, Details): adequate tap targets on mobile --- */
-
-    /* --- Data controls: wrap on very narrow screens --- */
-
-    /* --- Strain/edible control buttons: larger tap targets --- */
-
-    /* --- Result cards: reduce shadow offset and padding on small screens --- */
-
-    /* --- Footer links: stack vertically on small screens --- */
-
-    /* --- Modal: full-width on small screens --- */
-
-    /* --- Custom inputs grid: single column on phones --- */
-
-    /* --- Select dropdowns: adequate height on mobile --- */
-
-    /* --- Prevent any remaining horizontal overflow --- */
-
-    /* --- Sensitivity labels: ensure readable on phones --- */
-
-    /* --- Reset button: adequate tap target --- */
-
-    /* ============================================================================
        MEDIA QUERIES (consolidated from 25 blocks into 6)
        Breakpoints: 768px (tablet), 600px (small tablet), 480px (phone), 400px (small phone)
        ============================================================================ */
@@ -2354,8 +2311,10 @@
         }
 
         #adc-calculator .adc-collapse-btn {
-            width: 40px;
-            height: 40px;
+            min-width: 44px;
+            min-height: 44px;
+            width: 44px;
+            height: 44px;
             font-size: 16px;
             right: 12px;
             top: 10px;
@@ -2367,15 +2326,17 @@
         }
 
         #adc-calculator .adc-level-collapse-btn {
-            width: 36px;
-            height: 36px;
+            min-width: 44px;
+            min-height: 44px;
+            width: 44px;
+            height: 44px;
             font-size: 14px;
             /* Keep top-right positioning on mobile too */
         }
 
         #adc-calculator .adc-result-card {
-            /* Keep right padding for button on mobile (36px button + 12px offset + 16px gap) */
-            padding-right: 64px;
+            /* Keep right padding for button on mobile (44px button + 12px offset + 16px gap) */
+            padding-right: 72px;
         }
 
         #adc-calculator .adc-result-card .adc-tryptamine-breakdown,
