@@ -30,16 +30,18 @@
     }
 
     function loadPreferences() {
-        // Check storage version; clear stale data on version mismatch
-        const storedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
-        if (storedVersion !== STORAGE_VERSION) {
-            Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-            localStorage.setItem(STORAGE_VERSION_KEY, STORAGE_VERSION);
-        }
-        
-        // Check if DONTKEEP is set - if so, user doesn't want storage
+        // Check consent FIRST — before any localStorage writes
         const dontkeep = localStorage.getItem(STORAGE_KEYS.dontkeep);
         state.storageConsent = dontkeep !== 'true';
+
+        // Only do version migration if consent is given
+        if (state.storageConsent) {
+            const storedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+            if (storedVersion !== STORAGE_VERSION) {
+                Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
+                localStorage.setItem(STORAGE_VERSION_KEY, STORAGE_VERSION);
+            }
+        }
         const prefs = loadFromStorage(STORAGE_KEYS.preferences, {});
         state.weightLbs = prefs.weightLbs || 150;
         state.displayUnit = prefs.displayUnit || 'lbs';
@@ -86,6 +88,13 @@
     // ============================================================================
 
     function loadLevelCollapseState() {
+        if (!state.storageConsent) {
+            // Default: all levels collapsed
+            ['mushroom', 'edible'].forEach(type => {
+                LEVEL_IDS.forEach(id => collapsedLevels[type].add(id));
+            });
+            return;
+        }
         try {
             const raw = localStorage.getItem(LEVEL_COLLAPSE_KEY);
             if (!raw) {
