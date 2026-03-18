@@ -858,7 +858,7 @@
     }
 
     #adc-calculator .adc-results-summary {
-        background: #dc2626;
+        background: var(--adc-color-profound, #dc2626);
         border-radius: var(--adc-radius) var(--adc-radius) 0 0;
         color: #fff;
         font-family: var(--adc-font-body);
@@ -878,7 +878,7 @@
     }
 
     #adc-calculator .adc-results-grid.adc-tolerance-active {
-        background: #dc2626;
+        background: var(--adc-color-profound, #dc2626);
         border-radius: 0 0 var(--adc-radius) var(--adc-radius);
     }
 
