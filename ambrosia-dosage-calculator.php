@@ -473,15 +473,13 @@ window.addEventListener('resize', function() {
         );
         
         // QR Code library for generator
-        if (strpos($hook, 'dosage-calculator') !== false) {
-            wp_enqueue_script(
-                'qrcode-js',
-                ADC_PLUGIN_URL . 'admin/js/vendor/qrcode.min.js',
-                array(),
-                '1.5.1',
-                true
-            );
-        }
+        wp_enqueue_script(
+            'qrcode-js',
+            ADC_PLUGIN_URL . 'admin/js/vendor/qrcode.min.js',
+            array(),
+            '1.5.1',
+            true
+        );
         
         wp_localize_script('adc-admin', 'adcAdmin', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
