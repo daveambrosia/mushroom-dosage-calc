@@ -255,7 +255,7 @@ class ADC_Admin_Submissions {
                                                 <?php endif; ?>
                                             <?php elseif ($sub['type'] === 'edible' && isset($data['psilocybin'])): ?>
                                                 <br><small><?php echo number_format($data['psilocybin']); ?> mcg/pkg</small>
-                                                <br><small><?php echo $data['piecesPerPackage'] ?? $data['pieces_per_package'] ?? 1; ?> pieces/pkg</small>
+                                                <br><small><?php echo intval($data['piecesPerPackage'] ?? $data['pieces_per_package'] ?? 1); ?> pieces/pkg</small>
                                             <?php endif; ?>
                                         </td>
                                         <td data-label="Submitter">
@@ -329,7 +329,7 @@ class ADC_Admin_Submissions {
                                             </div>
                                             <div class="adc-detail-row">
                                                 <span class="adc-detail-label">Pieces:</span>
-                                                <span class="adc-detail-value"><?php echo $data['piecesPerPackage'] ?? $data['pieces_per_package'] ?? 1; ?> per pkg</span>
+                                                <span class="adc-detail-value"><?php echo intval($data['piecesPerPackage'] ?? $data['pieces_per_package'] ?? 1); ?> per pkg</span>
                                             </div>
                                         <?php endif; ?>
                                         
