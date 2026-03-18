@@ -219,7 +219,7 @@ class Ambrosia_Dosage_Calculator {
         }
         // Security: only allow logged-in users with manage_options
         if (!is_user_logged_in() || !current_user_can('manage_options')) {
-            wp_die('Unauthorized', 403);
+            wp_die('Unauthorized', 'Unauthorized', array('response' => 403));
         }
         $this->render_preview_page();
         exit;
