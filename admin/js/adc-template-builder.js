@@ -1,7 +1,7 @@
 /**
  * ADC Template Builder - Edit View JS
  *
- * Handles: wp-color-picker init, accordion toggle, live preview,
+ * Handles: Pickr color-picker init, accordion toggle, live preview,
  * "Start from..." template loading, dirty-state tracking,
  * template picker modal, structured controls, WCAG contrast checker.
  *
@@ -19,6 +19,110 @@
             clearTimeout(timer);
             timer = setTimeout(function() { fn.apply(ctx, args); }, ms);
         };
+    }
+
+    // ---- Pickr instance management ----
+    var pickrInstances = {};
+
+    // Default swatches: core colors from the Minimal built-in theme
+    var defaultSwatches = [
+        '#ffffff', '#1a1a2e', '#e94560',
+        '#f5f5f5', '#eaeaea', '#cccccc'
+    ];
+
+    // Stub — replaced by full implementation in Task 5
+    function adcAddRecentColor() {}
+
+    function initPickrInstance(triggerEl, inputEl) {
+        var key = inputEl.dataset.key;
+        var currentVal = inputEl.value || null;
+        var savedVal = currentVal; // Track value before picker opens
+        var didSave = false;
+
+        var pickr = Pickr.create({
+            el: triggerEl,
+            theme: 'nano',
+            default: currentVal,
+            lockOpacity: true,
+            defaultRepresentation: 'HEX',
+            comparison: true,
+            closeWithKey: 'Escape',
+            swatches: defaultSwatches,
+            components: {
+                palette: true,
+                preview: true,
+                opacity: false,
+                hue: true,
+                interaction: {
+                    hex: true,
+                    rgba: false,
+                    hsla: true,
+                    hsva: false,
+                    cmyk: false,
+                    input: true,
+                    clear: true,
+                    save: true,
+                    cancel: false
+                }
+            }
+        });
+
+        pickr.on('show', function() {
+            savedVal = inputEl.value;
+            didSave = false;
+        });
+
+        pickr.on('save', function(color, instance) {
+            didSave = true;
+            if (color) {
+                var hex = color.toHEXA().toString();
+                if (hex.length === 9 && hex.endsWith('FF')) {
+                    hex = hex.slice(0, 7);
+                }
+                inputEl.value = hex;
+                savedVal = hex;
+                adcAddRecentColor(hex);
+            } else {
+                inputEl.value = '';
+                savedVal = '';
+            }
+            instance.hide();
+            debouncedPreview();
+            adcUpdateContrastCheck();
+            formDirty = true;
+        });
+
+        pickr.on('change', function(color) {
+            // Live preview while picking (before save).
+            // Temporarily set input value for preview; restored on hide if no save.
+            var hex = color.toHEXA().toString();
+            if (hex.length === 9 && hex.endsWith('FF')) {
+                hex = hex.slice(0, 7);
+            }
+            inputEl.value = hex;
+            debouncedPreview();
+        });
+
+        pickr.on('hide', function() {
+            // Restore original value if picker closed without saving
+            if (!didSave) {
+                inputEl.value = savedVal;
+                debouncedPreview();
+            }
+        });
+
+        // Sync: if user types hex directly in input
+        inputEl.addEventListener('change', function() {
+            var val = inputEl.value.trim();
+            if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
+                pickr.setColor(val, true);
+            } else if (val === '') {
+                pickr.setColor(null, true);
+            }
+        });
+
+        pickrInstances[key] = pickr;
+        return pickr;
     }
 
     // ---- Dirty-state tracking ----
@@ -49,7 +153,10 @@
         // Clear all fields
         $('.adc-color-picker-input').each(function() {
             $(this).val('');
-            try { $(this).wpColorPicker('color', ''); } catch(e) {}
+            var key = $(this).data('key');
+            if (pickrInstances[key]) {
+                pickrInstances[key].setColor(null, true);
+            }
         });
         $('.adc-tb-text-input').each(function() { $(this).val(''); });
 
@@ -60,7 +167,10 @@
             if ($input.length) {
                 $input.val(vars[key]);
                 if (/^#[0-9a-fA-F]{3,8}$/.test(vars[key])) {
-                    try { $input.wpColorPicker('color', vars[key]); } catch(e) {}
+                    var dataKey = $input.data('key');
+                    if (pickrInstances[dataKey]) {
+                        pickrInstances[dataKey].setColor(vars[key], true);
+                    }
                 }
             }
 
@@ -316,35 +426,16 @@
             });
         }
 
-        // ---- Initialize wp-color-picker ----
-        if ($.fn.wpColorPicker) {
-            $('.adc-color-picker-input').wpColorPicker({
-                change: function(event, ui) {
-                    setTimeout(function() {
-                        debouncedPreview();
-                        adcUpdateContrastCheck();
-                        formDirty = true;
-                    }, 10);
-                },
-                clear: function() {
-                    debouncedPreview();
-                    adcUpdateContrastCheck();
-                    formDirty = true;
+        // ---- Initialize Pickr color pickers ----
+        if (typeof Pickr !== 'undefined') {
+            document.querySelectorAll('.adc-pickr-trigger').forEach(function(triggerEl) {
+                var inputId = triggerEl.dataset.for;
+                var inputEl = document.getElementById(inputId);
+                if (inputEl) {
+                    initPickrInstance(triggerEl, inputEl);
                 }
             });
         }
-
-        // ---- Clear buttons ----
-        $(document).on('click', '.adc-tb-clear', function() {
-            var target = $(this).data('target');
-            var $input = $('#' + target);
-            $input.val('');
-            try { $input.wpColorPicker('color', ''); } catch(e) {}
-            $input.closest('.wp-picker-container').find('.wp-color-result').css('background-color', '');
-            debouncedPreview();
-            adcUpdateContrastCheck();
-            formDirty = true;
-        });
 
         // ---- Text inputs: live preview on change ----
         $(document).on('input change', '.adc-tb-text-input', function() {
