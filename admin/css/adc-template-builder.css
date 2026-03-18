@@ -1,7 +1,7 @@
 /**
  * ADC Template Builder - Edit View Styles
  *
- * Accordion layout, color grid, live preview, wp-color-picker overrides.
+ * Accordion layout, color grid, live preview, Pickr color picker styles.
  *
  * @since 2.14.0
  */
@@ -145,17 +145,120 @@
     margin: 0;
     line-height: 1.3;
 }
-.adc-color-card .adc-tb-clear {
-    align-self: flex-start;
-    font-size: 11px;
-    height: 22px;
-    line-height: 20px;
-    padding: 0 8px;
+/* Pickr trigger swatch + input row */
+.adc-pickr-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
-/* wp-color-picker overrides to fit in grid card */
-.adc-color-card .wp-picker-container { display: block; }
-.adc-color-card .wp-picker-input-wrap { display: flex; align-items: center; gap: 4px; }
-.adc-color-card .wp-picker-input-wrap input[type="text"] { width: 90px !important; }
+.adc-pickr-trigger {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 12px 12px;
+}
+.adc-pickr-trigger .pcr-button {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 2px !important;
+}
+.adc-color-card .adc-color-picker-input {
+    width: 90px;
+    font-size: 12px;
+    font-family: monospace;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Eyedropper button */
+.adc-eyedropper-btn {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 3px 5px;
+    font-size: 14px;
+    line-height: 1;
+    color: #555;
+    flex-shrink: 0;
+}
+.adc-eyedropper-btn:hover {
+    background: #f0f0f0;
+    border-color: #999;
+}
+
+/* Color harmony toolbar */
+.adc-harmony-toolbar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    min-height: 0;
+}
+.adc-harmony-toolbar:empty {
+    display: none;
+}
+.adc-harmony-btn {
+    font-size: 10px;
+    padding: 1px 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fafafa;
+    cursor: pointer;
+    color: #555;
+}
+.adc-harmony-btn:hover {
+    background: #eee;
+    border-color: #bbb;
+}
+.adc-harmony-chips {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+.adc-harmony-chip {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+}
+.adc-harmony-chip:hover {
+    border-color: #333;
+    transform: scale(1.15);
+}
+
+/* Recent palette row */
+.adc-recent-palette {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+.adc-recent-palette:empty {
+    display: none;
+}
+.adc-recent-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+}
+.adc-recent-swatch:hover {
+    border-color: #333;
+    transform: scale(1.2);
+}
+
+/* Pickr popup z-index (above WP admin) */
+.pcr-app {
+    z-index: 100100 !important;
+}
 
 /* ---- Text variables table inside accordion ---- */
 .adc-text-vars-table { margin: 0; }
