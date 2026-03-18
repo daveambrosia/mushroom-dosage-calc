@@ -34,11 +34,14 @@
     var builderData = window.adcTemplateBuilderData || {};
 
     // ---- Load Built-in Template ----
-    function adcLoadBuiltinTemplate(slug, skipConfirm) {
+    async function adcLoadBuiltinTemplate(slug, skipConfirm) {
         if (!slug) return;
-        if (!skipConfirm && !confirm('This will overwrite all current values with the selected template. Continue?')) {
-            $('#adc_start_from').val('');
-            return;
+        if (!skipConfirm) {
+            var confirmed = await adcConfirm('This will overwrite all current values with the selected template. Continue?');
+            if (!confirmed) {
+                $('#adc_start_from').val('');
+                return;
+            }
         }
         var vars = builderData.builtinTemplates ? builderData.builtinTemplates[slug] : null;
         if (!vars) return;
