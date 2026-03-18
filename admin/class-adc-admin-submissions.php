@@ -149,7 +149,7 @@ class ADC_Admin_Submissions {
                                             <td data-label="Type"><strong><?php echo strtoupper(esc_html($entry['type'])); ?></strong></td>
                                             <td data-label="Value"><span class="adc-mobile-label">Value: </span><code><?php echo esc_html($entry['value']); ?></code></td>
                                             <td data-label="Reason"><span class="adc-mobile-label">Reason: </span><?php echo esc_html($entry['reason'] ?: '-'); ?></td>
-                                            <td data-label="Added"><span class="adc-mobile-label">Added: </span><?php echo esc_html(date('M j, Y', strtotime($entry['created_at']))); ?></td>
+                                            <td data-label="Added"><span class="adc-mobile-label">Added: </span><?php echo esc_html(wp_date('M j, Y', strtotime($entry['created_at']))); ?></td>
                                             <td data-label="Actions" class="adc-actions-cell">
                                                 <form method="post" class="adc-inline-form">
                                                     <?php wp_nonce_field('adc_blacklist', 'adc_blacklist_nonce'); ?>
@@ -269,7 +269,7 @@ class ADC_Admin_Submissions {
                                                 <em>Anonymous</em>
                                             <?php endif; ?>
                                         </td>
-                                        <td data-label="Date"><span class="adc-mobile-label">Submitted: </span><?php echo esc_html(date('M j, Y g:ia', strtotime($sub['created_at']))); ?></td>
+                                        <td data-label="Date"><span class="adc-mobile-label">Submitted: </span><?php echo esc_html(wp_date('M j, Y g:ia', strtotime($sub['created_at']))); ?></td>
                                         <td data-label="Status">
                                             <?php if ($sub['status'] === 'pending'): ?>
                                                 <span class="adc-status-pending">● Pending</span>
@@ -348,7 +348,7 @@ class ADC_Admin_Submissions {
                                         
                                         <div class="adc-detail-row">
                                             <span class="adc-detail-label">Date:</span>
-                                            <span class="adc-detail-value"><?php echo esc_html(date('M j, Y', strtotime($sub['created_at']))); ?></span>
+                                            <span class="adc-detail-value"><?php echo esc_html(wp_date('M j, Y', strtotime($sub['created_at']))); ?></span>
                                         </div>
                                         
                                         <div class="adc-detail-row">
