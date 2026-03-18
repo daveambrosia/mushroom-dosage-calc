@@ -30,8 +30,60 @@
         '#f5f5f5', '#eaeaea', '#cccccc'
     ];
 
-    // Stub — replaced by full implementation in Task 5
-    function adcAddRecentColor() {}
+    // ---- Recent Color Palette ----
+    var RECENT_PALETTE_KEY = 'adc_template_palette';
+    var MAX_RECENT_COLORS = 12;
+
+    function adcGetRecentColors() {
+        try {
+            var stored = localStorage.getItem(RECENT_PALETTE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function adcAddRecentColor(hex) {
+        if (!hex || !/^#[0-9a-fA-F]{3,8}$/.test(hex)) return;
+        hex = hex.toUpperCase();
+        var colors = adcGetRecentColors().filter(function(c) { return c !== hex; });
+        colors.unshift(hex);
+        if (colors.length > MAX_RECENT_COLORS) colors = colors.slice(0, MAX_RECENT_COLORS);
+        try {
+            localStorage.setItem(RECENT_PALETTE_KEY, JSON.stringify(colors));
+        } catch(e) {}
+        adcRenderRecentPalettes();
+    }
+
+    function adcRenderRecentPalettes() {
+        var colors = adcGetRecentColors();
+        document.querySelectorAll('.adc-recent-palette').forEach(function(container) {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+            var inputId = container.dataset.for;
+            colors.forEach(function(hex) {
+                var swatch = document.createElement('span');
+                swatch.className = 'adc-recent-swatch';
+                swatch.style.backgroundColor = hex;
+                swatch.title = hex;
+                swatch.addEventListener('click', function() {
+                    var inputEl = document.getElementById(inputId);
+                    if (inputEl) {
+                        inputEl.value = hex;
+                        var key = inputEl.dataset.key;
+                        if (pickrInstances[key]) {
+                            pickrInstances[key].setColor(hex, true);
+                        }
+                        debouncedPreview();
+                        adcUpdateContrastCheck();
+                        formDirty = true;
+                    }
+                });
+                container.appendChild(swatch);
+            });
+        });
+    }
 
     function initPickrInstance(triggerEl, inputEl) {
         var key = inputEl.dataset.key;
@@ -435,6 +487,17 @@
                     initPickrInstance(triggerEl, inputEl);
                 }
             });
+
+            // Add recent palette containers
+            document.querySelectorAll('.adc-color-card').forEach(function(card) {
+                var input = card.querySelector('.adc-color-picker-input');
+                if (!input) return;
+                var palette = document.createElement('div');
+                palette.className = 'adc-recent-palette';
+                palette.dataset.for = input.id;
+                card.appendChild(palette);
+            });
+            adcRenderRecentPalettes();
         }
 
         // ---- Text inputs: live preview on change ----
