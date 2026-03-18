@@ -429,6 +429,10 @@ class ADC_Template_Builder {
      * Handle save/update of a custom template.
      */
     private function handle_save() {
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized', 'Unauthorized', array('response' => 403));
+        }
+
         if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['adc_template_builder_nonce'] ?? '')), 'adc_template_builder_save')) {
             wp_die(__('Security check failed', 'ambrosia-dosage-calc'));
         }
