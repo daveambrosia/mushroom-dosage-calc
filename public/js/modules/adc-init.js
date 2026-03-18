@@ -32,8 +32,7 @@
         populateStrainSelect();
         populateEdibleSelect();
         // Always lazy-load from REST (data no longer inlined in page)
-        await fetchStrains();
-        await fetchEdibles();
+        await Promise.all([fetchStrains(), fetchEdibles()]);
         bindEvents();
         // Sync state.activeTab from DOM (PHP/inline script sets initial state, no flash)
         const domHasEdibles = elements.calculator?.classList.contains('adc-tab-edibles');
