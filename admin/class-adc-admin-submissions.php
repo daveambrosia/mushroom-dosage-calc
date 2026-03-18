@@ -304,7 +304,7 @@ class ADC_Admin_Submissions {
                                 $name = $data['name'] ?? 'Unknown';
                                 $statusClass = $sub['status'] === 'pending' ? 'pending' : ($sub['status'] === 'approved' ? 'approved' : 'rejected');
                             ?>
-                                <div class="adc-submission-card adc-submission-<?php echo $statusClass; ?>">
+                                <div class="adc-submission-card adc-submission-<?php echo esc_attr($statusClass); ?>">
                                     <div class="adc-submission-header">
                                         <div class="adc-submission-name"><?php echo esc_html($name); ?></div>
                                         <span class="adc-badge adc-badge-<?php echo esc_attr($sub['type']); ?>"><?php echo esc_html(ucfirst($sub['type'])); ?></span>
@@ -353,7 +353,7 @@ class ADC_Admin_Submissions {
                                         
                                         <div class="adc-detail-row">
                                             <span class="adc-detail-label">Status:</span>
-                                            <span class="adc-status-<?php echo $statusClass; ?>">● <?php echo ucfirst($sub['status']); ?></span>
+                                            <span class="adc-status-<?php echo esc_attr($statusClass); ?>">● <?php echo ucfirst($sub['status']); ?></span>
                                         </div>
                                     </div>
                                     

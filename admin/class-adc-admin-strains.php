@@ -36,8 +36,8 @@ class ADC_Admin_Strains {
         <div class="wrap adc-admin">
             <h1>
                 Strains
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-strain'); ?>" class="page-title-action">Add New</a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-import'); ?>" class="page-title-action">Import CSV</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-strain')); ?>" class="page-title-action">Add New</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-import')); ?>" class="page-title-action">Import CSV</a>
                 <?php if (current_user_can('manage_options')): ?>
                     <a href="<?php echo esc_url(admin_url('admin-ajax.php?action=adc_export&type=strains&format=csv&_wpnonce=' . wp_create_nonce('adc_export'))); ?>" class="page-title-action">Export CSV</a>
                     <a href="<?php echo esc_url(admin_url('admin-ajax.php?action=adc_export&type=strains&format=json&_wpnonce=' . wp_create_nonce('adc_export'))); ?>" class="page-title-action">Export JSON</a>
@@ -59,7 +59,7 @@ class ADC_Admin_Strains {
                 </thead>
                 <tbody>
                     <?php if (empty($strains)): ?>
-                        <tr><td colspan="7">No strains found. <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-strain'); ?>">Add one</a>.</td></tr>
+                        <tr><td colspan="7">No strains found. <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-strain')); ?>">Add one</a>.</td></tr>
                     <?php else: ?>
                         <?php foreach ($strains as $strain): 
                             $total = intval($strain['psilocybin']) + intval($strain['psilocin']);
@@ -79,7 +79,7 @@ class ADC_Admin_Strains {
                                     <?php endif; ?>
                                 </td>
                                 <td data-label="Actions" class="adc-actions-cell">
-                                    <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-strain&id=' . $strain['id']); ?>" class="button button-small">Edit</a>
+                                    <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-strain&id=' . intval($strain['id']))); ?>" class="button button-small">Edit</a>
                                     <a href="#" class="button button-small adc-delete-strain adc-btn-delete" data-id="<?php echo $strain['id']; ?>" data-name="<?php echo esc_attr($strain['name']); ?>">Delete</a>
                                 </td>
                             </tr>

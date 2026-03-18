@@ -36,8 +36,8 @@ class ADC_Admin_Edibles {
         <div class="wrap adc-admin">
             <h1>
                 Edibles
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-edible'); ?>" class="page-title-action">Add New</a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-import'); ?>" class="page-title-action">Import CSV</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-edible')); ?>" class="page-title-action">Add New</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-import')); ?>" class="page-title-action">Import CSV</a>
                 <?php if (current_user_can('manage_options')): ?>
                     <a href="<?php echo esc_url(admin_url('admin-ajax.php?action=adc_export&type=edibles&format=csv&_wpnonce=' . wp_create_nonce('adc_export'))); ?>" class="page-title-action">Export CSV</a>
                     <a href="<?php echo esc_url(admin_url('admin-ajax.php?action=adc_export&type=edibles&format=json&_wpnonce=' . wp_create_nonce('adc_export'))); ?>" class="page-title-action">Export JSON</a>
@@ -60,7 +60,7 @@ class ADC_Admin_Edibles {
                 </thead>
                 <tbody>
                     <?php if (empty($edibles)): ?>
-                        <tr><td colspan="9">No edibles found. <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-edible'); ?>">Add one</a>.</td></tr>
+                        <tr><td colspan="9">No edibles found. <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-edible')); ?>">Add one</a>.</td></tr>
                     <?php else: ?>
                         <?php foreach ($edibles as $edible): 
                             $mcg_per_piece = ($edible['psilocybin'] ?? 0) + ($edible['psilocin'] ?? 0);
@@ -71,7 +71,7 @@ class ADC_Admin_Edibles {
                                 <td data-label="Brand"><span class="adc-mobile-label">Brand: </span><?php echo esc_html($edible['brand'] ?: '-'); ?></td>
                                 <td data-label="Type"><span class="adc-mobile-label">Type: </span><?php echo esc_html(ucfirst($edible['product_type'])); ?></td>
                                 <td data-label="Psilocybin"><span class="adc-mobile-label">Psilocybin: </span><?php echo number_format($edible['psilocybin'] ?? 0); ?></td>
-                                <td data-label="Pieces"><span class="adc-mobile-label">Pieces: </span><?php echo $edible['pieces_per_package']; ?></td>
+                                <td data-label="Pieces"><span class="adc-mobile-label">Pieces: </span><?php echo intval($edible['pieces_per_package']); ?></td>
                                 <td data-label="mcg/pkg"><span class="adc-mobile-label">mcg/pkg: </span><strong><?php echo number_format($mcg_per_piece); ?></strong></td>
                                 <td data-label="Status">
                                     <?php if ($edible['is_active']): ?>
@@ -81,7 +81,7 @@ class ADC_Admin_Edibles {
                                     <?php endif; ?>
                                 </td>
                                 <td data-label="Actions" class="adc-actions-cell">
-                                    <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-edible&id=' . $edible['id']); ?>" class="button button-small">Edit</a>
+                                    <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-edible&id=' . intval($edible['id']))); ?>" class="button button-small">Edit</a>
                                     <a href="#" class="button button-small adc-delete-edible adc-btn-delete" data-id="<?php echo $edible['id']; ?>" data-name="<?php echo esc_attr($edible['name']); ?>">Delete</a>
                                 </td>
                             </tr>

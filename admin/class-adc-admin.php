@@ -195,31 +195,31 @@ class ADC_Admin {
             <h1>Dosage Calculator v<?php echo ADC_VERSION; ?></h1>
             
             <div class="adc-dashboard-cards">
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-strains'); ?>" class="adc-card" style="text-decoration:none;">
-                    <h3><?php echo $total_strains; ?></h3>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-strains')); ?>" class="adc-card" style="text-decoration:none;">
+                    <h3><?php echo intval($total_strains); ?></h3>
                     <p>Total Strains</p>
-                    <span class="adc-card-sub"><?php echo $active_strains; ?> active</span>
+                    <span class="adc-card-sub"><?php echo intval($active_strains); ?> active</span>
                 </a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-edibles'); ?>" class="adc-card" style="text-decoration:none;">
-                    <h3><?php echo $total_edibles; ?></h3>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-edibles')); ?>" class="adc-card" style="text-decoration:none;">
+                    <h3><?php echo intval($total_edibles); ?></h3>
                     <p>Total Edibles</p>
-                    <span class="adc-card-sub"><?php echo $active_edibles; ?> active</span>
+                    <span class="adc-card-sub"><?php echo intval($active_edibles); ?> active</span>
                 </a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-submissions'); ?>" class="adc-card <?php echo $submission_counts['pending'] > 0 ? 'adc-card-alert' : ''; ?>" style="text-decoration:none;">
-                    <h3><?php echo $submission_counts['pending']; ?></h3>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-submissions')); ?>" class="adc-card <?php echo $submission_counts['pending'] > 0 ? 'adc-card-alert' : ''; ?>" style="text-decoration:none;">
+                    <h3><?php echo intval($submission_counts['pending']); ?></h3>
                     <p>Pending Submissions</p>
-                    <span class="adc-card-sub"><?php echo $submission_counts['total']; ?> total</span>
+                    <span class="adc-card-sub"><?php echo intval($submission_counts['total']); ?> total</span>
                 </a>
             </div>
             
             <div class="adc-quick-actions">
                 <h2>Quick Actions</h2>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-strain'); ?>" class="button button-primary">Add New Strain</a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-add-edible'); ?>" class="button button-primary">Add New Edible</a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-qr-generator'); ?>" class="button">Generate QR Codes</a>
-                <a href="<?php echo admin_url('admin.php?page=dosage-calculator-import'); ?>" class="button">Import CSV</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-strain')); ?>" class="button button-primary">Add New Strain</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-add-edible')); ?>" class="button button-primary">Add New Edible</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-qr-generator')); ?>" class="button">Generate QR Codes</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-import')); ?>" class="button">Import CSV</a>
                 <?php if ($submission_counts['pending'] > 0): ?>
-                    <a href="<?php echo admin_url('admin.php?page=dosage-calculator-submissions'); ?>" class="button button-warning">Review Submissions (<?php echo $submission_counts['pending']; ?>)</a>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=dosage-calculator-submissions')); ?>" class="button button-warning">Review Submissions (<?php echo intval($submission_counts['pending']); ?>)</a>
                 <?php endif; ?>
             </div>
             
