@@ -825,12 +825,7 @@
    15. REFACTORED INLINE STYLES
    ============================================================================ */
 
-/* Status indicators */
-.adc-status-pending { color: #f0ad4e; }
-.adc-status-approved { color: green; }
-.adc-status-rejected { color: #999; }
-.adc-status-active { color: green; }
-.adc-status-inactive { color: #999; }
+/* Status indicators (duplicate removed — base definitions in Section 7) */
 
 /* Button variants */
 .adc-btn-warning,
@@ -1163,10 +1158,10 @@
     color: #004085;
 }
 
-/* Status colors */
-.adc-status-pending { color: #856404; background: #fff3cd; padding: 2px 8px; border-radius: 3px; }
-.adc-status-approved { color: #155724; background: #d4edda; padding: 2px 8px; border-radius: 3px; }
-.adc-status-rejected { color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 3px; }
+/* Status badge colors — scoped to submissions context to avoid overriding base status indicators */
+#adc-submissions-form .adc-status-pending { color: #856404; background: #fff3cd; padding: 2px 8px; border-radius: 3px; }
+#adc-submissions-form .adc-status-approved { color: #155724; background: #d4edda; padding: 2px 8px; border-radius: 3px; }
+#adc-submissions-form .adc-status-rejected { color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 3px; }
 
 @media screen and (max-width: 782px) {
     /* Hide desktop table elements */
