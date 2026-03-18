@@ -1062,9 +1062,10 @@ class ADC_Template_Builder {
         $builtins = self::get_builtin_templates();
 
         // Enqueue external JS and CSS
-        wp_enqueue_style('wp-color-picker');
-        wp_enqueue_style('adc-template-builder', ADC_PLUGIN_URL . 'admin/css/adc-template-builder.css', array('wp-color-picker'), ADC_VERSION);
-        wp_enqueue_script('adc-template-builder', ADC_PLUGIN_URL . 'admin/js/adc-template-builder.js', array('jquery', 'wp-color-picker'), ADC_VERSION, true);
+        wp_enqueue_style('pickr-nano', 'https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/themes/nano.min.css', array(), '1.9.1');
+        wp_enqueue_style('adc-template-builder', ADC_PLUGIN_URL . 'admin/css/adc-template-builder.css', array('pickr-nano'), ADC_VERSION);
+        wp_enqueue_script('pickr', 'https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js', array(), '1.9.1', true);
+        wp_enqueue_script('adc-template-builder', ADC_PLUGIN_URL . 'admin/js/adc-template-builder.js', array('jquery', 'pickr'), ADC_VERSION, true);
 
         $builtin_json = array();
         foreach ($builtins as $slug => $bt) {
@@ -1164,7 +1165,6 @@ class ADC_Template_Builder {
                     echo '<label for="' . esc_attr($post_key) . '" class="adc-color-label">' . esc_html($label) . '</label>';
                     echo '<input type="text" id="' . esc_attr($post_key) . '" name="' . esc_attr($post_key) . '" value="' . esc_attr($current_val) . '" class="adc-color-picker-input" data-key="' . esc_attr($key) . '" data-default-color="">';
                     echo '<label for="' . esc_attr($post_key) . '" class="screen-reader-text">' . esc_html($label) . '</label>';
-                    echo '<button type="button" class="button button-small adc-tb-clear" data-target="' . esc_attr($post_key) . '" aria-label="' . esc_attr(sprintf(__('Clear %s', 'ambrosia-dosage-calc'), $label)) . '">' . esc_html__('Clear', 'ambrosia-dosage-calc') . '</button>';
                     if ($desc) {
                         echo '<p class="description">' . esc_html($desc) . '</p>';
                     }
