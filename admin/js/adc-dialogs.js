@@ -63,7 +63,7 @@
         dialog.className = 'adc-dialog adc-dialog-' + options.type;
         icon.textContent = options.icon || '';
         title.textContent = options.title || '';
-        message.innerHTML = options.message || '';
+        message.textContent = options.message || '';
         
         // Handle input for prompt
         if (options.type === 'prompt') {
