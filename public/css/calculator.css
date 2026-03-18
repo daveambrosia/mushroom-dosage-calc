@@ -31,47 +31,7 @@
    1. CSS VARIABLES
    ============================================================================ */
 
-:root {
-    /* Colors */
-    --adc-surface: #fffef9;
-    --adc-surface-alt: #f0f0e8;
-    --adc-text: #000000;
-    --adc-border: #000000;
-    --adc-border-width: 3px;
-    --adc-shadow-offset: 6px;
-    
-    /* Accent Colors */
-    --adc-accent-red: #ff5c5c;
-    --adc-accent-yellow: #ffde59;
-    --adc-accent-green: #7bed9f;
-    --adc-accent-blue: #74b9ff;
-    --adc-accent-purple: #a29bfe;
-    
-    /* Experience Level Colors - Standard Church Brand Colors */
-    --adc-color-microdose: #5468ad;
-    --adc-color-perceivable: #4f9350;
-    --adc-color-intense: #e2a03f;
-    --adc-color-profound: #c04c32;
-    --adc-color-breakthrough: #83318a;
-    
-    /* Warning */
-    --adc-warning: #ff5c5c;
-    --adc-warning-bg: #ffe0e0;
-    
-    /* Typography */
-    --adc-font-heading: 'Space Mono', monospace;
-    --adc-font-body: 'Work Sans', sans-serif;
-    --adc-font-mono: 'Space Mono', monospace;
-    
-    /* Spacing */
-    --adc-space-1: 0.25rem;
-    --adc-space-2: 0.5rem;
-    --adc-space-3: 0.5rem;
-    --adc-space-4: 1rem;
-    --adc-space-5: 1.25rem;
-    --adc-space-6: 0.5rem;
-    --adc-space-8: 1rem;
-}
+/* :root variables removed — all defaults are scoped to #adc-calculator below */
 
 /* ============================================================================
    SCOPED STYLES
