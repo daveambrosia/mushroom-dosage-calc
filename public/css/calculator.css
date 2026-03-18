@@ -1,0 +1,3049 @@
+/**
+ * Ambrosia Dosage Calculator - Public Styles
+ * Version: 2.8.0
+ * 
+ * Table of Contents:
+ * 1. CSS Variables
+ * 2. Base & Container
+ * 3. Header
+ * 4. Tabs
+ * 5. Input Section
+ * 6. Weight Controls
+ * 7. Select & Potency Display
+ * 8. Tolerance & Sensitivity
+ * 9. Custom Inputs
+ * 10. Buttons
+ * 11. Results Section
+ * 12. Result Cards
+ * 13. Tryptamine Breakdown
+ * 14. Converter Section
+ * 15. Safety & Footer
+ * 16. Modals
+ * 17. Share Popup
+ * 18. Submit Modal
+ * 19. Tab Switching
+ * 20. Media Queries
+ */
+
+@charset "utf-8";
+
+/* ============================================================================
+   1. CSS VARIABLES
+   ============================================================================ */
+
+:root {
+    /* Colors */
+    --adc-surface: #fffef9;
+    --adc-surface-alt: #f0f0e8;
+    --adc-text: #000000;
+    --adc-border: #000000;
+    --adc-border-width: 3px;
+    --adc-shadow-offset: 6px;
+    
+    /* Accent Colors */
+    --adc-accent-red: #ff5c5c;
+    --adc-accent-yellow: #ffde59;
+    --adc-accent-green: #7bed9f;
+    --adc-accent-blue: #74b9ff;
+    --adc-accent-purple: #a29bfe;
+    
+    /* Experience Level Colors - Standard Church Brand Colors */
+    --adc-color-microdose: #5468ad;
+    --adc-color-perceivable: #4f9350;
+    --adc-color-intense: #e2a03f;
+    --adc-color-profound: #c04c32;
+    --adc-color-breakthrough: #83318a;
+    
+    /* Warning */
+    --adc-warning: #ff5c5c;
+    --adc-warning-bg: #ffe0e0;
+    
+    /* Typography */
+    --adc-font-heading: 'Space Mono', monospace;
+    --adc-font-body: 'Work Sans', sans-serif;
+    --adc-font-mono: 'Space Mono', monospace;
+    
+    /* Spacing */
+    --adc-space-1: 0.25rem;
+    --adc-space-2: 0.5rem;
+    --adc-space-3: 0.5rem;
+    --adc-space-4: 1rem;
+    --adc-space-5: 1.25rem;
+    --adc-space-6: 0.5rem;
+    --adc-space-8: 1rem;
+}
+
+/* ============================================================================
+   SCOPED STYLES
+   All styles below are scoped to #adc-calculator for isolation from theme CSS.
+   Previously used CSS @scope, replaced with ID prefix for Firefox compat (v2.12.50)..
+   
+   Previously used CSS @scope (#adc-calculator), which is Chrome 118+ only
+   and has no Firefox support. Replaced with #adc-calculator ID prefix for
+   universal browser compatibility (v2.12.50).
+   ============================================================================ */
+
+    /* ============================================================================
+       2. BASE & CONTAINER
+       ============================================================================ */
+
+    #adc-calculator {
+        /* === Template Variables (defaults = brutal template) === */
+        /* Override these via data-template in calculator-themes.css */
+        
+        /* Core colors */
+        --adc-bg: #fffef9;
+        --adc-text: #000000;
+        --adc-surface: #fffef9;
+        --adc-surface-alt: #f0f0e8;
+        --adc-border: #000000;
+        --adc-border-width: 3px;
+        --adc-radius: 0px;
+        --adc-shadow: 6px 6px 0 #000000;
+        --adc-accent: #8B5CF6;
+        
+        /* Header */
+        --adc-header-bg: #ffde59;
+        --adc-header-text: #000000;
+        
+        /* Tabs */
+        --adc-tab-bg: #fffef9;
+        --adc-tab-text: #000000;
+        --adc-tab-active-bg: #ffde59;
+        --adc-tab-active-text: #000000;
+        --adc-tab-hover-bg: #f0f0e8;
+        
+        /* Body */
+        --adc-body-bg: #fffef9;
+        
+        /* Inputs */
+        --adc-input-bg: #fffef9;
+        --adc-input-border: #000000;
+        --adc-input-focus-bg: #ffde59;
+        --adc-focus-ring: none;
+        
+        /* Buttons */
+        --adc-btn-bg: #fffef9;
+        --adc-btn-text: #000000;
+        --adc-btn-border: #000000;
+        --adc-btn-hover-bg: #ffde59;
+        --adc-btn-primary-bg: #7bed9f;
+        --adc-btn-primary-text: #000000;
+        
+        /* Unit toggle */
+        --adc-unit-active-bg: #74b9ff;
+        --adc-unit-active-text: #000000;
+        
+        /* Sections */
+        --adc-converter-bg: #74b9ff;
+        --adc-safety-bg: #ffe0e0;
+        --adc-safety-border: #000000;
+        
+        /* Modals */
+        --adc-modal-header-bg: #ffde59;
+        --adc-modal-header-text: #000000;
+        
+        /* Container */
+        --adc-container-border: none;
+        
+        /* Dose level colors */
+        --adc-color-microdose: #5468ad;
+        --adc-color-perceivable: #4f9350;
+        --adc-color-intense: #e2a03f;
+        --adc-color-profound: #c04c32;
+        --adc-color-breakthrough: #83318a;
+        
+        /* Legacy accent colors (used in base styles) */
+        --adc-accent-red: #ff5c5c;
+        --adc-accent-yellow: #ffde59;
+        --adc-accent-green: #7bed9f;
+        --adc-accent-blue: #74b9ff;
+        --adc-accent-purple: #a29bfe;
+        --adc-warning: #ff5c5c;
+        --adc-warning-bg: #ffe0e0;
+        
+        /* Typography */
+        --adc-font-heading: 'Space Mono', monospace;
+        --adc-font-body: 'Work Sans', sans-serif;
+        --adc-font-mono: 'Space Mono', monospace;
+        
+        /* Spacing */
+        --adc-space-1: 0.25rem;
+        --adc-space-2: 0.5rem;
+        --adc-space-3: 0.5rem;
+        --adc-space-4: 1rem;
+        --adc-space-5: 1.25rem;
+        --adc-space-6: 0.5rem;
+        --adc-space-8: 1rem;
+    
+        /* Base styles */
+        background: var(--adc-surface) !important;
+        color: var(--adc-text) !important;
+        font-family: var(--adc-font-body);
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.5;
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: var(--adc-space-4);
+        text-align: left;
+    
+        /* Prevent inheritance issues */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Universal reset for calculator elements */
+    #adc-calculator *,
+    #adc-calculator *::before,
+    #adc-calculator *::after {
+        box-sizing: border-box;
+    }
+
+    /* Form element isolation - prevent theme overrides */
+    #adc-calculator button,
+    #adc-calculator input,
+    #adc-calculator select,
+    #adc-calculator textarea {
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        color: inherit !important;
+        margin: 0;
+        padding: .5em;
+        border: none;
+        background: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    #adc-calculator button {
+        cursor: pointer;
+        text-transform: none;
+    }
+
+    #adc-calculator a {
+        color: inherit !important;
+        text-decoration: none;
+    }
+
+    #adc-calculator ul,
+    #adc-calculator ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #adc-calculator h1,
+    #adc-calculator h2,
+    #adc-calculator h3,
+    #adc-calculator h4,
+    #adc-calculator h5,
+    #adc-calculator h6,
+    #adc-calculator p {
+        margin: 0;
+        padding: 0;
+        font-weight: inherit;
+    }
+
+    #adc-calculator img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    #adc-calculator .adc-box {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: var(--adc-shadow-offset) var(--adc-shadow-offset) 0 var(--adc-border);
+    }
+
+    /* F-015: Skip link for keyboard navigation */
+    #adc-calculator .adc-skip-link {
+        background: var(--adc-accent-yellow);
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: var(--adc-shadow-offset) var(--adc-shadow-offset) 0 var(--adc-border);
+        color: var(--adc-text);
+        font-family: var(--adc-font-heading);
+        font-weight: 700;
+        left: -9999px;
+        padding: var(--adc-space-3) var(--adc-space-4);
+        position: absolute;
+        text-decoration: none;
+        z-index: 99999;
+    }
+
+    #adc-calculator .adc-skip-link:focus {
+        left: 50%;
+        top: var(--adc-space-2);
+        transform: translateX(-50%);
+    }
+
+    /* ============================================================================
+       2b. FOCUS INDICATORS (Accessibility)
+       ============================================================================ */
+
+    /* Enhanced focus-visible indicators for keyboard navigation */
+    /* Fixed: was scoped to .adc-container which doesn't exist; corrected to #adc-calculator */
+    #adc-calculator button:focus-visible,
+    #adc-calculator a:focus-visible,
+    #adc-calculator input:focus-visible,
+    #adc-calculator select:focus-visible,
+    #adc-calculator textarea:focus-visible,
+    #adc-calculator [tabindex]:focus-visible {
+        outline: 3px solid var(--adc-accent-blue, #2271b1);
+        outline-offset: 2px;
+    }
+
+    /* Remove focus ring for mouse users */
+    #adc-calculator button:focus:not(:focus-visible),
+    #adc-calculator a:focus:not(:focus-visible) {
+        outline: none;
+    }
+
+    /* Modal focus trapping indicator */
+    #adc-calculator .adc-share-modal-overlay:focus-visible,
+    #adc-calculator .adc-consent-modal:focus-visible {
+        outline: none;
+    }
+
+    #adc-calculator .adc-share-modal:focus-visible,
+    #adc-calculator .adc-consent-modal-content:focus-visible {
+        outline: 3px solid var(--adc-accent-blue, #2271b1);
+        outline-offset: 4px;
+    }
+
+    /* ============================================================================
+       3. HEADER
+       ============================================================================ */
+
+    #adc-calculator .adc-header {
+        background: var(--adc-accent-yellow);
+        border: var(--adc-header-border, var(--adc-border-width) solid var(--adc-border));
+        box-shadow: var(--adc-shadow-offset) var(--adc-shadow-offset) 0 var(--adc-border);
+        margin-bottom: var(--adc-space-8);
+        padding: var(--adc-space-6);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-title {
+        font-family: var(--adc-font-heading);
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 var(--adc-space-2);
+        padding-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-subtitle {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* ============================================================================
+       4. TABS
+       ============================================================================ */
+
+    #adc-calculator .adc-tabs {
+        border: var(--adc-border-width) solid var(--adc-border);
+        display: flex;
+    }
+
+    /* When tabs are inside a tab-container, remove borders so everything sits flush */
+    #adc-calculator .adc-tab-container .adc-tabs {
+        border: none;
+        border-radius: 0;
+    }
+
+    #adc-calculator .adc-tab-container .adc-tab {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    #adc-calculator .adc-tab-container .adc-body {
+        border: none;
+        border-radius: 0;
+    }
+
+    #adc-calculator .adc-tab {
+        background: var(--adc-surface);
+        border: none;
+        border-right: var(--adc-border-width) solid var(--adc-border);
+        color: var(--adc-text);
+        cursor: pointer;
+        flex: 1;
+        font-family: var(--adc-font-heading);
+        font-size: 0.875rem;
+        font-weight: 700;
+        padding: var(--adc-space-4);
+        text-transform: uppercase;
+        transition: background 0.1s;
+    }
+
+    #adc-calculator .adc-tab:last-child {
+        border-right: none;
+    }
+
+    #adc-calculator .adc-tab.active {
+        background: var(--adc-accent-yellow);
+    }
+
+    #adc-calculator .adc-tab:hover:not(.active) {
+        background: var(--adc-surface-alt);
+    }
+
+    /* ============================================================================
+       5. INPUT SECTION
+       ============================================================================ */
+
+    #adc-calculator .adc-input-section {
+        display: grid;
+        gap: var(--adc-space-4);
+        margin-bottom: var(--adc-space-8);
+        outline: none; /* Prevent focus ring when clicked (tabindex="-1") */
+    }
+
+    #adc-input-section span {
+        margin-left: 5px;
+    }
+
+    #adc-calculator .adc-input-group {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: var(--adc-space-5);
+    }
+
+    #adc-calculator .adc-input-group label {
+        display: block;
+        font-family: var(--adc-font-heading);
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: var(--adc-space-3);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-hint {
+        font-size: 0.75rem;
+        margin-bottom: 0;
+        margin-top: auto;
+        opacity: 0.7;
+        padding-top: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-label-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-label-row label {
+        margin-bottom: 0;
+        max-width: 55%;
+        line-height: 1.2;
+        word-wrap: break-word;
+    }
+
+    /* Adjustments subsections (for combined tolerance + sensitivity) */
+    #adc-calculator .adc-adjustment-subsection {
+        padding-top: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-adj-label {
+        display: block;
+        font-family: var(--adc-font-heading);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin-bottom: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-adj-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-wrap: wrap;
+        gap: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-adj-row .adc-select {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    #adc-calculator .adc-adj-row .adc-reset-btn {
+        flex-shrink: 0;
+    }
+
+    #adc-calculator .adc-adj-row .adc-sensitivity-slider {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    /* ============================================================================
+       6. WEIGHT CONTROLS
+       ============================================================================ */
+
+    #adc-calculator .adc-weight-wrapper {
+        align-items: stretch;
+        display: flex;
+        position: relative;
+    }
+
+    #adc-calculator .adc-weight-input {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        border-right: none;
+        color: var(--adc-text);
+        flex: 1;
+        font-family: var(--adc-font-mono);
+        font-size: 1.125rem;
+        font-weight: 700;
+        min-width: 0;
+        padding: var(--adc-space-3);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-weight-input:focus {
+        background: var(--adc-accent-yellow);
+        outline: none;
+    }
+
+    #adc-calculator .adc-unit-toggle {
+        border: var(--adc-border-width) solid var(--adc-border);
+        display: flex;
+        overflow: hidden;
+    }
+
+    #adc-calculator .adc-unit-toggle button {
+        background: var(--adc-surface);
+        border: none;
+        border-left: var(--adc-border-width) solid var(--adc-border);
+        color: var(--adc-text);
+        cursor: pointer;
+        font-family: var(--adc-font-heading);
+        font-size: 0.75rem;
+        font-weight: 700;
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--adc-space-3);
+        text-transform: uppercase;
+        transition: background 0.1s;
+    }
+
+    #adc-calculator .adc-unit-toggle button:first-child {
+        border-left: none;
+    }
+
+    #adc-calculator .adc-unit-toggle button.active {
+        background: var(--adc-accent-blue);
+    }
+
+    #adc-calculator .adc-unit-toggle button:hover:not(.active) {
+        background: var(--adc-surface-alt);
+    }
+
+    /* ============================================================================
+       7. SELECT & POTENCY DISPLAY
+       ============================================================================ */
+
+    #adc-calculator .adc-select {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        color: var(--adc-text);
+        cursor: pointer;
+        font-family: var(--adc-font-body);
+        font-size: 0.875rem;
+        font-weight: 600;
+        min-height: 44px;
+        padding: var(--adc-space-3);
+        width: 100%;
+    }
+
+    #adc-calculator .adc-select:focus {
+        background: var(--adc-accent-yellow);
+        outline: none;
+    }
+
+    #adc-calculator .adc-potency-display,
+    #adc-calculator .adc-edible-info {
+        background: var(--adc-surface-alt);
+        border: 2px solid var(--adc-border);
+        font-size: 0.75rem;
+        margin-top: var(--adc-space-3);
+        padding: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-potency-row,
+    #adc-calculator .adc-edible-info-row {
+        display: flex;
+        font-family: var(--adc-font-mono);
+        font-size: 0.6875rem;
+        justify-content: space-between;
+        padding: 2px 0;
+    }
+
+    #adc-calculator .adc-potency-row.total,
+    #adc-calculator .adc-edible-info-row.total {
+        border-top: 2px solid var(--adc-border);
+        font-weight: 700;
+        margin-top: var(--adc-space-2);
+        padding-top: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-strain-controls,
+    #adc-calculator .adc-edible-controls {
+        display: flex;
+        gap: var(--adc-space-2);
+        margin-top: var(--adc-space-3);
+    	justify-content: center;
+    }
+
+    /* ============================================================================
+       8. TOLERANCE & SENSITIVITY
+       ============================================================================ */
+
+    #adc-calculator .adc-tolerance-display {
+        border-radius: var(--adc-radius);
+        box-sizing: border-box;
+        font-family: var(--adc-font-mono);
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-top: var(--adc-space-4);
+        max-width: 100%;
+        padding: var(--adc-space-1);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-tolerance-display.high {
+        background: var(--adc-warning);
+        color: #1a1a1a;
+    }
+
+    #adc-calculator .adc-tolerance-display.medium {
+        background: var(--adc-accent-yellow);
+        color: #1a1a1a;
+    }
+
+    #adc-calculator .adc-tolerance-display.low {
+        background: var(--adc-accent-green);
+        color: #1a1a1a;
+    }
+    
+    #adc-calculator .adc-tolerance-display.microdose {
+        background: var(--adc-color-microdose);
+        color: #ffffff;
+    }
+
+    #adc-calculator .adc-sensitivity-controls {
+        align-items: center;
+        display: flex;
+        gap: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-sensitivity-slider {
+        appearance: none;
+        background: var(--adc-surface-alt);
+        border: 2px solid var(--adc-border);
+        flex: 1;
+        height: 12px;
+        outline: none;
+    }
+
+    #adc-calculator .adc-sensitivity-slider::-webkit-slider-thumb {
+        appearance: none;
+        background: var(--adc-accent-purple);
+        border: var(--adc-border-width) solid var(--adc-border);
+        border-radius: 50%;
+        cursor: pointer;
+        height: 28px;
+        width: 28px;
+    }
+
+    #adc-calculator .adc-sensitivity-slider::-moz-range-thumb {
+        appearance: none;
+        background: var(--adc-accent-purple);
+        border: var(--adc-border-width) solid var(--adc-border);
+        border-radius: 50%;
+        cursor: pointer;
+        height: 22px;
+        width: 22px;
+    }
+
+    #adc-calculator .adc-sensitivity-input-wrapper {
+        align-items: center;
+        background: var(--adc-surface);
+        border: none;
+        display: flex;
+    }
+
+    #adc-calculator .adc-sensitivity-input {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        color: var(--adc-text);
+        font-family: var(--adc-font-mono);
+        font-size: 1.125rem;
+        font-weight: 700;
+        min-height: 44px;
+        padding: var(--adc-space-3);
+        text-align: center;
+        min-width: 60px;
+    }
+
+    #adc-calculator .adc-sensitivity-input:focus {
+        background: var(--adc-accent-yellow);
+        outline: none;
+    }
+
+    #adc-calculator .adc-sensitivity-input-wrapper span {
+        font-family: var(--adc-font-mono);
+        font-size: 0.875rem;
+        font-weight: 700;
+    }
+
+    #adc-calculator .adc-sensitivity-labels {
+        display: none;
+    }
+
+    /* ============================================================================
+       9. CUSTOM INPUTS
+       ============================================================================ */
+
+    #adc-calculator .adc-custom-wrapper {
+        margin-top: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-custom-grid {
+        display: grid;
+        gap: var(--adc-space-2);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #adc-calculator .adc-custom-input label {
+        display: block;
+        font-family: var(--adc-font-mono);
+        font-size: 0.625rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-custom-input input {
+        background: var(--adc-surface);
+        border: 2px solid var(--adc-border);
+        font-family: var(--adc-font-mono);
+        font-size: 0.75rem;
+        padding: var(--adc-space-2);
+        width: 100%;
+    }
+
+    #adc-calculator .adc-custom-unit-label {
+        font-size: 0.8rem;
+        font-style: italic;
+        margin: 0 0 var(--adc-space-2) 0;
+        opacity: 0.7;
+    }
+
+    /* ============================================================================
+       10. BUTTONS
+       ============================================================================ */
+
+    #adc-calculator .adc-btn {
+        background: var(--adc-surface);
+        border: 2px solid var(--adc-border);
+        color: var(--adc-text);
+        cursor: pointer;
+        font-family: var(--adc-font-mono);
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0 1em;
+        height: 3em;
+        text-transform: uppercase;
+        transition: background 0.1s;
+        min-width: auto;
+    }
+
+    /* Strain/Edible control buttons - ensure they fit on one line */
+    #adc-calculator .adc-strain-controls,
+    #adc-calculator .adc-edible-controls {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+    }
+
+    #adc-calculator .adc-strain-controls .adc-btn,
+    #adc-calculator .adc-edible-controls .adc-btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+
+    #adc-calculator .adc-btn:hover {
+        background: var(--adc-accent-yellow);
+    }
+
+    #adc-calculator .adc-btn-primary {
+        background: var(--adc-accent-green);
+    }
+
+    #adc-calculator .adc-btn-primary:hover {
+        background: #5ed690;
+    }
+
+    #adc-calculator .adc-btn-secondary {
+        background: var(--adc-surface);
+    }
+
+    /* F-012: Danger/destructive button */
+    #adc-calculator .adc-btn-danger {
+        background: var(--adc-warning);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-btn-danger:hover {
+        background: #e04040;
+    }
+
+    #adc-calculator .adc-delete-btn:hover {
+        background: var(--adc-warning);
+        color: #fff;
+    }
+
+ 	
+    #adc-calculator .adc-reset-btn {
+        background: var(--adc-surface);
+        color: var(--adc-text);
+        cursor: pointer;
+        font-family: var(--adc-font-mono);
+        font-size: 0.7rem;
+        padding: 0 1em;
+        height: 3em;
+        text-transform: uppercase;
+        transition: opacity 0.2s;
+        position: relative;
+    }
+
+    #adc-calculator .adc-reset-btn:hover {
+        background: #e8e8e0;
+        color: var(--adc-text);
+        opacity: 1;
+    }
+
+    /* Custom tooltip for Reset buttons (replaces native title tooltip) */
+    #adc-calculator .adc-reset-btn[title]::after {
+        content: attr(title);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        right: 0;
+        background: #333;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 1000;
+        font-family: var(--adc-font-body);
+        text-transform: none;
+        font-weight: normal;
+    }
+
+    #adc-calculator .adc-reset-btn[title]:hover::after {
+        opacity: 1;
+    }
+
+    /* Tooltip arrow */
+    #adc-calculator .adc-reset-btn[title]::before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + 2px);
+        right: 12px;
+        border: 6px solid transparent;
+        border-top-color: #333;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 1001;
+    }
+
+    #adc-calculator .adc-reset-btn[title]:hover::before {
+        opacity: 1;
+    }
+
+    /* ============================================================================
+       11. RESULTS SECTION
+       ============================================================================ */
+
+    #adc-calculator .adc-results-section {
+        margin-bottom: var(--adc-space-8);
+    }
+
+    #adc-calculator .adc-results-header h2 {
+        font-family: var(--adc-font-heading);
+        font-size: 1rem;
+        margin: 0 0 var(--adc-space-2);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-results-summary {
+        background: #dc2626;
+        border-radius: var(--adc-radius) var(--adc-radius) 0 0;
+        color: #fff;
+        font-family: var(--adc-font-body);
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: var(--adc-space-3) var(--adc-space-4) 0 var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-results-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--adc-space-3);
+        background: var(--adc-tab-active-bg);
+        padding: var(--adc-space-3);
+        border-radius: var(--adc-radius);
+    }
+
+    #adc-calculator .adc-results-grid.adc-tolerance-active {
+        background: #dc2626;
+        border-radius: 0 0 var(--adc-radius) var(--adc-radius);
+    }
+
+    #adc-calculator .adc-no-selection {
+        background: var(--adc-surface-alt);
+        border: 2px dashed var(--adc-border);
+        color: #666;
+        font-family: var(--adc-font-body);
+        font-size: 1rem;
+        padding: var(--adc-space-8);
+        text-align: center;
+    }
+
+    /* D-1: Loading skeleton cards */
+    #adc-calculator .adc-skeleton-card {
+        background: var(--adc-surface-alt);
+        border: var(--adc-border-width) solid var(--adc-border);
+        border-radius: 0;
+        min-height: 80px;
+        padding: var(--adc-space-4);
+        animation: adcPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes adcPulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.6; }
+    }
+
+    /* D-4: Toast notifications */
+    #adc-calculator .adc-toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #333;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-family: var(--adc-font-body);
+        font-size: 0.9rem;
+        font-weight: 600;
+        z-index: 100003;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+    }
+
+    #adc-calculator .adc-toast-show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================================================================
+       12. RESULT CARDS
+       ============================================================================ */
+
+    #adc-calculator .adc-result-card {
+        position: relative;
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: var(--adc-shadow-offset) var(--adc-shadow-offset) 0 var(--adc-border);
+        min-height: 120px;
+        padding: var(--adc-space-4);
+        padding-right: 60px; /* Make room for top-right collapse button (button + offset + gap) */
+        transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    #adc-calculator .adc-result-card:hover {
+        box-shadow: 9px 9px 0 var(--adc-border);
+        transform: translate(-3px, -3px);
+    }
+
+    #adc-calculator .adc-result-card.microdose {
+        background: var(--adc-color-microdose);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-result-card.perceivable {
+        background: var(--adc-color-perceivable);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-result-card.intense {
+        background: var(--adc-color-intense);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-result-card.profound {
+        background: var(--adc-color-profound);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-result-card.breakthrough {
+        background: var(--adc-color-breakthrough);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-card-main {
+        display: flex;
+        flex-direction: column;
+        gap: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-card-left {
+        flex: 0 0 auto;
+        margin-left: 10px;
+    }
+
+    #adc-calculator .adc-card-right {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        gap: var(--adc-space-2);
+    }
+
+    /* Breakdown, description, and footer: extend into the right padding reserved for the collapse button.
+       Negative right margin on a block element makes it wider by pulling the right edge outward. */
+    #adc-calculator .adc-result-card > .adc-tryptamine-breakdown,
+    #adc-calculator .adc-result-card > .adc-description,
+    #adc-calculator .adc-result-card > .adc-card-footer {
+        margin-right: -44px;
+        padding-right: 10px;
+    }
+
+    /* Share button footer: sits below breakdown, centered */
+    #adc-calculator .adc-card-footer {
+        margin-top: var(--adc-space-3);
+        display: flex;
+        justify-content: center;
+    }
+
+    #adc-calculator .adc-card-footer .adc-share-btn {
+        min-width: 100px;
+    }
+
+    #adc-calculator .adc-dose-row {
+        align-items: flex-start;
+        display: flex;
+        gap: var(--adc-space-4);
+        margin-top: var(--adc-space-1);
+    }
+
+    #adc-calculator .adc-dose-info {
+        flex-shrink: 0;
+    }
+
+    #adc-calculator .adc-level-name {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--adc-font-heading);
+        font-size: 1.49rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* F-006: Level icons for non-color identification */
+    #adc-calculator .adc-level-icon {
+        display: inline-block;
+        font-size: 1em;
+        margin-right: 0.25em;
+        vertical-align: middle;
+    }
+
+    #adc-calculator .adc-dosage {
+        font-family: var(--adc-font-mono);
+        font-size: 1.29rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-dose-label {
+        font-size: 0.7em;
+        font-weight: 600;
+        opacity: 0.85;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    #adc-calculator .adc-psilocybin-range {
+        font-family: var(--adc-font-mono);
+        font-size: 0.95rem;
+        font-weight: 600;
+        opacity: 0.85;
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-description {
+        font-size: 1rem;
+        line-height: 1.4;
+        text-align: center;
+        margin-top: 3px;
+    }
+
+    #adc-calculator .adc-unit {
+        display: block;
+        font-size: 0.65rem;
+        font-weight: normal;
+        margin-top: 2px;
+        opacity: 0.7;
+    }
+
+    #adc-calculator .adc-dose-fraction {
+        font-size: 1.2em;
+        font-weight: 700;
+    }
+
+    #adc-calculator .adc-dose-unit {
+        font-size: 0.65em;
+        font-weight: 400;
+        opacity: 0.8;
+        text-transform: lowercase;
+    }
+
+    #adc-calculator .adc-share-btn,
+    #adc-calculator .adc-details-toggle {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.25);
+        border: 2px solid currentcolor;
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        font-family: var(--adc-font-heading);
+        font-size: 0.65rem;
+        font-weight: 700;
+        justify-content: center;
+        min-width: 120px;
+        padding: var(--adc-space-2) var(--adc-space-3);
+        text-transform: uppercase;
+        transition: background 0.1s;
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-share-btn:hover,
+    #adc-calculator .adc-details-toggle:hover {
+        background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Intense card buttons now use same styling as other cards for consistency */
+
+    /* Button active/focus states */
+    #adc-calculator .adc-share-btn:active,
+    #adc-calculator .adc-details-toggle:active {
+        background: rgba(255, 255, 255, 0.35);
+    }
+
+    #adc-calculator .adc-share-btn:focus-visible,
+    #adc-calculator .adc-details-toggle:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.5);
+        outline-offset: 2px;
+    }
+
+
+
+    /* ============================================================================
+       13. TRYPTAMINE BREAKDOWN
+       ============================================================================ */
+
+    #adc-calculator .adc-tryptamine-breakdown {
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: 8px;
+        display: none;
+        margin-top: var(--adc-space-4);
+        padding: var(--adc-space-4) var(--adc-space-5);
+    }
+
+    /* Always-visible breakdown (details button removed in v2.12.50) */
+    #adc-calculator .adc-tryptamine-breakdown.adc-breakdown-visible,
+    #adc-calculator .adc-tryptamine-breakdown.visible {
+        display: grid;
+        gap: 6px 24px;
+        grid-template-columns: repeat(2, auto);
+    }
+
+    #adc-calculator .adc-tryptamine-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 2px var(--adc-space-2);
+        margin: 0;
+        padding: 0;
+    }
+
+    #adc-calculator .adc-compound-name {
+        display: inline;
+        font-size: 0.85rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    #adc-calculator .adc-compound-value {
+        display: inline;
+        font-family: var(--adc-font-mono);
+        font-size: 0.85rem;
+        font-weight: 400;
+        line-height: 1.2;
+        margin-top: 1px;
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-tryptamine-row:last-child {
+        margin-bottom: 0;
+    }
+
+    #adc-calculator .adc-tryptamine-row.adc-per-piece {
+        border-top: none;
+        font-size: 0.9em;
+        margin-top: 0;
+        opacity: 0.85;
+        padding-top: 0;
+    }
+
+    #adc-calculator .adc-per-piece-header {
+        border-top: 1px dashed rgba(255, 255, 255, 0.3);
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-top: var(--adc-space-3);
+        opacity: 0.9;
+        padding-top: var(--adc-space-2);
+    }
+
+    /* ============================================================================
+       14. CONVERTER SECTION
+       ============================================================================ */
+
+    #adc-calculator .adc-converter-section {
+        background: var(--adc-accent-blue);
+        margin-bottom: var(--adc-space-8);
+        padding: var(--adc-space-5);
+    }
+
+    #adc-calculator .adc-converter-header {
+        margin-bottom: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-converter-header h3 {
+        font-family: var(--adc-font-heading);
+        font-size: 0.875rem;
+        margin: 0 0 var(--adc-space-1);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-converter-strain {
+        font-family: var(--adc-font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        opacity: 0.8;
+    }
+
+    #adc-calculator .adc-converter-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--adc-space-3);
+        margin-bottom: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-converter-input-group {
+        display: flex;
+        align-items: center;
+		justify-content: center;
+        gap: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-converter-equals {
+        font-family: var(--adc-font-mono);
+        font-size: 1.5rem;
+        font-weight: 700;
+        align-self: flex-start;
+        margin: 0 auto;
+        line-height: 0;
+    }
+
+    #adc-calculator .adc-converter-input {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        font-family: var(--adc-font-mono);
+        font-size: 1rem;
+        font-weight: 700;
+        min-height: 48px;
+        padding: var(--adc-space-3);
+        width: 100%;
+    }
+
+	#adc-mcg-input, #adc-grams-input {
+		margin-left: 5%;
+	}
+	
+	#adc-sensitivity-input {
+	
+	}
+    #adc-calculator .adc-converter-input:focus {
+        background: var(--adc-accent-yellow);
+        outline: none;
+    }
+
+    #adc-calculator .adc-converter-label {
+        font-family: var(--adc-font-mono);
+        font-size: 0.875rem;
+        font-weight: 700;
+		width: 5%;
+    }
+
+    #adc-calculator .adc-converter-equals {
+        font-family: var(--adc-font-mono);
+        font-weight: 700;
+    }
+
+    #adc-calculator .adc-converter-breakdown {
+        background: var(--adc-surface);
+        border: 2px solid var(--adc-border);
+        display: grid;
+        gap: var(--adc-space-2) var(--adc-space-5);
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: var(--adc-space-4);
+        padding: var(--adc-space-3) var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-converter-breakdown:empty {
+        display: none;
+    }
+
+    #adc-calculator .adc-converter-compound {
+        font-family: var(--adc-font-mono);
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    /* ============================================================================
+       15. SAFETY & FOOTER
+       ============================================================================ */
+
+    #adc-calculator .adc-safety-warning {
+        background: var(--adc-warning-bg);
+        margin-bottom: var(--adc-space-6);
+        padding: var(--adc-space-5);
+    }
+
+    #adc-calculator .adc-safety-warning h3 {
+        font-family: var(--adc-font-heading);
+        font-size: 0.875rem;
+        margin: 0 0 var(--adc-space-4);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-safety-warning ul {
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.8;
+        margin: 0;
+        padding-left: var(--adc-space-5);
+    }
+
+    #adc-calculator .adc-disclaimer {
+        border-top: 2px solid var(--adc-border);
+        font-size: 0.75rem;
+        margin-top: var(--adc-space-4);
+        padding-top: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-data-controls {
+        align-items: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--adc-space-4);
+        margin-top: var(--adc-space-4);
+        padding-top: var(--adc-space-4);
+		justify-content: center;
+
+    }
+
+    #adc-calculator .adc-data-controls label {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        font-family: var(--adc-font-mono);
+        font-size: 0.75rem;
+        gap: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-data-controls input[type="checkbox"] {
+        -webkit-appearance: checkbox !important;
+        -moz-appearance: checkbox !important;
+        appearance: checkbox !important;
+        cursor: pointer;
+        height: 18px;
+        width: 18px;
+        background: #fff;
+        border: 2px solid var(--adc-border);
+    }
+
+    #adc-calculator .adc-footer {
+        border-top: var(--adc-border-width) solid var(--adc-border);
+        font-family: var(--adc-font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding-top: var(--adc-space-6);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-footer p {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--adc-space-2);
+        justify-content: center;
+        margin: 0;
+    }
+
+    #adc-calculator .adc-footer a {
+        align-items: center;
+        border: 2px solid var(--adc-border);
+        color: var(--adc-text);
+        display: inline-flex;
+        min-height: 44px;
+        padding: var(--adc-space-3) var(--adc-space-4);
+        text-decoration: none;
+        transition: background 0.1s;
+    }
+
+    #adc-calculator .adc-footer a:hover {
+        background: var(--adc-accent-yellow);
+    }
+
+    #adc-calculator .adc-version {
+        color: #999;
+        font-size: 0.65rem;
+        margin-top: var(--adc-space-4);
+        opacity: 0.7;
+    }
+
+    /* ============================================================================
+       16. MODALS
+       ============================================================================ */
+
+    #adc-calculator .adc-modal-overlay {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        inset: 0;
+        justify-content: center;
+        padding: var(--adc-space-4);
+        position: fixed;
+        z-index: 100000;
+    }
+
+    #adc-calculator .adc-modal-overlay.show {
+        display: flex;
+    }
+
+    #adc-calculator .adc-modal {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: var(--adc-shadow-offset) var(--adc-shadow-offset) 0 var(--adc-border);
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        max-width: 500px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    #adc-calculator .adc-modal-header {
+        align-items: center;
+        background: var(--adc-accent-yellow);
+        border-bottom: var(--adc-border-width) solid var(--adc-border);
+        display: flex;
+        flex-shrink: 0;
+        justify-content: space-between;
+        padding: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-modal-header h3 {
+        font-family: var(--adc-font-heading);
+        font-size: 1rem;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-modal-close,
+    #adc-calculator button.adc-modal-close,
+    #adc-calculator .adc-modal-header .adc-modal-close {
+        align-items: center !important;
+        background: #dc3545 !important;
+        background-color: #dc3545 !important;
+        border: none !important;
+        border-radius: 4px !important;
+        color: #ffffff !important;
+        cursor: pointer !important;
+        display: flex !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 1rem !important;
+        font-weight: bold !important;
+        height: 32px !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+        text-shadow: none !important;
+        width: 32px !important;
+    }
+
+    #adc-calculator .adc-modal-close:hover,
+    #adc-calculator button.adc-modal-close:hover,
+    #adc-calculator .adc-modal-header .adc-modal-close:hover {
+        background: #c82333 !important;
+        background-color: #c82333 !important;
+        color: #ffffff !important;
+    }
+
+    #adc-calculator .adc-modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-modal-field {
+        margin-bottom: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-modal-field label {
+        display: block;
+        font-family: var(--adc-font-heading);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-modal-field input,
+    #adc-calculator .adc-modal-field textarea {
+        background: var(--adc-surface);
+        border: 2px solid var(--adc-border);
+        box-sizing: border-box;
+        color: var(--adc-text);
+        font-family: var(--adc-font-mono);
+        font-size: 1rem;
+        padding: var(--adc-space-3);
+        width: 100%;
+    }
+
+    #adc-calculator .adc-modal-field textarea {
+        font-family: inherit;
+        resize: vertical;
+    }
+
+    #adc-calculator .adc-modal-field input:focus {
+        background: var(--adc-accent-yellow);
+        outline: none;
+    }
+
+    #adc-calculator .adc-modal-compounds {
+        display: grid;
+        column-gap: var(--adc-space-5);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #adc-calculator .adc-modal-footer {
+        background: var(--adc-surface-alt);
+        border-top: var(--adc-border-width) solid var(--adc-border);
+        display: flex;
+        flex-shrink: 0;
+        gap: var(--adc-space-3);
+        padding: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-modal-footer .adc-btn {
+        border-radius: 999px;
+        flex: 1;
+        min-height: 48px;
+        padding: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-modal-hint {
+        color: #666;
+        font-size: 0.85rem;
+        font-style: italic;
+        margin: var(--adc-space-3) 0;
+    }
+
+    #adc-calculator .adc-compound-breakdown {
+        border-top: 1px solid var(--adc-border);
+        font-size: 0.85rem;
+        margin-top: var(--adc-space-2);
+        padding-top: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-calculated-value {
+        background: var(--adc-surface-alt);
+        border: 2px solid var(--adc-border);
+        color: var(--adc-accent-purple);
+        display: inline-block;
+        font-family: var(--adc-font-mono);
+        font-size: 1.1rem;
+        font-weight: 700;
+        min-width: 100px;
+        padding: var(--adc-space-2);
+    }
+
+    /* ============================================================================
+       17. SHARE POPUP
+       ============================================================================ */
+
+    #adc-calculator .adc-share-popup-overlay {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 1rem;
+        position: fixed;
+        z-index: 100001;
+    }
+
+    #adc-calculator .adc-share-popup {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: 8px 8px 0 var(--adc-border);
+        max-height: 90vh;
+        max-width: 400px;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    #adc-calculator .adc-share-popup-header {
+        background: var(--adc-accent-purple);
+        color: #fff;
+        padding: var(--adc-space-4);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-share-popup-header h3 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    #adc-calculator .adc-share-popup-body {
+        padding: var(--adc-space-4);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-shared-intro {
+        margin: 0 0 var(--adc-space-4);
+        opacity: 0.8;
+    }
+
+    #adc-calculator .adc-shared-product {
+        font-size: 1.1rem;
+        font-weight: 700;
+        hyphens: auto;
+        margin-bottom: var(--adc-space-2);
+        overflow-wrap: break-word;
+    }
+
+    #adc-calculator .adc-shared-product-mcg {
+        font-size: 0.85em;
+        font-weight: 400;
+        opacity: 0.8;
+    }
+
+    #adc-calculator .adc-shared-level {
+        color: var(--adc-accent-purple);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--adc-space-2);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-shared-dose {
+        font-family: var(--adc-font-mono);
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: var(--adc-space-2);
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-shared-mcg {
+        color: var(--adc-accent-purple);
+        font-family: var(--adc-font-mono);
+        margin-bottom: var(--adc-space-4);
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-shared-breakdown {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid var(--adc-border);
+        border-radius: 4px;
+        margin-bottom: var(--adc-space-4);
+        padding: var(--adc-space-3);
+        text-align: left;
+    }
+
+    #adc-calculator .adc-shared-row {
+        display: flex;
+        font-size: 0.9rem;
+        justify-content: space-between;
+        padding: 2px 0;
+    }
+
+    #adc-calculator .adc-shared-perpiece {
+        border-top: 1px dashed rgba(0, 0, 0, 0.3);
+        font-size: 0.85rem;
+        margin-top: var(--adc-space-2);
+        opacity: 0.8;
+        padding-top: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-shared-note {
+        font-size: 0.85rem;
+        font-style: italic;
+        margin: var(--adc-space-4) 0 0;
+        opacity: 0.7;
+    }
+
+    #adc-calculator .adc-share-popup-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: var(--adc-space-4);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-share-popup-footer .adc-btn-primary {
+        background: var(--adc-accent-purple);
+        border: 2px solid var(--adc-border);
+        color: #fff;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: var(--adc-space-3) var(--adc-space-6);
+    }
+
+    /* ============================================================================
+       18. SUBMIT MODAL
+       ============================================================================ */
+
+    #adc-calculator .adc-submit-modal {
+        max-width: 450px;
+    }
+
+    #adc-calculator .adc-submit-intro {
+        font-size: 0.9rem;
+        margin: 0 0 var(--adc-space-4);
+        opacity: 0.9;
+    }
+
+    #adc-calculator .adc-field-hint {
+        font-size: 0.75rem;
+        margin-top: var(--adc-space-1);
+        opacity: 0.7;
+    }
+
+    #adc-calculator .adc-submit-preview {
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px dashed var(--adc-border);
+        margin-top: var(--adc-space-4);
+        padding: var(--adc-space-3);
+    }
+
+    #adc-calculator .adc-submit-preview h4 {
+        font-size: 0.8rem;
+        margin: 0 0 var(--adc-space-2);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-modal-footer .adc-btn-submit {
+        background: var(--adc-color-perceivable);
+        color: #fff;
+    }
+
+    #adc-calculator .adc-modal-footer .adc-btn-submit:hover {
+        background: #27ae60;
+    }
+
+    #adc-submit-modal.show {
+        display: flex;
+    }
+
+    /* ============================================================================
+       19. TAB SWITCHING
+       ============================================================================ */
+
+    /* Default state: show mushrooms, hide edibles */
+    #adc-calculator .adc-mushroom-input,
+    #adc-calculator .adc-mushroom-results-section {
+        display: block !important;
+    }
+
+    #adc-calculator .adc-edible-input,
+    #adc-calculator .adc-edible-results-section {
+        display: none !important;
+    }
+
+    /* Edibles tab active: show edibles, hide mushrooms */
+    #adc-calculator.adc-tab-edibles .adc-edible-input,
+    #adc-calculator.adc-tab-edibles .adc-edible-results-section {
+        display: block !important;
+    }
+
+    #adc-calculator.adc-tab-edibles .adc-mushroom-input,
+    #adc-calculator.adc-tab-edibles .adc-mushroom-results-section,
+    #adc-calculator.adc-tab-edibles .adc-converter-section {
+        display: none !important;
+    }
+
+    /* Override tab display rules when section is explicitly hidden (no product selected) */
+    #adc-calculator .adc-results-section.adc-section-hidden {
+        display: none !important;
+    }
+
+    /* ============================================================================
+       19.5. SHARE MODAL (F-010)
+       ============================================================================ */
+
+    #adc-calculator .adc-share-modal-overlay {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 1rem;
+        position: fixed;
+        z-index: 100002;
+    }
+
+    #adc-calculator .adc-share-modal {
+        background: var(--adc-surface);
+        border: var(--adc-border-width) solid var(--adc-border);
+        box-shadow: 8px 8px 0 var(--adc-border);
+        max-width: 380px;
+        width: 100%;
+    }
+
+    #adc-calculator .adc-share-modal-header {
+        align-items: center;
+        background: var(--adc-accent-purple);
+        border-bottom: var(--adc-border-width) solid var(--adc-border);
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        padding: var(--adc-space-4);
+    }
+
+    #adc-calculator .adc-share-modal-header h3 {
+        font-family: var(--adc-font-heading);
+        font-size: 1rem;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-share-modal-body {
+        padding: var(--adc-space-5);
+    }
+
+    #adc-calculator .adc-share-preview {
+        background: var(--adc-surface-alt);
+        border: 2px solid var(--adc-border);
+        margin-bottom: var(--adc-space-4);
+        padding: var(--adc-space-4);
+        text-align: center;
+    }
+
+    #adc-calculator .adc-share-product {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-share-level {
+        color: var(--adc-accent-purple);
+        font-family: var(--adc-font-heading);
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: var(--adc-space-2);
+        text-transform: uppercase;
+    }
+
+    #adc-calculator .adc-share-dose-display {
+        font-family: var(--adc-font-mono);
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    #adc-calculator .adc-share-mcg {
+        color: #666;
+        font-family: var(--adc-font-mono);
+        font-size: 0.875rem;
+    }
+
+    #adc-calculator .adc-share-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--adc-space-2);
+    }
+
+    #adc-calculator .adc-share-actions .adc-btn {
+        justify-content: center;
+        min-height: 48px;
+        width: 100%;
+    }
+
+    #adc-calculator .adc-share-feedback {
+        background: var(--adc-accent-green);
+        border: 2px solid var(--adc-border);
+        font-family: var(--adc-font-mono);
+        font-weight: 700;
+        margin-top: var(--adc-space-3);
+        padding: var(--adc-space-2);
+        text-align: center;
+    }
+
+    /* ============================================================================
+       20. MEDIA QUERIES
+       ============================================================================ */
+
+    /* Tablet and up: two-column layout with strain/edible spanning full width below */
+
+
+    /* Mobile adjustments */
+
+
+
+    /* Mobile (max-width: 500px) - Consolidated small screen styles */
+
+    /* ============================================================================
+       INPUT VALIDATION FEEDBACK (v2.10.4)
+       ============================================================================ */
+
+    /* Error state for inputs */
+    #adc-calculator .adc-input-error {
+        border-color: var(--adc-color-danger, #ef4444);
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Warning state for inputs */
+    #adc-calculator .adc-input-warning {
+        border-color: var(--adc-color-warning, #f59e0b);
+        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Error/warning message below input */
+    #adc-calculator .adc-input-error-msg {
+        color: var(--adc-color-danger, #ef4444);
+        font-size: 0.75rem;
+        margin-top: 4px;
+        display: none;
+    }
+
+    /* Prevent error message from affecting flex layout in weight wrapper */
+    #adc-calculator .adc-weight-wrapper .adc-input-error-msg {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 4px;
+        background: var(--adc-surface);
+        padding: 4px 8px;
+        border: 2px solid currentColor;
+        border-radius: 4px;
+        z-index: 10;
+    }
+
+    /* Warning message variant */
+    #adc-calculator .adc-input-error-msg.adc-input-warning-msg {
+        color: var(--adc-color-warning, #f59e0b);
+    }
+
+    /* ============================================================================
+       DETAILS TOGGLE EXPANDED STATE
+       ============================================================================ */
+
+    /* Details toggle expanded state - white background when details are shown */
+    #adc-calculator .adc-details-toggle.expanded {
+        background: #ffffff;
+        color: var(--adc-text);
+        border-color: var(--adc-text);
+    }
+
+    #adc-calculator .adc-details-toggle.expanded:hover {
+        background: var(--adc-surface-alt);
+        color: var(--adc-text);
+    }
+
+    /* Ensure buttons revert properly - explicit default state with to match expanded state */
+    #adc-calculator .adc-details-toggle:not(.expanded) {
+        background: rgba(255, 255, 255, 0.25);
+        color: inherit;
+
+    }
+
+
+    /* ============================================================================
+       MOBILE RESPONSIVE FIXES
+       ============================================================================ */
+
+    /* Ensure all boxes fit within viewport */
+    #adc-calculator,
+    #adc-calculator .adc-box,
+    #adc-calculator .adc-input-group {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Prevent horizontal overflow */
+    #adc-calculator {
+        overflow-x: hidden;
+    }
+
+    /* Make weight wrapper responsive */
+    #adc-calculator .adc-weight-wrapper {
+        max-width: 100%;
+    }
+
+    #adc-calculator .adc-weight-input {
+        min-width: 60px;
+        max-width: 100%;
+    }
+
+    /* Make select dropdowns responsive */
+    #adc-calculator .adc-select {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Make strain/edible controls wrap on mobile */
+    #adc-calculator .adc-strain-controls,
+    #adc-calculator .adc-edible-controls {
+        flex-wrap: wrap;
+    }
+
+    /* Make tolerance select responsive */
+    #adc-tolerance {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Converter inputs responsive */
+    #adc-calculator .adc-converter-input {
+        width: 100px;
+        max-width: 75%;
+    }
+
+
+    /* ---- Collapsible Sections ---- */
+
+    /* Position context for the toggle button */
+    #adc-calculator [data-collapsible] {
+        position: relative;
+    }
+
+    /* The toggle button — top right corner of the box */
+    /* border/background use !important to override WP theme button resets */
+    #adc-calculator .adc-collapse-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.08);
+        border: 2px solid currentColor;
+        border-radius: 4px;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.75;
+        transition: opacity 0.15s, background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+        flex-shrink: 0;
+        z-index: 1;
+    }
+
+    #adc-calculator .adc-collapse-btn:hover {
+        opacity: 1;
+        background: rgba(0,0,0,0.18);
+    }
+
+    /* Collapsed state — hide content (does not apply to select-only boxes, which have their own rule) */
+    #adc-calculator [data-collapsible]:not([data-collapse-mode="select-only"]).adc-collapsed > *:not(.adc-label-row):not(.adc-results-header):not(.adc-converter-header):not(h3):not(.adc-collapse-btn):not(.adc-collapse-summary) {
+        display: none !important;
+    }
+
+    /* Select-only collapse: show label, the select dropdown, and the toggle button */
+    #adc-calculator [data-collapse-mode="select-only"].adc-collapsed > *:not(label):not(.adc-select):not(.adc-collapse-btn) {
+        display: none !important;
+    }
+
+    /* Tighten the box when only the select shows */
+    #adc-calculator [data-collapse-mode="select-only"].adc-collapsed {
+        padding: 10px;
+    }
+
+    /* Select in select-only sections: leave room for collapse button */
+    #adc-calculator [data-collapse-mode="select-only"] > .adc-select {
+        width: calc(100% - 36px);
+    }
+
+    /* Collapsed state: maintain clearance for button */
+    #adc-calculator [data-collapse-mode="select-only"].adc-collapsed .adc-select {
+        width: calc(100% - 36px);
+        margin: 0;
+    }
+
+    /* Keep the header row visible and tighten the box */
+    #adc-calculator [data-collapsible].adc-collapsed {
+        cursor: pointer;
+        padding-bottom: 10px;
+    }
+
+    /* Summary text shown when collapsed */
+    #adc-calculator .adc-collapse-summary {
+        display: block;
+        font-size: 0.8em;
+        opacity: 0.7;
+        font-weight: normal;
+        text-align: center;
+        flex: 1;
+        padding: 0 8px;
+        min-width: 0;
+        white-space: normal;
+        line-height: 1.5;
+    }
+
+    /* Adjustments collapsed summary: centered block below header row */
+    #adc-calculator [data-section="adjustments"].adc-collapsed .adc-collapse-summary {
+        display: block;
+        flex: none;
+        width: 100%;
+        text-align: center;
+        padding: 8px 36px 4px 0;
+    }
+
+    #adc-calculator .adc-adj-line {
+        display: block;
+        padding: 4px 0;
+        text-align: center;
+    }
+
+    #adc-calculator .adc-adj-divider {
+        border: none;
+        border-top: 1px solid rgba(0,0,0,0.15);
+        margin: 4px auto;
+        width: 80%;
+    }
+
+    /* Converter header: pad right so text clears the absolute collapse button */
+    #adc-calculator .adc-converter-header {
+        padding-right: 36px;
+    }
+
+    /* Safety box: h3 needs padding for the button */
+    #adc-calculator .adc-safety-warning h3 {
+        padding-right: 36px;
+    }
+
+    /* Make space for the absolute collapse button so it doesn't crash into Reset */
+    #adc-calculator .adc-label-row {
+        padding-right: 36px;
+    }
+
+    /* Hide Reset button when the section is collapsed */
+    #adc-calculator [data-collapsible].adc-collapsed .adc-reset-btn {
+        display: none !important;
+    }
+
+    /* Strain/edible label: pad right so text clears the absolute collapse button */
+    #adc-calculator [data-collapse-mode="select-only"] > label {
+        display: block;
+        padding-right: 36px;
+    }
+
+    /* ---- Per-Level Collapse ---- */
+
+    /* Push the collapse button to the right */
+    /* border/background use !important to override WP theme button resets */
+    #adc-calculator .adc-level-collapse-btn {
+        background: rgba(0,0,0,0.08);
+        border: 2px solid currentColor;
+        border-radius: 4px;
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        font-size: 10px;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.15s, background 0.15s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+        flex-shrink: 0;
+        /* Desktop: absolute position at top-right */
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        margin-left: 0;
+    }
+
+    #adc-calculator .adc-level-collapse-btn:hover {
+        opacity: 1;
+        background: rgba(0,0,0,0.18);
+    }
+
+    /* mcg range inside level name row — hidden when expanded */
+    #adc-calculator .adc-level-mcg-inline {
+        display: none;
+        font-family: var(--adc-font-mono, monospace);
+        font-size: 0.72em;
+        font-weight: normal;
+        text-transform: none;
+        opacity: 0.9;
+        white-space: normal;
+        flex-shrink: 1;
+        min-width: 0;
+        line-height: 1.6;
+    }
+
+    /* Keep each half of the collapsed summary together; wrap only at the separator */
+    #adc-calculator .adc-nowrap {
+        white-space: nowrap;
+    }
+
+    #adc-calculator .adc-collapse-sep {
+        white-space: normal;
+    }
+
+    /* Collapsed card — hide dose info, description, breakdown, footer */
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-dose-info,
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-description,
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-card-right,
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-card-footer,
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-tryptamine-breakdown {
+        display: none !important;
+    }
+
+    /* Show inline summary when collapsed: fill remaining space, allow wrapping */
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-mcg-inline {
+        display: inline-block;
+        flex: 1;
+        text-align: center;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* When collapsed, card-main and level-name use flex for proper centering */
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-card-main {
+        display: block;
+    }
+
+    #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-name {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Override the 120px min-height and tighten padding (keep right padding for collapse button) */
+    #adc-calculator .adc-result-card.adc-level-collapsed {
+        min-height: 0;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 12px;
+        /* Do NOT override padding-right here — let the base/media-query rules keep space for the button */
+        cursor: pointer;
+    }
+
+    /* Phone (≤500px): move level collapse button to absolute top-right,
+       matching the section collapse button pattern */
+
+    /* ============================================================================
+       21. MOBILE UX PASS (v2.12.22)
+       Touch targets, typography, layout, overflow fixes for 375px+ screens
+       ============================================================================ */
+
+    /* --- Global mobile: ensure minimum touch targets (44px iOS HIG) --- */
+
+    /* Collapse buttons: too small at 26px/22px — bump to 40px on touch devices */
+
+    /* --- Stack two-column input grid on narrow phones --- */
+
+    /* --- Level name row: prevent overflow on 375px screens --- */
+
+    /* --- Tabs: ensure full-width, adequate tap targets --- */
+
+    /* --- Sensitivity slider: larger touch area on mobile --- */
+
+    /* --- Weight input + LBS/KG toggle: ensure 44px+ tap targets --- */
+
+    /* --- Quick converter: stack inputs vertically & full-width on mobile --- */
+
+    /* --- Card action buttons (Share, Details): adequate tap targets on mobile --- */
+
+    /* --- Data controls: wrap on very narrow screens --- */
+
+    /* --- Strain/edible control buttons: larger tap targets --- */
+
+    /* --- Result cards: reduce shadow offset and padding on small screens --- */
+
+    /* --- Footer links: stack vertically on small screens --- */
+
+    /* --- Modal: full-width on small screens --- */
+
+    /* --- Custom inputs grid: single column on phones --- */
+
+    /* --- Select dropdowns: adequate height on mobile --- */
+
+    /* --- Prevent any remaining horizontal overflow --- */
+
+    /* --- Sensitivity labels: ensure readable on phones --- */
+
+    /* --- Reset button: adequate tap target --- */
+
+    /* ============================================================================
+       MEDIA QUERIES (consolidated from 25 blocks into 6)
+       Breakpoints: 768px (tablet), 600px (small tablet), 480px (phone), 400px (small phone)
+       ============================================================================ */
+
+    @media (min-width: 600px) {
+        #adc-calculator .adc-input-section {
+            gap: var(--adc-space-5);
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* Mushroom Strain and Edible Product boxes span both columns */
+        #adc-calculator .adc-mushroom-input,
+        #adc-calculator .adc-edible-input {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @media (min-width: 768px) {
+        #adc-calculator .adc-title {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        /* Allow collapsed card level names to wrap at medium widths */
+        #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-name {
+            white-space: normal;
+            flex-wrap: wrap;
+        }
+
+        #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-mcg-inline {
+            white-space: normal;
+            font-size: 0.7em;
+        }
+    }
+
+    @media (max-width: 768px) {
+        /* Robust breakout for WordPress themes:
+           Using viewport units and negative margins to escape content wrappers.
+           Full-bleed: calculator spans the full viewport width on mobile. */
+        #adc-calculator {
+            width: calc(100vw) !important;
+            max-width: none !important;
+            margin-left: calc(50% - 50vw) !important;
+            margin-right: calc(50% - 50vw) !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Allow dose text to wrap so it doesn't overflow under the collapse button */
+        #adc-calculator .adc-dosage,
+        #adc-calculator .adc-psilocybin-range {
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        #adc-calculator .adc-dose-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: var(--adc-space-2);
+        }
+
+        #adc-calculator .adc-collapse-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            right: 12px;
+            top: 10px;
+        }
+
+        /* Ensure collapsed boxes don't get too short for the absolute button */
+        #adc-calculator [data-collapsible] {
+            min-height: 60px;
+        }
+
+        #adc-calculator .adc-level-collapse-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+            /* Keep top-right positioning on mobile too */
+        }
+
+        #adc-calculator .adc-result-card {
+            /* Keep right padding for button on mobile (36px button + 12px offset + 16px gap) */
+            padding-right: 64px;
+        }
+
+        #adc-calculator .adc-result-card .adc-tryptamine-breakdown,
+        #adc-calculator .adc-result-card .adc-description,
+        #adc-calculator .adc-result-card .adc-card-footer {
+            margin-right: -48px;
+            padding-right: 10px;
+        }
+
+        /* Right clearance must grow to match the wider button (40px + 12px offset = 52px + gap = ~56px) */
+        #adc-calculator .adc-label-row,
+        #adc-calculator .adc-converter-header,
+        #adc-calculator .adc-safety-warning h3 {
+            padding-right: 56px;
+        }
+
+        #adc-calculator [data-collapse-mode="select-only"] > label {
+            padding-right: 56px;
+        }
+
+        #adc-calculator [data-collapse-mode="select-only"] > .adc-select,
+        #adc-calculator [data-collapse-mode="select-only"].adc-collapsed .adc-select {
+            width: calc(100% - 56px);
+        }
+
+        #adc-calculator .adc-sensitivity-slider {
+            height: 20px;
+        }
+
+        #adc-calculator .adc-sensitivity-slider::-webkit-slider-thumb {
+            height: 36px;
+            width: 36px;
+        }
+
+        #adc-calculator .adc-sensitivity-slider::-moz-range-thumb {
+            height: 32px;
+            width: 32px;
+        }
+
+        #adc-calculator .adc-sensitivity-controls {
+            gap: var(--adc-space-4);
+        }
+
+        #adc-calculator .adc-sensitivity-input {
+            min-height: 48px;
+            min-width: 70px;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        #adc-calculator .adc-share-btn,
+        #adc-calculator .adc-details-toggle {
+            flex: 1;
+            font-size: 0.6rem;
+            min-width: 0;
+            padding: var(--adc-space-2);
+        }
+    
+        #adc-calculator .adc-tryptamine-breakdown.visible,
+        #adc-calculator .adc-tryptamine-breakdown.adc-breakdown-visible {
+            grid-template-columns: 1fr;
+        }
+
+        #adc-calculator .adc-converter-breakdown {
+
+            font-size: 0.75rem;
+            grid-template-columns: 1fr;
+        }
+
+        #adc-calculator .adc-level-name {
+            font-size: 1.1rem;
+            flex-wrap: wrap;
+            white-space: normal;
+            gap: 4px;
+        }
+
+        #adc-calculator .adc-level-name-text {
+            flex-shrink: 1;
+            min-width: 0;
+        }
+
+        #adc-calculator .adc-dosage {
+            font-size: 1.1rem;
+        }
+
+        #adc-calculator .adc-psilocybin-range {
+            font-size: 0.8rem;
+        }
+
+        #adc-calculator .adc-description {
+            font-size: 0.9rem;
+        }
+
+        #adc-calculator .adc-card-left {
+            margin-left: 0;
+        }
+
+        #adc-calculator .adc-share-btn,
+        #adc-calculator .adc-details-toggle {
+            min-height: 44px;
+            font-size: 0.7rem;
+            padding: var(--adc-space-2) var(--adc-space-3);
+        }
+    }
+
+    @media (max-width: 480px) {
+        #adc-calculator .adc-share-popup {
+            max-width: 95%;
+        }
+    
+        #adc-calculator .adc-shared-dose {
+            font-size: 1.5rem;
+        }
+    
+        #adc-calculator .adc-tryptamine-breakdown.visible,
+        #adc-calculator .adc-tryptamine-breakdown.adc-breakdown-visible {
+            gap: 10px;
+            grid-template-columns: 1fr;
+            padding: var(--adc-space-3);
+        }
+    
+        #adc-calculator .adc-tryptamine-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+        }
+    
+        #adc-calculator .adc-compound-name {
+            font-size: 0.9rem;
+        }
+    
+        #adc-calculator .adc-compound-value {
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        #adc-calculator .adc-result-card {
+            position: relative;
+        }
+
+        #adc-calculator .adc-level-collapse-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            margin-left: 0;
+        }
+
+        /* Pad level name so text doesn't run under the absolute button */
+        #adc-calculator .adc-level-name {
+            width: 100%;
+        }
+
+        /* Collapsed: mcg range wraps to its own line below the name */
+        #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-name {
+            flex-wrap: wrap;
+        }
+        #adc-calculator .adc-result-card.adc-level-collapsed .adc-level-mcg-inline {
+            flex-basis: 100%;
+            order: 10;
+            padding-left: 0;
+            text-align: center;
+        }
+
+        #adc-calculator .adc-input-section {
+            grid-template-columns: 1fr;
+        }
+
+        #adc-calculator .adc-tab {
+            padding: var(--adc-space-4) var(--adc-space-2);
+            font-size: 0.8rem;
+            min-height: 48px;
+        }
+
+        #adc-calculator .adc-weight-input {
+            min-height: 48px;
+            font-size: 1.125rem;
+        }
+
+        #adc-calculator .adc-unit-toggle button {
+            min-width: 48px;
+            min-height: 48px;
+            font-size: 0.875rem;
+            padding: var(--adc-space-3);
+        }
+
+        #adc-calculator .adc-converter-row {
+            flex-direction: column;
+            gap: var(--adc-space-2);
+        }
+
+        #adc-calculator .adc-converter-input-group {
+            flex-direction: row;
+            width: 100%;
+        }
+
+        #adc-calculator .adc-converter-input {
+            width: 100%;
+            max-width: 100%;
+            min-height: 48px;
+            font-size: 1rem;
+        }
+
+        #adc-calculator .adc-converter-label {
+            width: auto;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        #adc-mcg-input,
+        #adc-grams-input {
+            margin-left: 0;
+        }
+
+        #adc-calculator .adc-converter-equals {
+            text-align: center;
+            align-self: center;
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        #adc-calculator .adc-strain-controls .adc-btn,
+        #adc-calculator .adc-edible-controls .adc-btn {
+            min-height: 40px;
+            padding: var(--adc-space-2) var(--adc-space-3);
+            font-size: 0.75rem;
+        }
+
+        #adc-calculator .adc-result-card {
+            box-shadow: 4px 4px 0 var(--adc-border);
+            padding: var(--adc-space-3);
+            padding-right: 64px; /* Preserve clearance for collapse button */
+        }
+
+        #adc-calculator .adc-result-card:hover {
+            box-shadow: 6px 6px 0 var(--adc-border);
+            transform: translate(-2px, -2px);
+        }
+
+        #adc-calculator .adc-box {
+            box-shadow: 4px 4px 0 var(--adc-border);
+        }
+
+        #adc-calculator .adc-header {
+            box-shadow: 4px 4px 0 var(--adc-border);
+            padding: var(--adc-space-4);
+            margin-bottom: var(--adc-space-6);
+        }
+
+        #adc-calculator .adc-subtitle {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        #adc-calculator .adc-modal {
+            max-width: 100%;
+            margin: var(--adc-space-2);
+        }
+
+        #adc-calculator .adc-share-modal {
+            max-width: 100%;
+        }
+
+        #adc-calculator .adc-modal-field input,
+        #adc-calculator .adc-modal-field textarea {
+            width: 100%;
+        }
+
+        #adc-calculator .adc-modal-compounds {
+            grid-template-columns: 1fr;
+        }
+
+        #adc-calculator .adc-modal-footer .adc-btn {
+            min-height: 48px;
+        }
+
+        #adc-calculator .adc-custom-grid {
+            grid-template-columns: 1fr;
+        }
+
+        #adc-calculator .adc-custom-input input {
+            min-height: 44px;
+            font-size: 0.875rem;
+        }
+
+        #adc-calculator .adc-select {
+            min-height: 48px;
+            font-size: 0.9rem;
+        }
+
+        #adc-calculator {
+            overflow-x: hidden;
+            padding: var(--adc-space-3);
+        }
+
+        #adc-calculator .adc-converter-breakdown {
+            grid-template-columns: 1fr;
+            gap: var(--adc-space-2);
+        }
+
+        #adc-calculator .adc-potency-row,
+        #adc-calculator .adc-edible-info-row {
+            font-size: 0.65rem;
+        }
+
+        #adc-calculator .adc-sensitivity-labels {
+            font-size: 0.7rem;
+        }
+
+        #adc-calculator .adc-reset-btn {
+            min-height: 40px;
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        #adc-calculator {
+            padding: var(--adc-space-2);
+        }
+    
+        #adc-calculator .adc-input-group {
+            padding: var(--adc-space-8);
+        }
+    
+        #adc-calculator .adc-weight-input {
+            font-size: 1rem;
+        }
+    
+        #adc-calculator .adc-unit-toggle button {
+            min-width: 36px;
+            padding: var(--adc-space-2);
+        }
+    
+        #adc-calculator .adc-btn {
+            padding: var(--adc-space-2);
+            font-size: 0.7rem;
+        }
+    
+        #adc-calculator .adc-converter-input {
+            width: 80px;
+        }
+
+        #adc-calculator .adc-data-controls {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--adc-space-3);
+        }
+
+        #adc-calculator .adc-data-controls label {
+            font-size: 0.8rem;
+        }
+
+        #adc-calculator .adc-data-controls .adc-btn {
+            min-height: 44px;
+            font-size: 0.75rem;
+        }
+
+        #adc-calculator .adc-footer p {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        #adc-calculator .adc-footer a {
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+
+    /* ============================================================================
+       MOTION & INTERACTION
+       ============================================================================ */
+
+    /* Guard hover transforms for touch devices — prevents layout shift on tap */
+    @media (hover: hover) {
+        #adc-calculator .adc-result-card:hover {
+            box-shadow: 9px 9px 0 var(--adc-border);
+            transform: translate(-3px, -3px);
+        }
+        #adc-calculator .adc-btn:hover,
+        #adc-calculator .adc-footer a:hover {
+            background: var(--adc-btn-hover-bg, var(--adc-accent-yellow)) !important;
+        }
+    }
+
+    /* Respect reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        #adc-calculator *,
+        #adc-calculator *::before,
+        #adc-calculator *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+        #adc-calculator .adc-result-card:hover {
+            transform: none;
+        }
+    }
+    }
+
+
+    /* ============================================================================
+       TEMPLATE VARIABLE APPLICATION
+       These rules apply CSS variables set by templates in calculator-themes.css.
+       They use #adc-calculator for specificity to override base styles.
+       ============================================================================ */
+
+    /* Calculator container */
+    #adc-calculator {
+        background: var(--adc-bg) !important;
+        color: var(--adc-text) !important;
+        font-family: var(--adc-font-body);
+    }
+
+    /* Boxes */
+    #adc-calculator .adc-box {
+        background: var(--adc-surface) !important;
+        border: var(--adc-border-width) solid var(--adc-border) !important;
+        box-shadow: var(--adc-box-shadow, var(--adc-shadow));
+        border-radius: var(--adc-radius) !important;
+        padding: var(--adc-space-8);
+    }
+
+    /* Header */
+    #adc-calculator .adc-header {
+        background: var(--adc-header-bg) !important;
+        color: var(--adc-header-text) !important;
+        border: var(--adc-header-border, var(--adc-border-width) solid var(--adc-border)) !important;
+        box-shadow: var(--adc-header-shadow, var(--adc-shadow));
+        border-radius: var(--adc-radius) !important;
+    }
+    #adc-calculator .adc-title,
+    #adc-calculator .adc-subtitle {
+        color: var(--adc-header-text) !important;
+        font-family: var(--adc-font-heading);
+    }
+
+    /* Tabs */
+    #adc-calculator .adc-tabs {
+        background: var(--adc-tab-bg) !important;
+        border: var(--adc-border-width) solid var(--adc-border) !important;
+        border-color: var(--adc-tab-bg) !important;
+        border-bottom-width: 0 !important;
+    }
+    #adc-calculator .adc-tab {
+        background: var(--adc-tab-bg) !important;
+        color: var(--adc-tab-text) !important;
+        font-family: var(--adc-font-heading);
+    }
+    #adc-calculator .adc-tab.active {
+        background: var(--adc-tab-active-bg) !important;
+        color: var(--adc-tab-active-text) !important;
+        border-radius: var(--adc-radius) var(--adc-radius) 0 0;
+    }
+    #adc-calculator .adc-tab:hover:not(.active) {
+        background: var(--adc-tab-hover-bg) !important;
+    }
+
+    /* Tab container (for tabbed templates) */
+    #adc-calculator .adc-tab-container {
+        border: var(--adc-container-border);
+        border-radius: var(--adc-radius);
+        overflow: hidden;
+    }
+
+    /* Body */
+    #adc-calculator .adc-body {
+        background: var(--adc-body-bg);
+        padding: 1rem;
+    }
+
+    /* Labels */
+    #adc-calculator .adc-input-group label {
+        color: var(--adc-accent) !important;
+        font-family: var(--adc-font-heading);
+    }
+
+    /* Inputs */
+    #adc-calculator .adc-weight-input,
+    #adc-calculator .adc-select,
+    #adc-calculator .adc-sensitivity-input {
+        background: var(--adc-input-bg) !important;
+        border: var(--adc-border-width) solid var(--adc-input-border) !important;
+        border-radius: var(--adc-radius) !important;
+        color: var(--adc-text) !important;
+    }
+    #adc-calculator .adc-weight-input:focus,
+    #adc-calculator .adc-select:focus,
+    #adc-calculator .adc-sensitivity-input:focus {
+        background: var(--adc-input-focus-bg) !important;
+        box-shadow: var(--adc-focus-ring) !important;
+    }
+
+    /* Unit toggle */
+    #adc-calculator .adc-unit-toggle {
+        border: var(--adc-border-width) solid var(--adc-input-border) !important;
+        border-radius: var(--adc-radius) !important;
+        overflow: hidden !important;
+    }
+    #adc-calculator .adc-unit-toggle button {
+        background: var(--adc-input-bg) !important;
+        color: var(--adc-text) !important;
+        border-left: var(--adc-border-width) solid var(--adc-input-border) !important;
+    }
+    #adc-calculator .adc-unit-toggle button:first-child {
+        border-left: none !important;
+    }
+    #adc-calculator .adc-unit-toggle button:nth-child(1) {
+        border-radius: var(--adc-radius) 0 0 var(--adc-radius) !important;
+    }
+    #adc-calculator .adc-unit-toggle button:nth-child(2) {
+        border-radius: 0 var(--adc-radius) var(--adc-radius) 0 !important;
+    }
+    #adc-calculator .adc-unit-toggle button.active {
+        background: var(--adc-unit-active-bg) !important;
+        color: var(--adc-unit-active-text) !important;
+    }
+
+    /* Buttons */
+    #adc-calculator .adc-btn {
+        background: var(--adc-btn-bg) !important;
+        color: var(--adc-btn-text) !important;
+        border: 2px solid var(--adc-btn-border) !important;
+        border-radius: var(--adc-radius) !important;
+    }
+    #adc-calculator .adc-btn:hover {
+        background: var(--adc-btn-hover-bg) !important;
+    }
+    #adc-calculator .adc-btn-primary {
+        background: var(--adc-btn-primary-bg) !important;
+        color: var(--adc-btn-primary-text) !important;
+        border-color: var(--adc-btn-primary-bg) !important;
+    }
+
+    /* Result cards */
+    #adc-calculator .adc-result-card {
+        border: var(--adc-border-width) solid var(--adc-border) !important;
+        box-shadow: var(--adc-card-shadow, var(--adc-shadow));
+        border-radius: var(--adc-radius) !important;
+    }
+    #adc-calculator .adc-result-card:hover {
+        box-shadow: var(--adc-card-shadow, var(--adc-shadow));
+    }
+
+    /* Dose level colors */
+    #adc-calculator .adc-result-card.microdose { background: var(--adc-color-microdose) !important; }
+    #adc-calculator .adc-result-card.perceivable { background: var(--adc-color-perceivable) !important; }
+    #adc-calculator .adc-result-card.intense { background: var(--adc-color-intense) !important; }
+    #adc-calculator .adc-result-card.profound { background: var(--adc-color-profound) !important; }
+    #adc-calculator .adc-result-card.breakthrough { background: var(--adc-color-breakthrough) !important; }
+
+    /* Converter */
+    #adc-calculator .adc-converter-section {
+        background: var(--adc-converter-bg) !important;
+        border: var(--adc-border-width) solid var(--adc-border) !important;
+        border-radius: var(--adc-radius) !important;
+    }
+
+    /* Safety warning */
+    #adc-calculator .adc-safety-warning {
+        background: var(--adc-safety-bg) !important;
+        border: var(--adc-border-width) solid var(--adc-safety-border) !important;
+        border-radius: var(--adc-radius) !important;
+        margin-top: var(--adc-space-8);
+    }
+
+    /* Modals */
+    #adc-calculator .adc-modal-header {
+        background: var(--adc-modal-header-bg) !important;
+        color: var(--adc-modal-header-text) !important;
+    }
+    #adc-calculator .adc-modal-header h3 {
+        color: var(--adc-modal-header-text) !important;
+    }
+    #adc-calculator .adc-modal {
+        border-radius: var(--adc-radius) !important;
+    }
+
+    /* Potency / info displays */
+    #adc-calculator .adc-potency-display,
+    #adc-calculator .adc-edible-info {
+        background: var(--adc-surface-alt) !important;
+        border: 2px solid var(--adc-border) !important;
+        border-radius: var(--adc-radius) !important;
+    }
+
+    /* Tolerance display */
+    #adc-calculator .adc-tolerance-display {
+        border: 2px solid var(--adc-border) !important;
+        border-radius: var(--adc-radius) !important;
+    }
+
+    /* Shared sizing for info/tolerance displays and footer links */
+    #adc-calculator .adc-edible-info,
+    #adc-calculator .adc-footer a,
+    #adc-calculator .adc-tolerance-display {
+        width: 50%;
+        align-self: center;
+    }
+
+    /* Potency display fills its container — no width constraint */
+    #adc-calculator .adc-potency-display {
+        width: 100%;
+        align-self: stretch;
+        box-sizing: border-box;
+    }
+
+    /* Strip double-box: tryptamine-breakdown inside potency-display has no extra bg/padding */
+    #adc-calculator .adc-potency-display .adc-tryptamine-breakdown,
+    #adc-calculator .adc-potency-display .adc-tryptamine-breakdown.visible {
+        background: none;
+        border-radius: 0;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    /* Footer */
+    #adc-calculator .adc-footer {
+        border-top: var(--adc-border-width) solid var(--adc-border) !important;
+    }
+    #adc-calculator .adc-footer a {
+        border: 2px solid var(--adc-border) !important;
+        border-radius: var(--adc-radius) !important;
+    }
+
+    /* Results header */
+    #adc-calculator .adc-results-header h2 {
+        color: var(--adc-accent) !important;
+        font-family: var(--adc-font-heading);
+    }
+
+    /* Toast */
+    #adc-calculator .adc-toast {
+        border-radius: var(--adc-radius);
+    }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin: 0; padding: 0; background: #eee; }
+  /* Simulate an off-center or padded parent */
+  .parent { width: 80%; margin-left: 10%; padding-left: 20px; background: #ccc; }
+  
+  .breakout {
+      background: red;
+      height: 100px;
+      
+      /* Try the left/right calculation */
+      width: calc(100vw - 20px);
+      max-width: none;
+      /* Getting distance from left viewport edge using getBoundingClientRect in JS is the only 100% reliable way if CSS fails, but let's try CSS */
+      position: relative;
+      left: calc(-1 * var(--offset-left, 0px)); 
+  }
+</style>
+</head>
+<body>
+  <div class="parent">
+    <div class="breakout"></div>
+  </div>
+  <script>
+    const el = document.querySelector('.breakout');
+    // Calculate how far the parent is from the left edge of viewport
+    const parentLeft = el.parentElement.getBoundingClientRect().left;
+    // We want the element to be 10px from the left viewport edge
+    // So we need to shift it left by (parentLeft - 10px)
+    el.style.setProperty('--offset-left', (parentLeft - 10) + 'px');
+  </script>
+</body>
+</html>

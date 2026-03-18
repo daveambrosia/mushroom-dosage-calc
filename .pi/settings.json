@@ -1,0 +1,6 @@
+{
+  "skills": [
+    ".claude/commands"
+  ],
+  "enableSkillCommands": true
+}

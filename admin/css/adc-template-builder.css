@@ -1,0 +1,445 @@
+/**
+ * ADC Template Builder - Edit View Styles
+ *
+ * Accordion layout, color grid, live preview, wp-color-picker overrides.
+ *
+ * @since 2.14.0
+ */
+
+/* ---- Two-column layout ---- */
+.adc-tb-layout {
+    display: flex;
+    gap: 10px;
+    align-items: stretch; /* both cols same height */
+    min-height: calc(100vh - 120px);
+}
+.adc-tb-form-col {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 8px; /* room for scrollbar */
+}
+.adc-tb-preview-col {
+    width: 480px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 32px; /* WP admin bar */
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+}
+.adc-tb-preview-sticky {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+@media (max-width: 1400px) {
+    .adc-tb-preview-col {
+        width: 420px;
+    }
+}
+@media (max-width: 900px) {
+    /* Only stack on very small screens (tablets/mobile admin) */
+    .adc-tb-layout {
+        flex-direction: column;
+        min-height: unset;
+    }
+    .adc-tb-form-col {
+        max-height: unset;
+        overflow-y: visible;
+    }
+    .adc-tb-preview-col {
+        width: 100%;
+        position: static;
+        height: 500px;
+    }
+    .adc-tb-preview-sticky {
+        height: 100%;
+    }
+}
+
+/* ---- Accordion ---- */
+.adc-accordion-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.adc-accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2327;
+    transition: background 0.15s;
+}
+.adc-accordion-header:hover { background: #f0f0f0; }
+.adc-accordion-section.adc-tier-1 .adc-accordion-header { background: #f0f6fc; }
+.adc-accordion-section.adc-tier-1 .adc-accordion-header:hover { background: #e0effa; }
+.adc-accordion-title { flex: 1; }
+.adc-accordion-badge {
+    font-size: 11px;
+    font-weight: normal;
+    color: #888;
+    background: #e8e8e8;
+    padding: 2px 7px;
+    border-radius: 10px;
+}
+.adc-accordion-arrow { color: #888; font-size: 12px; }
+.adc-accordion-body {
+    padding: 16px;
+    background: #fff;
+    display: none;
+}
+.adc-accordion-section[data-open="true"] .adc-accordion-body { display: block; }
+
+/* Advanced divider */
+.adc-advanced-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 12px;
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.adc-advanced-divider::before,
+.adc-advanced-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+/* ---- Color grid ---- */
+.adc-color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+.adc-color-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.adc-color-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+}
+.adc-color-card .description {
+    font-size: 11px;
+    color: #888;
+    margin: 0;
+    line-height: 1.3;
+}
+.adc-color-card .adc-tb-clear {
+    align-self: flex-start;
+    font-size: 11px;
+    height: 22px;
+    line-height: 20px;
+    padding: 0 8px;
+}
+/* wp-color-picker overrides to fit in grid card */
+.adc-color-card .wp-picker-container { display: block; }
+.adc-color-card .wp-picker-input-wrap { display: flex; align-items: center; gap: 4px; }
+.adc-color-card .wp-picker-input-wrap input[type="text"] { width: 90px !important; }
+
+/* ---- Text variables table inside accordion ---- */
+.adc-text-vars-table { margin: 0; }
+.adc-text-vars-table th { padding: 8px 10px 8px 0; width: 140px; }
+.adc-text-vars-table td { padding: 8px 0; }
+
+/* ---- Template Builder heading size ---- */
+.adc-template-builder .regular-text {
+    width: 15em;
+}
+.adc-template-builder h2 {
+    font-size: 1.2em;
+}
+
+/* ---- Built-in Template Gallery ---- */
+.adc-builtin-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    max-width: 900px;
+}
+.adc-builtin-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease-in-out;
+}
+.adc-builtin-card:hover {
+    border-color: #c3c4c7;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+.adc-builtin-card-title {
+    font-size: 1.1em;
+    margin: 0 0 10px;
+    color: #333;
+}
+.adc-builtin-card-swatches {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+.adc-builtin-card-actions {
+    margin-top: auto;
+}
+
+/* ---- Preview iframe container ---- */
+.adc-preview-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.adc-preview-label {
+    margin: 0;
+    font-size: 13px;
+    color: #555;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.adc-preview-iframe-wrapper {
+    position: relative;
+    border-radius: 6px;
+    overflow-x: hidden;
+    transition: background 0.2s;
+    border: 1px solid #ddd;
+    flex: 1;
+    min-height: 0;
+}
+.adc-preview-iframe {
+    width: 100%;
+    height: 800px; /* initial height — auto-sized via postMessage once content loads */
+    min-height: 400px;
+    border: none;
+    display: block;
+}
+.adc-preview-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.85);
+    font-size: 13px;
+    color: #888;
+}
+.adc-preview-footer-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+.adc-preview-status {
+    margin-left: auto;
+    font-size: 11px;
+    color: #999;
+}
+
+
+/* bg toggle */
+.adc-preview-bg-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #888;
+}
+.adc-preview-bg-btn {
+    background: none;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 1px 3px;
+    font-size: 13px;
+    line-height: 1;
+}
+.adc-preview-bg-btn.active { border-color: #2271b1; }
+.adc-preview-bg-btn:hover { border-color: #ccc; }
+
+/* ---- Template Picker Modal ---- */
+.adc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.adc-modal-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    max-width: 860px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.adc-modal-header {
+    padding: 20px 24px 12px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+.adc-modal-header h2 { margin: 0 0 4px; font-size: 18px; }
+.adc-modal-header .description { margin: 0; }
+.adc-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+.adc-modal-close:hover { background: #f0f0f0; color: #333; }
+.adc-modal-body {
+    padding: 16px 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+.adc-modal-footer {
+    padding: 12px 24px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+/* Picker Grid */
+.adc-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+.adc-picker-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    background: #fff;
+}
+.adc-picker-card:hover,
+.adc-picker-card:focus {
+    border-color: #2271b1;
+    box-shadow: 0 2px 8px rgba(34,113,177,0.15);
+    transform: translateY(-2px);
+    outline: none;
+}
+.adc-picker-preview {
+    width: 100%;
+    aspect-ratio: 3/4;
+    margin-bottom: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.adc-picker-preview-blank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    font-size: 32px;
+    color: #ccc;
+}
+.adc-picker-card-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+}
+.adc-picker-card-desc {
+    font-size: 11px;
+    color: #888;
+}
+
+/* ---- Range Slider Controls ---- */
+.adc-range-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.adc-range-slider {
+    flex: 1;
+    max-width: 200px;
+    cursor: pointer;
+}
+.adc-range-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    min-width: 40px;
+}
+
+/* ---- Shadow Select ---- */
+.adc-shadow-select {
+    max-width: 200px;
+    display: block;
+}
+
+/* ---- Border Quick-Set ---- */
+.adc-border-quick-set .adc-border-quick-btn {
+    margin-right: 4px;
+    font-size: 11px;
+}
+
+/* ---- Font Select ---- */
+.adc-font-select {
+    max-width: 250px;
+}
+
+/* ---- WCAG Contrast Panel ---- */
+.adc-contrast-panel {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 24px 0;
+}
+.adc-contrast-panel h3 { margin: 0 0 4px; font-size: 14px; }
+.adc-contrast-table { border-collapse: collapse; width: 100%; max-width: 500px; margin-top: 12px; font-size: 13px; }
+.adc-contrast-table th { text-align: left; padding: 4px 10px; background: #f0f0f0; border-bottom: 2px solid #ddd; }
+.adc-contrast-table td { padding: 5px 10px; border-bottom: 1px solid #eee; }
+.adc-contrast-fail td { background: #fff5f5; }
+.adc-contrast-pass td { background: #f0fff4; }
+.adc-contrast-warning { background: #fffbeb; border: 1px solid #f59e0b; border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; font-size: 13px; }
