@@ -214,6 +214,7 @@
     }
 
     function handleConverterMcg() {
+        if (!elements.mcgInput || !elements.gramsInput) return;
         const strain = getCurrentStrain();
         if (!strain) return;
         const total = getTotalPsilocybin(strain);
@@ -224,6 +225,7 @@
     }
 
     function handleConverterGrams() {
+        if (!elements.mcgInput || !elements.gramsInput) return;
         const strain = getCurrentStrain();
         if (!strain) return;
         const total = getTotalPsilocybin(strain);
