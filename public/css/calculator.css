@@ -25,13 +25,9 @@
  * 20. Media Queries
  */
 
-@charset "utf-8";
-
 /* ============================================================================
-   1. CSS VARIABLES
+   1. CSS VARIABLES (scoped to #adc-calculator below)
    ============================================================================ */
-
-/* :root variables removed — all defaults are scoped to #adc-calculator below */
 
 /* ============================================================================
    SCOPED STYLES
@@ -2777,7 +2773,6 @@
         #adc-calculator .adc-result-card:hover {
             transform: none;
         }
-    }
     }
 
 
