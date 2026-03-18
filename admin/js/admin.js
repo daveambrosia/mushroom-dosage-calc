@@ -452,7 +452,7 @@ function adcShowDetailsModal(sub) {
     html += "<div class='adc-detail-section-body'>";
     html += "<div class='adc-detail-row'><span class='adc-detail-label'>Name:</span> " + escapeHtml(data.name || "-") + "</div>";
     if (data.brand) html += "<div class='adc-detail-row'><span class='adc-detail-label'>Brand:</span> " + escapeHtml(data.brand) + "</div>";
-    if (data.piecesPerPackage || data.pieces_per_package) html += "<div class='adc-detail-row'><span class='adc-detail-label'>Pieces/Package:</span> " + (data.piecesPerPackage || data.pieces_per_package) + "</div>";
+    if (data.piecesPerPackage || data.pieces_per_package) html += "<div class='adc-detail-row'><span class='adc-detail-label'>Pieces/Package:</span> " + escapeHtml(data.piecesPerPackage || data.pieces_per_package) + "</div>";
     html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocybin:</span> " + (data.psilocybin ? data.psilocybin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
     html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocin:</span> " + (data.psilocin ? data.psilocin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
     html += "<div class='adc-detail-row'><span class='adc-detail-label'>Baeocystin:</span> " + (data.baeocystin ? data.baeocystin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
@@ -476,10 +476,10 @@ function adcShowDetailsModal(sub) {
     html += "<div class='adc-detail-section'>";
     html += "<div class='adc-detail-section-header'>System Info</div>";
     html += "<div class='adc-detail-section-body'>";
-    html += "<div class='adc-detail-row'><span class='adc-detail-label'>ID:</span> " + sub.id + "</div>";
-    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Type:</span> " + (sub.type || "-") + "</div>";
-    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Status:</span> " + (sub.status || "-") + "</div>";
-    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Submitted:</span> " + (sub.created_at || "-") + "</div>";
+    html += "<div class='adc-detail-row'><span class='adc-detail-label'>ID:</span> " + escapeHtml(sub.id) + "</div>";
+    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Type:</span> " + escapeHtml(sub.type || "-") + "</div>";
+    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Status:</span> " + escapeHtml(sub.status || "-") + "</div>";
+    html += "<div class='adc-detail-row'><span class='adc-detail-label'>Submitted:</span> " + escapeHtml(sub.created_at || "-") + "</div>";
     html += "</div></div>";
     
     var content = document.getElementById("adc-details-content");
