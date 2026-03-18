@@ -103,9 +103,6 @@ class Ambrosia_Dosage_Calculator {
         add_action('plugins_loaded', array('ADC_DB', 'init'), 1);
         add_action('update_option_adc_settings', array('ADC_DB', 'invalidate_cache'));
         
-        register_activation_hook(__FILE__, array('ADC_Activator', 'activate'));
-        register_deactivation_hook(__FILE__, array('ADC_Activator', 'deactivate'));
-        
         add_action('plugins_loaded', array($this, 'check_db_update'));
         add_action('init', array($this, 'init'));
         add_action('rest_api_init', array($this, 'register_rest_routes'));
@@ -507,6 +504,8 @@ function adc_init() {
     return Ambrosia_Dosage_Calculator::get_instance();
 }
 add_action('plugins_loaded', 'adc_init');
+register_activation_hook(__FILE__, array('ADC_Activator', 'activate'));
+register_deactivation_hook(__FILE__, array('ADC_Activator', 'deactivate'));
 
 /**
  * Get the plugin instance helper.
