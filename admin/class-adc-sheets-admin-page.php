@@ -131,7 +131,17 @@ class ADC_Sheets_Admin_Page {
         // Handle settings save
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['adc_gsheets_nonce'])) {
             if (wp_verify_nonce($_POST['adc_gsheets_nonce'], 'adc_gsheets_settings')) {
-                ADC_Sheets_Importer::save_settings($_POST);
+                $settings_fields = array(
+                    'strains_url', 'strains_gid', 'edibles_url', 'edibles_gid',
+                    'import_mode', 'auto_sync', 'sync_frequency', 'notify_admin'
+                );
+                $settings = array();
+                foreach ($settings_fields as $field) {
+                    if (isset($_POST[$field])) {
+                        $settings[$field] = wp_unslash($_POST[$field]);
+                    }
+                }
+                ADC_Sheets_Importer::save_settings($settings);
                 echo '<div class="notice notice-success"><p>Settings saved.</p></div>';
             }
         }
