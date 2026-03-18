@@ -213,7 +213,7 @@ class ADC_Google_Sheets {
     public static function is_rate_limited() {
         $last_sync = get_option('adc_gsheets_last_sync_time', 0);
         $elapsed = time() - $last_sync;
-        $cooldown = 10;
+        $cooldown = 300;
         if ($elapsed < $cooldown) {
             return $cooldown - $elapsed;
         }
