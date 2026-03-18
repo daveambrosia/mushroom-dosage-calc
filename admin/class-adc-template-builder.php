@@ -740,6 +740,9 @@ class ADC_Template_Builder {
 
         header('Content-Type: application/json');
         header('Content-Disposition: attachment; filename="adc-template-' . esc_attr($slug) . '.json"');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
         echo wp_json_encode($export_data, JSON_PRETTY_PRINT);
         exit;
     }
