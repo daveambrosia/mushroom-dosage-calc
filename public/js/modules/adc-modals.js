@@ -426,12 +426,44 @@
         });
     }
 
+    function validateStrainData(data) {
+        if (!data || typeof data !== 'object') return null;
+        var allowed = ['name', 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin'];
+        var clean = {};
+        allowed.forEach(function(key) {
+            if (key === 'name') {
+                clean[key] = typeof data[key] === 'string' ? data[key].substring(0, 200) : 'Shared Strain';
+            } else {
+                clean[key] = typeof data[key] === 'number' ? Math.max(0, Math.min(data[key], 100000)) : 0;
+            }
+        });
+        return clean;
+    }
+
+    function validateEdibleData(data) {
+        if (!data || typeof data !== 'object') return null;
+        var allowed = ['name', 'brand', 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin', 'piecesPerPackage'];
+        var clean = {};
+        allowed.forEach(function(key) {
+            if (key === 'name') {
+                clean[key] = typeof data[key] === 'string' ? data[key].substring(0, 200) : 'Shared Edible';
+            } else if (key === 'brand') {
+                clean[key] = typeof data[key] === 'string' ? data[key].substring(0, 200) : '';
+            } else {
+                clean[key] = typeof data[key] === 'number' ? Math.max(0, Math.min(data[key], 100000)) : 0;
+            }
+        });
+        return clean;
+    }
+
     function applySharedData(data) {
         if (!data) return;
         if (data.type === 'mushroom') {
             if (data.strainData && data.strainId) {
                 const sharedId = 'shared-' + Date.now();
-                state.customStrains[sharedId] = data.strainData;
+                var validated = validateStrainData(data.strainData);
+                if (!validated) return;
+                state.customStrains[sharedId] = validated;
                 saveToStorage(STORAGE_KEYS.customStrains, state.customStrains);
                 populateStrainSelect();
                 state.strainId = sharedId;
@@ -445,7 +477,9 @@
         if (data.type === 'edible') {
             if (data.edibleData && data.edibleId) {
                 const sharedId = 'shared-' + Date.now();
-                state.customEdibles[sharedId] = data.edibleData;
+                var validated = validateEdibleData(data.edibleData);
+                if (!validated) return;
+                state.customEdibles[sharedId] = validated;
                 saveToStorage(STORAGE_KEYS.customEdibles, state.customEdibles);
                 populateEdibleSelect();
                 state.edibleId = sharedId;
