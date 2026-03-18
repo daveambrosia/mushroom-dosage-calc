@@ -31,7 +31,7 @@
     --adc-input-bg: #fffef9;
     --adc-input-border: #000000;
     --adc-input-focus-bg: #ffde59;
-    --adc-focus-ring: none;
+    --adc-focus-ring: 0 0 0 3px rgba(0, 0, 0, 0.4);
     --adc-btn-bg: #fffef9;
     --adc-btn-text: #000000;
     --adc-btn-border: #000000;
@@ -359,7 +359,7 @@
     --adc-input-bg: #f5c87a;
     --adc-input-border: #8b4513;
     --adc-input-focus-bg: #ffe0a0;
-    --adc-focus-ring: none;
+    --adc-focus-ring: 0 0 0 3px rgba(0, 0, 0, 0.3);
     --adc-btn-bg: #f5c87a;
     --adc-btn-text: #1a0a00;
     --adc-btn-border: #8b4513;

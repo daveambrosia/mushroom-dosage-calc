@@ -661,6 +661,14 @@
         outline: none;
     }
 
+    /* Focus-visible fallback: ensures keyboard focus is always visible (WCAG 2.4.7) */
+    #adc-calculator .adc-weight-input:focus-visible,
+    #adc-calculator .adc-select:focus-visible,
+    #adc-calculator .adc-sensitivity-input:focus-visible {
+        outline: 2px solid var(--adc-accent-blue, #2271b1);
+        outline-offset: 2px;
+    }
+
     #adc-calculator .adc-sensitivity-input-wrapper span {
         font-family: var(--adc-font-mono);
         font-size: 0.875rem;
