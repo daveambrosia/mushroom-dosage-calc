@@ -20,7 +20,9 @@ Replace wp-color-picker with **Pickr v1.9.1** (Nano theme), loaded from CDN:
 - JS: `https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js` (23KB)
 - CSS: `https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/themes/nano.min.css` (9KB)
 
-Pickr attaches to existing `<input type="text">` fields using `useAsButton: true`. The input remains visible for manual hex entry. Clicking it opens the Pickr popup.
+Each color field gets a small color swatch `<div class="adc-pickr-trigger">` as the Pickr trigger element. The existing `<input type="text">` stays beside it for display and form submission — clicking the swatch opens Pickr, clicking the input allows manual hex typing. The input syncs bidirectionally: Pickr `save` writes to the input, and input `change` calls `pickrInstance.setColor()`.
+
+**Two-step save flow:** Unlike wp-color-picker which wrote immediately, Pickr uses a save/clear button inside the popup. The `change` event fires during picking for live preview, but the input field value only updates on `save`. This means `formDirty` is set on `save`, not on `change`.
 
 Configuration per instance:
 - `theme: 'nano'`
@@ -30,7 +32,7 @@ Configuration per instance:
 - Components: palette, preview, hue slider, input field, hex/HSL format toggle, save button, clear button
 - Swatches: 6 core colors from the Minimal built-in theme as defaults
 
-On `save` event: write hex value to the input field, call `debouncedPreview()` and `adcUpdateContrastCheck()`, set `formDirty = true`. When `color` is `null` (clear), write empty string.
+On `save` event: write hex value to the input field, call `debouncedPreview()` and `adcUpdateContrastCheck()`, set `formDirty = true`. When `color` is `null` (clear), write empty string. Note: clear fires `save` with `null` — always null-check.
 
 On `change` event: call `debouncedPreview()` for live preview while picking (before save).
 
@@ -41,7 +43,7 @@ A "recent colors" row displayed as clickable swatch circles below each color car
 - Auto-populates as the user saves colors (last 12, deduplicated)
 - Stored in `localStorage` under key `adc_template_palette`
 - Clicking a recent swatch calls `pickrInstance.setColor(hex)` on the active field
-- Shared across all 23 color fields (one global palette)
+- Shared across all 30 color fields (one global palette)
 
 ### Custom Feature 2: Color Harmony Suggestions
 
@@ -71,25 +73,28 @@ A small eyedropper icon button rendered next to each color input.
 
 ### `admin/class-adc-template-builder.php`
 
-- **Remove**: `wp_enqueue_style('wp-color-picker')` and the `wp-color-picker` script dependency
-- **Add**: Pickr CDN CSS (`nano.min.css`) via `wp_enqueue_style` and Pickr CDN JS (`pickr.min.js`) via `wp_enqueue_script`
-- **Update color card HTML**: Remove wpColorPicker-specific markup. Keep `<input type="text">` with `adc-color-picker-input` class and `data-key` attribute. Add a container `<div>` for the eyedropper button and harmony toolbar.
+- **Remove**: `wp_enqueue_style('wp-color-picker')` and the `wp-color-picker` script dependency from `wp_enqueue_script`
+- **Add**: Pickr CDN CSS (`nano.min.css`) via `wp_enqueue_style('pickr-nano', ...)` and Pickr CDN JS (`pickr.min.js`) via `wp_enqueue_script('pickr', ...)`
+- **Update**: `adc-template-builder` CSS dependency array from `array('wp-color-picker')` to `array('pickr-nano')`
+- **Update**: `adc-template-builder` JS dependency array from `array('jquery', 'wp-color-picker')` to `array('jquery', 'pickr')`
+- **Update color card HTML**: Remove `data-default-color` attribute (wp-color-picker specific). Add `<div class="adc-pickr-trigger">` beside each input as the Pickr anchor. Add container `<div>` for eyedropper button and harmony toolbar.
 
 ### `admin/js/adc-template-builder.js`
 
-- **Remove**: `.wpColorPicker()` initialization block and the `clear` callback within it
-- **Add**: Pickr initialization loop — iterate all `.adc-color-picker-input` elements, create a `Pickr.create()` instance per field, store instances in a `Map` keyed by `data-key`
+- **Remove**: `.wpColorPicker()` initialization block (the `if ($.fn.wpColorPicker)` guard and its contents)
+- **Add**: Pickr initialization loop guarded by `if (typeof Pickr !== 'undefined')` — iterate all `.adc-color-picker-input` elements, create a `Pickr.create()` instance per field, store instances in a `Map` keyed by `data-key`
 - **Add**: Eyedropper button creation and click handler (progressive enhancement)
 - **Add**: Color harmony toolbar creation and HSL rotation logic
 - **Add**: Recent palette management (localStorage read/write, swatch rendering)
 - **Update**: `adcSendPreviewVars()` — still reads hex from input `.value`, no change needed
-- **Update**: `adcLoadBuiltinTemplate()` — instead of `.wpColorPicker('color', value)`, call `pickrInstance.setColor(value)` per field
-- **Update**: Template picker modal — same pattern, use `setColor()` instead of `.wpColorPicker()`
+- **Update**: `adcLoadBuiltinTemplate()` — instead of `.wpColorPicker('color', value)`, call `pickrInstance.setColor(value)` per field. For clearing all fields, call `pickrInstance.setColor(null)` to reset Pickr's visual state (not just the input value).
+
+Note: The template picker modal navigates via `window.location.href` — it does not call wpColorPicker and needs no Pickr changes.
 
 ### `admin/css/adc-template-builder.css`
 
 - **Remove**: `.wp-picker-container`, `.wp-picker-input-wrap` overrides
-- **Add**: Pickr Nano positioning within `.adc-color-card` grid cards
+- **Add**: `.adc-pickr-trigger` swatch styling and Pickr Nano positioning within `.adc-color-card` grid cards
 - **Add**: Styles for harmony toolbar (small button row, chip swatches)
 - **Add**: Styles for eyedropper button (icon, hover state)
 - **Add**: Styles for recent palette row (small swatch circles)
@@ -101,12 +106,17 @@ A small eyedropper icon button rendered next to each color input.
 - **Live preview postMessage flow** — `adcSendPreviewVars()` collects input `.value` hex strings, same as before
 - **WCAG contrast checker** — reads hex from inputs, luminance/ratio math unchanged
 - **Template import/export** — JSON format unchanged, same hex values
-- **Built-in template picker modal** — updates input values, Pickr picks them up
 - **Server-side sanitization** — `sanitize_hex_color()` unchanged since Pickr with `lockOpacity` outputs hex
+- **jQuery dependency** — the template builder JS still uses jQuery for accordion, range sliders, dirty state, etc. Only `wp-color-picker` is removed from the dependency chain.
+- **`build-min.sh`** — admin JS/CSS files are served unminified; no build script changes needed
 
 ## Backwards Compatibility
 
-Existing saved templates store hex values. Pickr reads and writes hex. No migration needed. If Pickr CDN is unreachable, the raw `<input type="text">` fields remain functional for manual hex entry (graceful degradation).
+Existing saved templates store hex values. Pickr reads and writes hex. No migration needed.
+
+## Graceful Degradation
+
+If Pickr CDN is unreachable, the `if (typeof Pickr !== 'undefined')` guard prevents runtime errors. The raw `<input type="text">` fields remain functional for manual hex entry. Eyedropper, harmony, and palette features (all rendered by JS that depends on Pickr) silently do not render.
 
 ## Browser Support
 
