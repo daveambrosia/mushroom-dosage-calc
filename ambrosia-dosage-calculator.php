@@ -106,7 +106,7 @@ class Ambrosia_Dosage_Calculator {
         add_action('plugins_loaded', array($this, 'check_db_update'));
         add_action('init', array($this, 'init'));
         add_action('rest_api_init', array($this, 'register_rest_routes'));
-        add_action('template_redirect', array('ADC_HTTP_Cache', 'init'), 5);
+        add_action('rest_api_init', array('ADC_HTTP_Cache', 'init'), 5);
         add_action('wp_enqueue_scripts', array($this, 'enqueue_public_assets'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
         

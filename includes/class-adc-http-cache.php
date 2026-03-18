@@ -81,11 +81,13 @@ class ADC_HTTP_Cache {
         // Handle conditional request (If-None-Match).
         $if_none_match = $request->get_header('if_none_match');
         if ($if_none_match !== null) {
-            // Strip surrounding quotes and whitespace for comparison.
-            $client_etag = trim($if_none_match, " \t\n\r\0\x0B\"");
             $server_etag = trim($etag, '"');
+            // If-None-Match can contain comma-separated ETags; check each one.
+            $client_etags = array_map(function ($e) {
+                return trim(trim($e), ' "');
+            }, explode(',', $if_none_match));
 
-            if ($client_etag === $server_etag) {
+            if (in_array($server_etag, $client_etags, true) || in_array('*', $client_etags, true)) {
                 $not_modified = new WP_REST_Response(null, 304);
                 $not_modified->header('Cache-Control', 'public, max-age=' . self::MAX_AGE);
                 $not_modified->header('ETag', $etag);
