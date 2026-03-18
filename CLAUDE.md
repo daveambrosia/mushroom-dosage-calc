@@ -4,11 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Live Testing Environment
 
-- **URL**: https://192.168.1.140/wordpress
+- **URL**: https://members.tail5d8649.ts.net/wordpress/ (Tailscale VPN). Also accessible via https://localhost/wordpress on the server itself.
 - **Plugin path**: `/var/www/html/wordpress/wp-content/plugins/ambrosia-dosage-calculator`
 - **Before any code change**, create a zip backup: `zip -r /home/dave/backup/ambrosia-dosage-calculator-$(date +%Y%m%d-%H%M%S).zip /var/www/html/wordpress/wp-content/plugins/ambrosia-dosage-calculator/`
 - **PHP version**: 8.3 on server (minimum 8.0)
 - **WordPress**: 6.0+ (tested up to 6.4)
+- **Admin login**: francis / password123 (testing only)
 
 ## Build Commands
 
@@ -76,11 +77,22 @@ Key modules:
 ## Code Conventions
 
 - All DB queries use `$wpdb->prepare()` — no raw interpolation
+- ORDER BY columns must use an allowlist, never `esc_sql()` alone
 - All REST endpoints require nonce verification and capability checks for write operations
-- Input: `sanitize_text_field()`, `sanitize_key()`, `absint()`. Output: `esc_html()`, `esc_attr()`, `esc_json()`
+- Input: `sanitize_text_field(wp_unslash(...))`, `sanitize_key()`, `absint()`. Always `wp_unslash()` superglobals before sanitizing.
+- Output: `esc_html()`, `esc_attr()`, `esc_url()` for admin_url(), `intval()` for numeric echo. Never skip output escaping.
+- JS dialog messages use `textContent` (not innerHTML) to prevent XSS. All dynamic values in HTML string builders must use `escapeHtml()`.
+- CSS template slugs validated with `sanitize_key()` + regex, CSS values stripped of `{}` to prevent injection
 - Class naming: `ADC_` prefix, one class per file, filename matches class (`class-adc-foo.php` → `ADC_Foo`)
 - Version constant `ADC_VERSION` in main plugin file must match `readme.txt` "Stable tag"
+- Use `wp_date()` instead of `date()` for admin UI timestamps (respects site timezone)
+- Activation/deactivation hooks must be at file scope, not inside `plugins_loaded` callbacks
+- localStorage reads/writes must check `state.storageConsent` first (GDPR)
+
+## Git Repository
+
+The plugin directory is a git repo. Baseline commit is `1858e48` (v2.17.20 pre-audit). The audit fix commits follow, one per fix (40 total). Use `git log --oneline` to see the full history.
 
 ## Specs & Feature Planning
 
-Feature specs live in `specs/NNN-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, and optional `checklists/`. The `.specify/` directory contains templates for these artifacts.
+Feature specs live in `specs/NNN-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, and optional `checklists/`. The `.specify/` directory contains templates for these artifacts. Audit/improvement plans live in `docs/superpowers/plans/`.
