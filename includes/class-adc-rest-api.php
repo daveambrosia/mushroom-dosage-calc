@@ -903,28 +903,27 @@ class ADC_REST_API {
         if ($output === false) {
             return new WP_Error('export_error', 'Could not create CSV output stream', array('status' => 500));
         }
-        
+
         // BOM for Excel UTF-8 compatibility
         fwrite($output, "\xEF\xBB\xBF");
         fputcsv($output, $headers);
         foreach ($rows as $row) {
             fputcsv($output, $row);
         }
-        
+
         rewind($output);
         $csv_content = stream_get_contents($output);
         fclose($output);
-        
-        // Send response with file headers
-        header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Length: ' . strlen($csv_content));
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        
-        echo $csv_content;
-        exit;
+
+        // Return WP_REST_Response instead of calling exit
+        $response = new WP_REST_Response($csv_content);
+        $response->header('Content-Type', 'text/csv; charset=UTF-8');
+        $response->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->header('Content-Length', strlen($csv_content));
+        $response->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+        $response->header('Pragma', 'no-cache');
+        $response->header('Expires', '0');
+        return $response;
     }
     
     /**
@@ -932,20 +931,20 @@ class ADC_REST_API {
      */
     private static function send_file_response($data, $filename, $content_type) {
         $json = wp_json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        
+
         if ($json === false) {
             return new WP_Error('export_error', 'JSON encoding failed: ' . json_last_error_msg(), array('status' => 500));
         }
-        
-        header('Content-Type: ' . $content_type . '; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Length: ' . strlen($json));
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        
-        echo $json;
-        exit;
+
+        // Return WP_REST_Response instead of calling exit
+        $response = new WP_REST_Response($json);
+        $response->header('Content-Type', $content_type . '; charset=UTF-8');
+        $response->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->header('Content-Length', strlen($json));
+        $response->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+        $response->header('Pragma', 'no-cache');
+        $response->header('Expires', '0');
+        return $response;
     }
     
     /**
