@@ -52,7 +52,9 @@ class ADC_Activator {
     
     public static function deactivate() {
         flush_rewrite_rules();
-        ADC_Sheets_Importer::deactivate();
+        if (class_exists('ADC_Sheets_Importer')) {
+            ADC_Sheets_Importer::deactivate();
+        }
         
         // Clear all plugin transients
         global $wpdb;
