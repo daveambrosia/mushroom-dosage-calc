@@ -95,7 +95,11 @@ class ADC_Edibles {
         }
         
         $where_sql = implode(' AND ', $where);
-        $order_sql = sprintf('%s %s', esc_sql($args['orderby']), esc_sql($args['order']));
+        $allowed_orderby = array('name', 'id', 'psilocybin', 'psilocin', 'sort_order', 'created_at', 'short_code', 'product_type');
+        $allowed_order = array('ASC', 'DESC');
+        $orderby = in_array($args['orderby'], $allowed_orderby, true) ? $args['orderby'] : 'sort_order';
+        $order = in_array(strtoupper($args['order']), $allowed_order, true) ? strtoupper($args['order']) : 'ASC';
+        $order_sql = sprintf('%s %s', $orderby, $order);
         
         $sql = "SELECT * FROM $table WHERE $where_sql ORDER BY $order_sql";
         
