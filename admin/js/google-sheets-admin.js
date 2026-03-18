@@ -5,6 +5,11 @@
 (function($) {
     'use strict';
 
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     const API_BASE = adcSheetsAdmin.restUrl;
     const NONCE = adcSheetsAdmin.nonce;
 
@@ -29,7 +34,7 @@
     function showStatus(containerId, type, message) {
         const $container = $(containerId);
         $container.html(
-            '<div class="notice notice-' + type + ' inline"><p>' + message + '</p></div>'
+            '<div class="notice notice-' + escapeHtml(type) + ' inline"><p>' + escapeHtml(message) + '</p></div>'
         ).show();
     }
 
@@ -39,19 +44,19 @@
     function buildPreviewTable(data, dbType) {
         if (!data.headers || !data.rows) return '<p>No data found.</p>';
 
-        let html = '<p><strong>' + data.total_count + ' total rows</strong> in sheet (showing first ' + data.rows.length + '):</p>';
+        let html = '<p><strong>' + escapeHtml(data.total_count) + ' total rows</strong> in sheet (showing first ' + escapeHtml(data.rows.length) + '):</p>';
 
         // Column mapping info
         if (data.column_map) {
             html += '<div class="adc-column-map">';
             html += '<h4>Detected Column Mapping:</h4><ul>';
             for (const [dbCol, sheetCol] of Object.entries(data.column_map)) {
-                html += '<li><code>' + dbCol + '</code> ← "' + sheetCol + '"</li>';
+                html += '<li><code>' + escapeHtml(dbCol) + '</code> ← "' + escapeHtml(sheetCol) + '"</li>';
             }
             html += '</ul>';
             const unmapped = data.headers.filter(h => !Object.values(data.column_map).includes(h));
             if (unmapped.length) {
-                html += '<p class="description">Unmapped columns (ignored): ' + unmapped.join(', ') + '</p>';
+                html += '<p class="description">Unmapped columns (ignored): ' + unmapped.map(escapeHtml).join(', ') + '</p>';
             }
             html += '</div>';
         }
@@ -60,14 +65,14 @@
         html += '<table class="widefat striped"><thead><tr>';
         data.headers.forEach(function(h) {
             const mapped = data.column_map && Object.values(data.column_map).includes(h);
-            html += '<th' + (mapped ? ' style="background:#e7f5e7"' : '') + '>' + h + '</th>';
+            html += '<th' + (mapped ? ' style="background:#e7f5e7"' : '') + '>' + escapeHtml(h) + '</th>';
         });
         html += '</tr></thead><tbody>';
 
         data.rows.forEach(function(row) {
             html += '<tr>';
             data.headers.forEach(function(h) {
-                html += '<td>' + (row[h] || '') + '</td>';
+                html += '<td>' + escapeHtml(row[h] || '') + '</td>';
             });
             html += '</tr>';
         });
@@ -175,7 +180,7 @@
                 msg += d.skipped + ' skipped.';
                 if (d.deactivated) msg += ' ' + d.deactivated + ' deactivated.';
                 if (d.errors && d.errors.length) {
-                    msg += '<br>Errors: ' + d.errors.join('<br>');
+                    msg += ' Errors: ' + d.errors.map(escapeHtml).join(', ');
                 }
                 showStatus('#adc-strains-import-status', d.errors?.length ? 'warning' : 'success', msg);
             } else {
@@ -219,7 +224,7 @@
                 msg += d.skipped + ' skipped.';
                 if (d.deactivated) msg += ' ' + d.deactivated + ' deactivated.';
                 if (d.errors && d.errors.length) {
-                    msg += '<br>Errors: ' + d.errors.join('<br>');
+                    msg += ' Errors: ' + d.errors.map(escapeHtml).join(', ');
                 }
                 showStatus('#adc-edibles-import-status', d.errors?.length ? 'warning' : 'success', msg);
             } else {
