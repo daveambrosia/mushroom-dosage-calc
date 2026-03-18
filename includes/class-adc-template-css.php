@@ -73,7 +73,10 @@ class ADC_Template_CSS {
             return '';
         }
 
-        $slug = esc_attr($template['slug']);
+        $slug = sanitize_key($template['slug']);
+        if (!preg_match('/^[a-z0-9-]+$/', $slug)) {
+            return '';
+        }
         $css = '#adc-calculator[data-template="' . $slug . '"] {' . "\n";
 
         $stored = $template['variables'];
@@ -91,7 +94,8 @@ class ADC_Template_CSS {
             if (preg_match('/^#[0-9a-fA-F]{3,8}$/', $value)) {
                 $css .= '    --adc-' . $safe_key . ': ' . sanitize_hex_color($value) . ';' . "\n";
             } else {
-                $css .= '    --adc-' . $safe_key . ': ' . wp_strip_all_tags($value) . ';' . "\n";
+                $sanitized_value = preg_replace('/[{}]/', '', wp_strip_all_tags($value));
+                $css .= '    --adc-' . $safe_key . ': ' . $sanitized_value . ';' . "\n";
             }
         }
 
