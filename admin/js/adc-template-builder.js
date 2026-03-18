@@ -183,6 +183,41 @@
         });
     }
 
+    // ---- Eyedropper (progressive enhancement) ----
+    function adcInitEyedroppers() {
+        if (!('EyeDropper' in window)) return;
+
+        document.querySelectorAll('.adc-pickr-row').forEach(function(row) {
+            var inputEl = row.querySelector('.adc-color-picker-input');
+            if (!inputEl) return;
+
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'adc-eyedropper-btn';
+            btn.title = 'Pick color from screen';
+            btn.setAttribute('aria-label', 'Pick color from screen');
+            btn.textContent = '\uD83D\uDC41';
+            btn.addEventListener('click', function() {
+                var dropper = new EyeDropper();
+                dropper.open().then(function(result) {
+                    var hex = result.sRGBHex;
+                    inputEl.value = hex;
+                    var key = inputEl.dataset.key;
+                    if (pickrInstances[key]) {
+                        pickrInstances[key].setColor(hex, true);
+                    }
+                    adcAddRecentColor(hex);
+                    debouncedPreview();
+                    adcUpdateContrastCheck();
+                    formDirty = true;
+                }).catch(function() {
+                    // User cancelled
+                });
+            });
+            row.appendChild(btn);
+        });
+    }
+
     function initPickrInstance(triggerEl, inputEl) {
         var key = inputEl.dataset.key;
         var currentVal = inputEl.value || null;
@@ -597,6 +632,7 @@
             });
             adcRenderRecentPalettes();
             adcInitHarmonyToolbars();
+            adcInitEyedroppers();
         }
 
         // ---- Text inputs: live preview on change ----
