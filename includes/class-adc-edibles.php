@@ -306,7 +306,7 @@ class ADC_Edibles {
             'product_type' => sanitize_title($data['product_type']),
             'batch_number' => sanitize_text_field($data['batch_number']),
             'pieces_per_package' => max(1, absint($data['pieces_per_package'])),
-            'total_mg' => absint($data['psilocybin']) + absint($data['psilocin']),
+            'total_mg' => absint($data['psilocybin']) + absint($data['psilocin']) + absint($data['norpsilocin']) + absint($data['baeocystin']) + absint($data['norbaeocystin']) + absint($data['aeruginascin']),
             'psilocybin' => absint($data['psilocybin']),
             'psilocin' => absint($data['psilocin']),
             'norpsilocin' => absint($data['norpsilocin']),
@@ -360,7 +360,7 @@ class ADC_Edibles {
         
         // Validate total_mg
         if ($data['total_mg'] <= 0) {
-            return new WP_Error('validation_error', 'Total mg must be greater than 0');
+            return new WP_Error('validation_error', 'At least one compound value must be greater than 0');
         }
         
         return true;
