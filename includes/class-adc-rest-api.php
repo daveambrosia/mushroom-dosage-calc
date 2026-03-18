@@ -569,7 +569,13 @@ class ADC_REST_API {
         if (empty($body['data'])) {
             return new WP_Error('invalid_data', 'No data provided', array('status' => 400));
         }
-        
+
+        // Enforce 64KB size limit on submission data
+        $json_data = wp_json_encode($body['data']);
+        if (strlen($json_data) > 65536) {
+            return new WP_Error('payload_too_large', 'Submission data exceeds maximum size', array('status' => 413));
+        }
+
         // Rate limiting (simple - by IP)
         $ip = self::get_client_ip();
         global $wpdb;
