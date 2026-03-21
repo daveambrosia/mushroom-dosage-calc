@@ -199,10 +199,22 @@
             debouncedPreview();
         });
 
+        pickr.on('cancel', function(instance) {
+            // Cancel = dismiss without changing anything (same as clicking outside).
+            instance.hide();
+        });
+
         pickr.on('hide', function() {
             // Restore original value if picker closed without saving
             if (!didSave) {
                 inputEl.value = savedVal;
+                // Restore the Pickr button swatch to the original color
+                if (savedVal && /^#[0-9a-fA-F]{3,8}$/.test(savedVal)) {
+                    pickr.setColor(savedVal, true);
+                    pickr.applyColor(true);
+                } else {
+                    pickr.setColor(null, true);
+                }
                 adcSendPreviewVars();
                 adcUpdateContrastCheck();
             }
