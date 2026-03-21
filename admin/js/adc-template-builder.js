@@ -250,6 +250,13 @@
             }
         });
 
+        // Clear the "Clear" placeholder text when user clicks into the input to type a new value
+        inputEl.addEventListener('focus', function() {
+            if (inputEl.value.toLowerCase() === 'clear') {
+                inputEl.value = '';
+            }
+        });
+
         // Sync: if user types hex directly in input
         inputEl.addEventListener('change', function() {
             var val = inputEl.value.trim();
