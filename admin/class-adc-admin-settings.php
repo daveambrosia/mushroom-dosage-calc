@@ -161,8 +161,12 @@ class ADC_Admin_Settings {
 		?>
 		<div class="wrap adc-admin">
 			<h1>⚙️ Calculator Settings</h1>
+			<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only display notices. ?>
 			<?php if ( isset( $_GET['saved'] ) ) : ?>
 				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Template saved!', 'ambrosia-dosage-calc' ); ?></p></div>
+			<?php endif; ?>
+			<?php if ( isset( $_GET['imported'] ) ) : ?>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Template imported successfully!', 'ambrosia-dosage-calc' ); ?></p></div>
 			<?php endif; ?>
 
 			<form method="post" id="adc-settings-form">
@@ -279,12 +283,7 @@ endforeach;
 								<?php if ( ! $is_active ) : ?>
 									<button class="button button-small adc-set-active" data-slug="<?php echo $ct_slug; ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_set_active_template' ) ); ?>"><?php esc_html_e( 'Set Active', 'ambrosia-dosage-calc' ); ?></button>
 								<?php endif; ?>
-								<form method="post" style="display:inline-block; margin:0;" action="<?php echo esc_url( admin_url( 'admin.php?page=dosage-calculator-template-builder' ) ); ?>">
-									<?php wp_nonce_field( 'adc_export_template_' . $ct_slug, '_wpnonce', true, true ); ?>
-									<input type="hidden" name="action" value="export">
-									<input type="hidden" name="slug" value="<?php echo $ct_slug; ?>">
-									<button type="submit" class="button button-small"><?php esc_html_e( 'Export', 'ambrosia-dosage-calc' ); ?></button>
-								</form>
+								<button type="button" class="button button-small adc-export-template" data-slug="<?php echo $ct_slug; ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_export_template_' . $ct_slug ) ); ?>"><?php esc_html_e( 'Export', 'ambrosia-dosage-calc' ); ?></button>
 								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=duplicate&slug=' . $ct_slug ), 'adc_duplicate_template_' . $ct_slug ) ); ?>" class="button button-small"><?php esc_html_e( 'Duplicate', 'ambrosia-dosage-calc' ); ?></a>
 								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=delete&slug=' . $ct_slug ), 'adc_delete_template_' . $ct_slug ) ); ?>" class="button button-small" style="color:#a00;" onclick="return confirm('<?php echo esc_js( __( 'Delete this template? This cannot be undone.', 'ambrosia-dosage-calc' ) ); ?>');"><?php esc_html_e( 'Delete', 'ambrosia-dosage-calc' ); ?></a>
 							</td>
@@ -295,6 +294,17 @@ endforeach;
 					<?php else : ?>
 					<p style="color:#666;"><?php esc_html_e( 'No custom templates yet. Create one to customize colors, fonts, and layout.', 'ambrosia-dosage-calc' ); ?></p>
 					<?php endif; ?>
+
+					<p style="margin-top:15px;">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=new' ) ); ?>" class="button button-primary"><?php esc_html_e( '+ New Template', 'ambrosia-dosage-calc' ); ?></a>
+						<button type="button" class="button button-secondary" id="adc-settings-toggle-import"><?php esc_html_e( 'Import Template', 'ambrosia-dosage-calc' ); ?> ▼</button>
+					</p>
+					<div id="adc-settings-import-section" style="display:none; margin-top:10px; padding:15px; background:#f9f9f9; border:1px solid #e0e0e0; border-radius:6px; max-width:600px;">
+						<p class="description"><?php esc_html_e( 'Upload a JSON file exported from the Template Builder.', 'ambrosia-dosage-calc' ); ?></p>
+						<input type="file" id="adc-settings-import-file" accept=".json" style="margin:8px 0;">
+						<br>
+						<button type="button" class="button button-secondary" id="adc-settings-import-btn"><?php esc_html_e( 'Import Now', 'ambrosia-dosage-calc' ); ?></button>
+					</div>
 
 					<h3 style="margin-top:30px;"><?php esc_html_e( 'Built-in Templates', 'ambrosia-dosage-calc' ); ?></h3>
 					<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">

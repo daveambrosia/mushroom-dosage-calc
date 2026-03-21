@@ -3,7 +3,7 @@
  * Plugin Name: Ambrosia Dosage Calculator
  * Plugin URI: https://ambrosia.church/calculator
  * Description: Psilocybin dosage calculator with strain & edible management, QR codes, and customizable templates.
- * Version: 2.24.4
+ * Version: 2.24.5
  * Author: Church of Ambrosia
  * Author URI: https://ambrosia.church
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'ADC_VERSION', '2.24.4' );
+define( 'ADC_VERSION', '2.24.5' );
 define( 'ADC_DB_VERSION', '2.0.0' );
 define( 'ADC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -514,11 +514,12 @@ window.addEventListener('resize', function() {
 			'adc-admin',
 			'adcAdmin',
 			array(
-				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
-				'restUrl'   => rest_url( 'adc/v1/' ),
-				'nonce'     => wp_create_nonce( 'adc_admin_nonce' ),
-				'restNonce' => wp_create_nonce( 'wp_rest' ),
-				'adminUrl'  => admin_url( 'admin.php' ),
+				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+				'restUrl'     => rest_url( 'adc/v1/' ),
+				'nonce'       => wp_create_nonce( 'adc_admin_nonce' ),
+				'restNonce'   => wp_create_nonce( 'wp_rest' ),
+				'adminUrl'    => admin_url( 'admin.php' ),
+				'importNonce' => wp_create_nonce( 'adc_import_template' ),
 			)
 		);
 	}

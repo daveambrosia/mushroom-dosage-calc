@@ -1005,7 +1005,13 @@ class ADC_Template_Builder {
 		$existing_templates[] = $new_template;
 		self::save_custom_templates( $existing_templates );
 
-		wp_safe_redirect( admin_url( 'admin.php?page=dosage-calculator-template-builder&imported=1' ) );
+		// Redirect to the referring page if available, otherwise settings template tab.
+		$referer = wp_get_referer();
+		if ( $referer && strpos( $referer, 'dosage-calculator-settings' ) !== false ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=dosage-calculator-settings&imported=1#tab-template' ) );
+		} else {
+			wp_safe_redirect( admin_url( 'admin.php?page=dosage-calculator-settings&imported=1#tab-template' ) );
+		}
 		exit;
 	}
 

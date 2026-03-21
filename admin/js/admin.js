@@ -655,6 +655,70 @@ jQuery(
 			$( "#psilocybin, #psilocin, #norpsilocin, #baeocystin, #norbaeocystin, #aeruginascin, #pieces_per_package" ).on( "input", updateAllCalculations );
 		}
 
+		// ---- Import Template toggle + submit (settings page) ----
+		$( "#adc-settings-toggle-import" ).on( "click", function() {
+			var $section = $( "#adc-settings-import-section" );
+			var visible = $section.is( ":visible" );
+			$section.toggle();
+			$( this ).text( visible ? "Import Template ▼" : "Import Template ▲" );
+		});
+
+		$( "#adc-settings-import-btn" ).on( "click", function() {
+			var fileInput = document.getElementById( "adc-settings-import-file" );
+			if ( ! fileInput || ! fileInput.files.length ) {
+				alert( "Please select a JSON file first." );
+				return;
+			}
+			if ( ! confirm( "Import this template? It will be added to your custom templates." ) ) {
+				return;
+			}
+			// Build a form dynamically and POST to the template builder page
+			var formData = new FormData();
+			formData.append( "action", "import_template" );
+			formData.append( "adc_import_nonce", "<?php echo esc_js( wp_create_nonce( 'adc_import_template' ) ); ?>" );
+			formData.append( "adc_import_file", fileInput.files[0] );
+
+			// Use a dynamic hidden form since we need multipart/form-data
+			var $form = $( "<form>", {
+				method: "post",
+				action: adcAdmin.adminUrl + "?page=dosage-calculator-template-builder",
+				enctype: "multipart/form-data",
+			});
+			// Clone file input into a dynamic form (avoids nested form issue)
+			var $form = $( "<form>", {
+				method: "post",
+				action: adcAdmin.adminUrl + "?page=dosage-calculator-template-builder",
+				enctype: "multipart/form-data",
+			});
+			// Move the actual file input into the form (clones lose the file)
+			var $fileOrig = $( fileInput );
+			var $placeholder = $( "<input>", { type: "file", id: "adc-settings-import-file", accept: ".json" } );
+			$fileOrig.after( $placeholder ).attr( "name", "adc_import_file" );
+			$form.append( $fileOrig );
+			$form.append( $( "<input>", { type: "hidden", name: "action", value: "import_template" } ) );
+			$form.append( $( "<input>", { type: "hidden", name: "adc_import_nonce", value: adcAdmin.importNonce || "" } ) );
+			$( "body" ).append( $form );
+			$form.submit();
+		});
+
+		// ---- Export Template (creates a temp form to POST, avoids nested form issue) ----
+		$( document ).on( "click", ".adc-export-template", function() {
+			var slug  = $( this ).data( "slug" );
+			var nonce = $( this ).data( "nonce" );
+			if ( ! slug || ! nonce ) {
+				return;
+			}
+			var $form = $( "<form>", {
+				method: "post",
+				action: adcAdmin.adminUrl + "?page=dosage-calculator-template-builder",
+			});
+			$form.append( $( "<input>", { type: "hidden", name: "_wpnonce", value: nonce } ) );
+			$form.append( $( "<input>", { type: "hidden", name: "action", value: "export" } ) );
+			$form.append( $( "<input>", { type: "hidden", name: "slug", value: slug } ) );
+			$( "body" ).append( $form );
+			$form.submit();
+		});
+
 		// ---- Set Active Template (works on settings page + template builder list) ----
 		$( document ).on( "click", ".adc-set-active", function() {
 			var $btn  = $( this );
