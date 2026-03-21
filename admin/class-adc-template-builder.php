@@ -813,6 +813,7 @@ class ADC_Template_Builder {
 
 		// Generate new name and slug
 		$base_name       = $original_template['name'];
+		// translators: %s is the original template name being duplicated.
 		$new_name_prefix = sprintf( __( 'Copy of %s', 'ambrosia-dosage-calc' ), $base_name );
 		$new_name        = $new_name_prefix;
 
@@ -867,6 +868,7 @@ class ADC_Template_Builder {
 
 		// File upload validation
 		if ( UPLOAD_ERR_OK !== $file['error'] ) {
+			// translators: %s is the numeric PHP file upload error code.
 			add_settings_error( 'adc_template_builder', 'upload_error', sprintf( __( 'File upload error: %s', 'ambrosia-dosage-calc' ), intval( $file['error'] ) ), 'error' );
 			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			return;
@@ -912,6 +914,7 @@ class ADC_Template_Builder {
 		// Validate and sanitize variables
 		foreach ( $imported_data['variables'] as $key => $value ) {
 			if ( ! in_array( $key, $all_known_keys, true ) ) {
+				// translators: %s is the unrecognized CSS variable key name.
 				add_settings_error( 'adc_template_builder', 'unknown_var', sprintf( __( 'Unknown variable key found: %s', 'ambrosia-dosage-calc' ), esc_html( $key ) ), 'error' );
 				return;
 			}
@@ -925,6 +928,7 @@ class ADC_Template_Builder {
 				if ( $sanitized ) {
 					$template_variables[ $key ] = $sanitized;
 				} else {
+					// translators: %s is the CSS variable key with the invalid color value.
 					add_settings_error( 'adc_template_builder', 'invalid_color', sprintf( __( 'Invalid color value for variable %s.', 'ambrosia-dosage-calc' ), esc_html( $key ) ), 'error' );
 					return;
 				}
@@ -1585,6 +1589,7 @@ class ADC_Template_Builder {
 							$tabact  = esc_attr( $vars['tab-active-bg'] ?? $accent );
 							$radius  = esc_attr( $vars['radius'] ?? '8px' );
 							?>
+						<?php // translators: %s is the built-in template name shown in the picker. ?>
 						<div class="adc-picker-card" data-slug="<?php echo esc_attr( $slug ); ?>" tabindex="0" role="button" aria-label="<?php echo esc_attr( sprintf( __( 'Start from %s template', 'ambrosia-dosage-calc' ), $bt['name'] ) ); ?>">
 							<div class="adc-picker-preview" style="
 								background:<?php echo esc_attr( $bg ); ?>;
