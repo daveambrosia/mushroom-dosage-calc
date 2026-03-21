@@ -198,10 +198,14 @@
                 }
                 inputEl.value = hex;
                 savedVal = hex;
+                pcrButton.classList.remove('clear');
                 adcAddRecentColor(hex);
             } else {
-                inputEl.value = '';
-                savedVal = '';
+                // Transparent: show "Clear" in input, checkerboard on button
+                inputEl.value = 'Clear';
+                savedVal = 'Clear';
+                pcrButton.classList.add('clear');
+                pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
             }
             instance.hide();
             // Use direct call (not debounced) to guarantee the preview updates
@@ -235,8 +239,11 @@
                 if (savedVal && /^#[0-9a-fA-F]{3,8}$/.test(savedVal)) {
                     pickr.setColor(savedVal, true);
                     pickr.applyColor(true);
+                    pcrButton.classList.remove('clear');
                 } else {
                     pickr.setColor(null, true);
+                    pcrButton.classList.add('clear');
+                    pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
                 }
                 adcSendPreviewVars();
                 adcUpdateContrastCheck();
@@ -249,8 +256,14 @@
             if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
                 pickr.setColor(val, true);
                 pickr.applyColor(true);
-            } else if (val === '') {
+                pcrButton.classList.remove('clear');
+            } else if (val === '' || val.toLowerCase() === 'clear') {
                 pickr.setColor(null, true);
+                pcrButton.classList.add('clear');
+                pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
+                if (val === '') {
+                    inputEl.value = 'Clear';
+                }
             }
         });
 
