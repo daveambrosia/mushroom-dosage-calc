@@ -131,6 +131,7 @@
         var pickr = Pickr.create({
             el: triggerEl,
             theme: 'nano',
+            position: 'bottom-start',
             default: currentVal,
             lockOpacity: true,
             defaultRepresentation: 'HEX',
