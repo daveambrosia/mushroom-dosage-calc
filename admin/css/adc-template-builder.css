@@ -251,6 +251,11 @@
 	padding: 4px 6px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
+	transition: border-color 0.2s, background-color 0.2s;
+}
+.adc-color-card .adc-color-picker-input.adc-input-error {
+	border-color: #ef4444;
+	background-color: #fef2f2;
 }
 
 /* Eyedropper button */

@@ -257,31 +257,58 @@
             }
         });
 
-        // Restore "Clear" if user clicks out without typing a valid hex
+        // On blur: validate input — accept hex or clear, reject anything else
         inputEl.addEventListener('blur', function() {
             var val = inputEl.value.trim();
+
+            // Empty or "Clear" — restore transparent state
             if (val === '' || val.toLowerCase() === 'clear') {
-                inputEl.value = 'Clear';
+                inputEl.value = savedVal === 'Clear' || savedVal === '' ? 'Clear' : savedVal;
+                if (inputEl.value === 'Clear') {
+                    pickr.setColor(null, true);
+                    pcrButton.classList.add('clear');
+                    pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
+                }
+                return;
+            }
+
+            // Valid hex — apply it
+            if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
+                pickr.setColor(val, true);
+                pickr.applyColor(true);
+                pcrButton.classList.remove('clear');
+                savedVal = val;
+                adcSendPreviewVars();
+                adcUpdateContrastCheck();
+                formDirty = true;
+                return;
+            }
+
+            // Invalid input — show error and revert
+            inputEl.classList.add('adc-input-error');
+            setTimeout(function() {
+                inputEl.classList.remove('adc-input-error');
+            }, 1500);
+            inputEl.value = savedVal || 'Clear';
+            if (savedVal && /^#[0-9a-fA-F]{3,8}$/.test(savedVal)) {
+                pickr.setColor(savedVal, true);
+                pickr.applyColor(true);
+                pcrButton.classList.remove('clear');
+            } else {
                 pickr.setColor(null, true);
                 pcrButton.classList.add('clear');
                 pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
             }
         });
 
-        // Sync: if user types hex directly in input
+        // Change event kept for Enter key submission (fires before blur)
         inputEl.addEventListener('change', function() {
+            // Blur handler does all the work now; just trigger preview on valid hex
             var val = inputEl.value.trim();
             if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
-                pickr.setColor(val, true);
-                pickr.applyColor(true);
-                pcrButton.classList.remove('clear');
-            } else if (val === '' || val.toLowerCase() === 'clear') {
-                pickr.setColor(null, true);
-                pcrButton.classList.add('clear');
-                pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
-                if (val === '') {
-                    inputEl.value = 'Clear';
-                }
+                adcSendPreviewVars();
+                adcUpdateContrastCheck();
+                formDirty = true;
             }
         });
 
