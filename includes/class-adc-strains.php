@@ -161,9 +161,6 @@ class ADC_Strains {
 	}
 
 	/**
-	 * Clear strains cache (call after create/update/delete)
-	 */
-	/**
 	 * Invalidate strains cache by bumping the version key.
 	 * Works with external object caches (Redis/Memcached) unlike direct SQL DELETE.
 	 */
