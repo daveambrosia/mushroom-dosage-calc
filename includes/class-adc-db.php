@@ -148,4 +148,67 @@ class ADC_DB {
 		$settings = self::get_settings();
 		return isset( $settings[ $key ] ) ? $settings[ $key ] : $default;
 	}
+
+	/**
+	 * Delete all REST API transients for a given data type.
+	 *
+	 * Both the transient value row and the timeout row are removed so that
+	 * WordPress does not serve stale data from the options table.
+	 *
+	 * @param string $prefix Transient prefix, e.g. 'adc_rest_strains_'.
+	 * @return void
+	 */
+	public static function clear_rest_transients( $prefix ) {
+		global $wpdb;
+		$like = $wpdb->esc_like( '_transient_' . $prefix ) . '%';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like ) );
+		$like_timeout = $wpdb->esc_like( '_transient_timeout_' . $prefix ) . '%';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like_timeout ) );
+	}
+
+	/**
+	 * Parse a product name into a base name + potency tuple for smart sorting.
+	 *
+	 * Names like "Golden Teacher (6000 mcg)" are split so the base name sorts
+	 * alphabetically first, then by mcg ascending as a tiebreaker.
+	 * Names without an mcg suffix return a potency of 0.
+	 *
+	 * @param string $name Product name.
+	 * @return array{ 0: string, 1: int } [ lowercase_base_name, mcg_value ]
+	 */
+	public static function parse_name_for_sort( $name ) {
+		if ( preg_match( '/^(.+?)\s*\(\s*([\d,]+)\s*mcg\s*\)\s*$/', $name, $m ) ) {
+			return array( strtolower( trim( $m[1] ) ), (int) str_replace( ',', '', $m[2] ) );
+		}
+		return array( strtolower( trim( $name ) ), 0 );
+	}
+
+	/**
+	 * Truncate a plugin table and reset its AUTO_INCREMENT counter.
+	 *
+	 * Wraps FK checks around the DELETE so that foreign key constraints do not
+	 * block the operation (plugin tables use InnoDB with FK relationships).
+	 * Returns the number of rows that could NOT be deleted (0 = full success).
+	 *
+	 * @param string $table_key Table key as accepted by ADC_DB::table() e.g. 'strains'.
+	 * @return int Remaining row count after deletion (0 on success).
+	 */
+	public static function reset_table( $table_key ) {
+		global $wpdb;
+
+		$table = self::table( $table_key );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DELETE FROM `' . esc_sql( $table ) . '`' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'ALTER TABLE `' . esc_sql( $table ) . '` AUTO_INCREMENT = 1' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 1' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		return (int) $wpdb->get_var( 'SELECT COUNT(*) FROM `' . esc_sql( $table ) . '`' );
+	}
 }

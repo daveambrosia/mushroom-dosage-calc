@@ -56,39 +56,21 @@ class ADC_Admin_Settings {
 				$messages   = array();
 
 				if ( 'strains' === $reset_type ) {
-					$table = ADC_DB::table( 'strains' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
-					$wpdb->query( 'DELETE FROM `' . esc_sql( $table ) . '`' );
-					$wpdb->query( 'ALTER TABLE `' . esc_sql( $table ) . '` AUTO_INCREMENT = 1' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 1' );
+					$remaining = ADC_DB::reset_table( 'strains' );
 					delete_transient( 'adc_strains_by_category' );
 					ADC_Strains::clear_cache();
-					$remaining  = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM `' . esc_sql( $table ) . '`' );
 					$messages[] = 0 === $remaining ? 'All strain data has been cleared.' : "Warning: $remaining strains could not be deleted.";
 				} elseif ( 'edibles' === $reset_type ) {
-					$table = ADC_DB::table( 'edibles' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
-					$wpdb->query( 'DELETE FROM `' . esc_sql( $table ) . '`' );
-					$wpdb->query( 'ALTER TABLE `' . esc_sql( $table ) . '` AUTO_INCREMENT = 1' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 1' );
+					$remaining = ADC_DB::reset_table( 'edibles' );
 					delete_transient( 'adc_edibles_by_type' );
-					$remaining  = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM `' . esc_sql( $table ) . '`' );
 					$messages[] = 0 === $remaining ? 'All edible data has been cleared.' : "Warning: $remaining edibles could not be deleted.";
 				} elseif ( 'categories' === $reset_type ) {
-					$table = ADC_DB::table( 'categories' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
-					$wpdb->query( 'DELETE FROM `' . esc_sql( $table ) . '`' );
-					$wpdb->query( 'ALTER TABLE `' . esc_sql( $table ) . '` AUTO_INCREMENT = 1' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 1' );
+					ADC_DB::reset_table( 'categories' );
 					delete_transient( 'adc_categories' );
 					ADC_Strains::clear_cache();
 					$messages[] = 'All categories have been cleared.';
 				} elseif ( 'product_types' === $reset_type ) {
-					$table = ADC_DB::table( 'product_types' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
-					$wpdb->query( 'DELETE FROM `' . esc_sql( $table ) . '`' );
-					$wpdb->query( 'ALTER TABLE `' . esc_sql( $table ) . '` AUTO_INCREMENT = 1' );
-					$wpdb->query( 'SET FOREIGN_KEY_CHECKS = 1' );
+					ADC_DB::reset_table( 'product_types' );
 					delete_transient( 'adc_product_types' );
 					delete_transient( 'adc_product_types_with_counts' );
 					$messages[] = 'All product types have been cleared.';

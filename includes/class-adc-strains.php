@@ -134,26 +134,20 @@ class ADC_Strains {
 
 		$results = $wpdb->get_results( $sql, ARRAY_A );
 
-		// Smart sort: category sort_order first, then base name alpha, then mcg ascending
+		// Smart sort: category sort_order first, then base name alpha, then mcg ascending.
 		usort(
 			$results,
 			function ( $a, $b ) {
-				// Category order first
+				// Category order first.
 				$cat_a = (int) ( $a['cat_sort_order'] ?? 999 );
 				$cat_b = (int) ( $b['cat_sort_order'] ?? 999 );
 				if ( $cat_b !== $cat_a ) {
 					return $cat_a - $cat_b;
 				}
 
-				// Then base name + mcg
-				$parse                = function ( $name ) {
-					if ( preg_match( '/^(.+?)\s*\(\s*([\d,]+)\s*mcg\s*\)\s*$/', $name, $m ) ) {
-						return array( strtolower( trim( $m[1] ) ), (int) str_replace( ',', '', $m[2] ) );
-					}
-					return array( strtolower( trim( $name ) ), 0 );
-				};
-				list($name_a, $mcg_a) = $parse( $a['name'] );
-				list($name_b, $mcg_b) = $parse( $b['name'] );
+				// Then base name alpha, with mcg as tiebreaker.
+				list($name_a, $mcg_a) = ADC_DB::parse_name_for_sort( $a['name'] );
+				list($name_b, $mcg_b) = ADC_DB::parse_name_for_sort( $b['name'] );
 				$cmp                  = strcmp( $name_a, $name_b );
 				return 0 !== $cmp ? $cmp : ( $mcg_a - $mcg_b );
 			}
@@ -186,10 +180,7 @@ class ADC_Strains {
 	 * @since 2.19.0
 	 */
 	private static function clear_rest_cache() {
-		global $wpdb;
-		// Delete all transients matching 'adc_rest_strains_*' pattern
-		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc_rest_strains_%'" );
-		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc_rest_strains_%'" );
+		ADC_DB::clear_rest_transients( 'adc_rest_strains_' );
 	}
 
 	/**
