@@ -61,10 +61,10 @@ class ADC_Sheets_Importer {
 	 */
 	public static function get_defaults() {
 		return array(
-			'strains_url'    => '',
-			'strains_gid'    => '',
-			'edibles_url'    => '',
-			'edibles_gid'    => '',
+			'strains_url'    => 'https://docs.google.com/spreadsheets/d/1x50He5HTMD2ISYo61xVjOKh9Fcv18C1i1EcpXM18rFU/edit?gid=0#gid=0',
+			'strains_gid'    => '0',
+			'edibles_url'    => 'https://docs.google.com/spreadsheets/d/1x50He5HTMD2ISYo61xVjOKh9Fcv18C1i1EcpXM18rFU/edit?gid=1037373262#gid=1037373262',
+			'edibles_gid'    => '1037373262',
 			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- documenting valid options.
 			'import_mode'    => 'update', // 'add_new', 'update', 'replace'
 			'auto_sync'      => false,
@@ -78,8 +78,19 @@ class ADC_Sheets_Importer {
 	 * Get current settings.
 	 */
 	public static function get_settings() {
-		$saved = get_option( self::OPT_SETTINGS, array() );
-		return wp_parse_args( $saved, self::get_defaults() );
+		$saved    = get_option( self::OPT_SETTINGS, array() );
+		$defaults = self::get_defaults();
+
+		// For URL/GID fields only: if the saved value is an empty string, fall back to
+		// the default so that new installs and reset sites get the pre-configured URLs.
+		// Other fields (booleans, mode strings) are intentionally left as saved.
+		foreach ( array( 'strains_url', 'strains_gid', 'edibles_url', 'edibles_gid' ) as $key ) {
+			if ( isset( $saved[ $key ] ) && '' === $saved[ $key ] && '' !== $defaults[ $key ] ) {
+				unset( $saved[ $key ] );
+			}
+		}
+
+		return wp_parse_args( $saved, $defaults );
 	}
 
 	/**
