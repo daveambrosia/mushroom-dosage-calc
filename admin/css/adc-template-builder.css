@@ -270,23 +270,25 @@
 	border-color: #999;
 }
 
-/* Recent palette row */
+/* Recent palette row — constrained to the pickr-row width */
 .adc-recent-palette {
 	display: flex;
 	gap: 3px;
 	flex-wrap: wrap;
-	margin-top: 2px;
+	margin-top: 3px;
+	max-width: 170px; /* fits ~9 swatches per row: pickr(28) + gap + input(90) + gap + eyedropper(~30) */
 }
 .adc-recent-palette:empty {
 	display: none;
 }
 .adc-recent-swatch {
-	width: 16px;
-	height: 16px;
+	width: 14px;
+	height: 14px;
 	border-radius: 2px;
-	border: 1px solid #000;
+	border: 1px solid rgba(0, 0, 0, 0.3);
 	cursor: pointer;
 	display: inline-block;
+	flex-shrink: 0;
 }
 .adc-recent-swatch:hover {
 	border-color: #000;

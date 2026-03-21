@@ -76,7 +76,7 @@
                             pickrInstances[key].setColor(hex, true);
                             pickrInstances[key].applyColor(true);
                         }
-                        debouncedPreview();
+                        adcSendPreviewVars();
                         adcUpdateContrastCheck();
                         formDirty = true;
                     }
@@ -181,7 +181,9 @@
                 savedVal = '';
             }
             instance.hide();
-            debouncedPreview();
+            // Use direct call (not debounced) to guarantee the preview updates
+            // after save. The debounced version can be cancelled by the hide handler.
+            adcSendPreviewVars();
             adcUpdateContrastCheck();
             formDirty = true;
         });
@@ -201,7 +203,8 @@
             // Restore original value if picker closed without saving
             if (!didSave) {
                 inputEl.value = savedVal;
-                debouncedPreview();
+                adcSendPreviewVars();
+                adcUpdateContrastCheck();
             }
         });
 
