@@ -508,35 +508,48 @@ class ADC_Template_Builder {
 			return self::$builtin_templates;
 		}
 
-		// Match each template block: #adc-calculator[data-template="xxx"] { ... }
-		// Some templates have multiple blocks (main variables + structural overrides).
-		// Only the first block (with --adc-* vars) matters; skip subsequent blocks for the same slug.
-		if ( preg_match_all( '/\[data-template="([^"]+)"\]\s*\{([^}]+)\}/s', $css, $matches, PREG_SET_ORDER ) ) {
+		// Match all CSS rule blocks that contain at least one [data-template="x"] selector.
+		// Handles both single-selector blocks and multi-selector shared blocks, e.g.:
+		//   #adc-calculator[data-template="minimal"] { --adc-bg: #fff; ... }
+		//   #adc-calculator[data-template="a"], #adc-calculator[data-template="b"] { ... }
+		if ( preg_match_all( '/((?:[^\{]*\[data-template="[^"]+"\][^\{]*,?\s*)+)\{([^}]+)\}/s', $css, $matches, PREG_SET_ORDER ) ) {
 			foreach ( $matches as $m ) {
-				$slug = $m[1];
+				$selector_block = $m[1];
+				$body           = $m[2];
 
-				// Skip if we already parsed this template (first block has the variables)
-				if ( isset( self::$builtin_templates[ $slug ] ) ) {
-					continue;
-				}
-
-				$block = $m[2];
-				$vars  = array();
-
-				// Extract --adc-xxx: value pairs
-				if ( preg_match_all( '/--adc-([a-z-]+)\s*:\s*([^;]+);/', $block, $var_matches, PREG_SET_ORDER ) ) {
+				// Extract --adc-xxx: value pairs from this block
+				$vars = array();
+				if ( preg_match_all( '/--adc-([a-z-]+)\s*:\s*([^;]+);/', $body, $var_matches, PREG_SET_ORDER ) ) {
 					foreach ( $var_matches as $vm ) {
 						$vars[ trim( $vm[1] ) ] = trim( $vm[2] );
 					}
 				}
 
-				$name                             = ucfirst( str_replace( '-', ' ', $slug ) );
-				self::$builtin_templates[ $slug ] = array(
-					'slug'      => $slug,
-					'name'      => $name,
-					'variables' => $vars,
-					'builtin'   => true,
-				);
+				// No ADC vars in this block — skip (e.g. structural overrides with only class rules)
+				if ( empty( $vars ) ) {
+					continue;
+				}
+
+				// Extract all template slugs from the selector
+				preg_match_all( '/\[data-template="([^"]+)"\]/', $selector_block, $slug_matches );
+				foreach ( $slug_matches[1] as $slug ) {
+					if ( ! isset( self::$builtin_templates[ $slug ] ) ) {
+						// First block for this slug — use as base
+						$name                             = ucfirst( str_replace( '-', ' ', $slug ) );
+						self::$builtin_templates[ $slug ] = array(
+							'slug'      => $slug,
+							'name'      => $name,
+							'variables' => $vars,
+							'builtin'   => true,
+						);
+					} else {
+						// Subsequent block — merge vars in (fills shared vars like dose level colors)
+						self::$builtin_templates[ $slug ]['variables'] = array_merge(
+							self::$builtin_templates[ $slug ]['variables'],
+							$vars
+						);
+					}
+				}
 			}
 		}
 
