@@ -1397,7 +1397,7 @@ class ADC_Template_Builder {
 			)
 		);
 
-		$back_url = admin_url( 'admin.php?page=dosage-calculator-template-builder' );
+		$back_url = admin_url( 'admin.php?page=dosage-calculator-settings#tab-template' );
 
 		// Wrap entire editor in a form so the sticky toolbar can contain the submit button
 		echo '<form method="post" id="adc-template-builder-form">';

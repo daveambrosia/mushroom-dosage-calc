@@ -276,6 +276,17 @@ endforeach;
 							</td>
 							<td>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=edit&slug=' . $ct_slug ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'ambrosia-dosage-calc' ); ?></a>
+								<?php if ( ! $is_active ) : ?>
+									<button class="button button-small adc-set-active" data-slug="<?php echo $ct_slug; ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_set_active_template' ) ); ?>"><?php esc_html_e( 'Set Active', 'ambrosia-dosage-calc' ); ?></button>
+								<?php endif; ?>
+								<form method="post" style="display:inline-block; margin:0;" action="<?php echo esc_url( admin_url( 'admin.php?page=dosage-calculator-template-builder' ) ); ?>">
+									<?php wp_nonce_field( 'adc_export_template_' . $ct_slug, '_wpnonce', true, true ); ?>
+									<input type="hidden" name="action" value="export">
+									<input type="hidden" name="slug" value="<?php echo $ct_slug; ?>">
+									<button type="submit" class="button button-small"><?php esc_html_e( 'Export', 'ambrosia-dosage-calc' ); ?></button>
+								</form>
+								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=duplicate&slug=' . $ct_slug ), 'adc_duplicate_template_' . $ct_slug ) ); ?>" class="button button-small"><?php esc_html_e( 'Duplicate', 'ambrosia-dosage-calc' ); ?></a>
+								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=delete&slug=' . $ct_slug ), 'adc_delete_template_' . $ct_slug ) ); ?>" class="button button-small" style="color:#a00;" onclick="return confirm('<?php echo esc_js( __( 'Delete this template? This cannot be undone.', 'ambrosia-dosage-calc' ) ); ?>');"><?php esc_html_e( 'Delete', 'ambrosia-dosage-calc' ); ?></a>
 							</td>
 						</tr>
 						<?php endforeach; ?>
@@ -536,7 +547,9 @@ endforeach;
 				var panels = document.querySelectorAll('.adc-tab-panel');
 				var submitBar = document.getElementById('adc-submit-bar');
 
-				var activeTab = localStorage.getItem('adc_settings_tab') || 'features';
+				// Check URL hash first (e.g. #tab-template from template builder Cancel link)
+				var hashTab = window.location.hash.replace('#tab-', '');
+				var activeTab = hashTab || localStorage.getItem('adc_settings_tab') || 'features';
 
 				function activateTab(tabName) {
 					tabs.forEach(function(t) {

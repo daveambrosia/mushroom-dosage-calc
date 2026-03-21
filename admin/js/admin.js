@@ -654,5 +654,39 @@ jQuery(
 		if ($( "#psilocybin" ).length) {
 			$( "#psilocybin, #psilocin, #norpsilocin, #baeocystin, #norbaeocystin, #aeruginascin, #pieces_per_package" ).on( "input", updateAllCalculations );
 		}
+
+		// ---- Set Active Template (works on settings page + template builder list) ----
+		$( document ).on( "click", ".adc-set-active", function() {
+			var $btn  = $( this );
+			var slug  = $btn.data( "slug" );
+			var nonce = $btn.data( "nonce" );
+
+			if ( ! slug || ! nonce ) {
+				return;
+			}
+
+			$btn.prop( "disabled", true ).text( "Activating..." );
+
+			$.post(
+				adcAdmin.ajaxUrl,
+				{
+					action: "adc_set_active_template",
+					slug: slug,
+					nonce: nonce,
+				},
+				function( response ) {
+					if ( response.success ) {
+						// Reload the page to reflect the change
+						window.location.reload();
+					} else {
+						alert( response.data || "Failed to set template active." );
+						$btn.prop( "disabled", false ).text( "Set Active" );
+					}
+				}
+			).fail( function() {
+				alert( "Request failed. Please try again." );
+				$btn.prop( "disabled", false ).text( "Set Active" );
+			});
+		});
 	}
 );
