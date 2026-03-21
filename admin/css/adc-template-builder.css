@@ -240,6 +240,10 @@
 .adc-pickr-row .pcr-button::after {
 	border-radius: 3px !important;
 }
+/* Center the Save / Transparent / Cancel buttons in the Pickr popup */
+.pcr-app .pcr-interaction {
+	justify-content: center !important;
+}
 .adc-color-card .adc-color-picker-input {
 	width: 90px;
 	font-size: 12px;

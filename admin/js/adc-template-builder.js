@@ -137,6 +137,11 @@
             comparison: true,
             closeWithKey: 'Escape',
             swatches: defaultSwatches,
+            i18n: {
+                'btn:save': 'Save',
+                'btn:cancel': 'Cancel',
+                'btn:clear': 'Transparent'
+            },
             components: {
                 palette: true,
                 preview: true,
@@ -151,7 +156,7 @@
                     input: true,
                     clear: true,
                     save: true,
-                    cancel: false
+                    cancel: true
                 }
             }
         });
