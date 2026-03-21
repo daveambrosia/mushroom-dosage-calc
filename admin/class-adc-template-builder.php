@@ -1353,6 +1353,14 @@ class ADC_Template_Builder {
 		$variables = $template ? ( $template['variables'] ?? array() ) : array();
 		$builtins  = self::get_builtin_templates();
 
+		// For new templates (empty variables), seed with 'minimal' built-in defaults so
+		// color pickers render with a sensible starting color instead of showing the
+		// empty/clear X state. An existing saved template with explicit empty strings
+		// is left as-is (user intentionally cleared those values).
+		if ( empty( $variables ) && isset( $builtins['minimal'] ) ) {
+			$variables = $builtins['minimal']['variables'];
+		}
+
 		// Enqueue external JS and CSS
 		// Self-hosted Pickr: eliminates CDN dependency without SRI (BUG-002).
 		wp_enqueue_style( 'pickr-nano', ADC_PLUGIN_URL . 'admin/css/vendor/pickr-nano.min.css', array(), '1.9.1' );
