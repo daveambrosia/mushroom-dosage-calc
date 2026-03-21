@@ -74,6 +74,7 @@
                         var key = inputEl.dataset.key;
                         if (pickrInstances[key]) {
                             pickrInstances[key].setColor(hex, true);
+                            pickrInstances[key].applyColor(true);
                         }
                         debouncedPreview();
                         adcUpdateContrastCheck();
@@ -107,6 +108,7 @@
                     var key = inputEl.dataset.key;
                     if (pickrInstances[key]) {
                         pickrInstances[key].setColor(hex, true);
+                        pickrInstances[key].applyColor(true);
                     }
                     adcAddRecentColor(hex);
                     debouncedPreview();
@@ -203,6 +205,7 @@
             var val = inputEl.value.trim();
             if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
                 pickr.setColor(val, true);
+                pickr.applyColor(true);
             } else if (val === '') {
                 pickr.setColor(null, true);
             }
@@ -243,6 +246,7 @@
             var key = $(this).data('key');
             if (pickrInstances[key]) {
                 pickrInstances[key].setColor(null, true);
+                pickrInstances[key].applyColor(true);
             }
         });
         $('.adc-tb-text-input').each(function() { $(this).val(''); });
@@ -257,6 +261,7 @@
                     var dataKey = $input.data('key');
                     if (pickrInstances[dataKey]) {
                         pickrInstances[dataKey].setColor(vars[key], true);
+                        pickrInstances[dataKey].applyColor(true);
                     }
                 }
             }
