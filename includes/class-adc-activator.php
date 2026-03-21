@@ -17,9 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Activator {
 
+	/** @var array Activation errors collected during activate(). */
 	private static $activation_errors   = array();
+	/** @var array Activation warnings collected during activate(). */
 	private static $activation_warnings = array();
 
+	/**
+	 * Run plugin activation tasks: create tables, insert defaults, set options.
+	 *
+	 * @return void
+	 */
 	public static function activate() {
 		self::$activation_errors   = array();
 		self::$activation_warnings = array();
@@ -57,6 +64,11 @@ class ADC_Activator {
 		flush_rewrite_rules();
 	}
 
+	/**
+	 * Run plugin deactivation tasks: flush rules, clear transients.
+	 *
+	 * @return void
+	 */
 	public static function deactivate() {
 		flush_rewrite_rules();
 		if ( class_exists( 'ADC_Sheets_Importer' ) ) {
@@ -156,6 +168,11 @@ class ADC_Activator {
 		);
 	}
 
+	/**
+	 * Create all plugin database tables via dbDelta.
+	 *
+	 * @return bool True if all tables were created without errors.
+	 */
 	private static function create_tables() {
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
@@ -346,6 +363,11 @@ class ADC_Activator {
 		return $all_ok;
 	}
 
+	/**
+	 * Insert default rows into categories, product_types, compounds, and strains tables.
+	 *
+	 * @return void
+	 */
 	private static function insert_default_data() {
 		global $wpdb;
 		$prefix = $wpdb->prefix . 'adc_';
@@ -587,6 +609,11 @@ class ADC_Activator {
 		}
 	}
 
+	/**
+	 * Set default plugin options, merging with any existing values.
+	 *
+	 * @return void
+	 */
 	private static function set_default_options() {
 		$defaults = array(
 			'template'                      => 'default',
@@ -611,6 +638,11 @@ class ADC_Activator {
 		update_option( 'adc_settings', $merged );
 	}
 
+	/**
+	 * Run data migrations for schema changes between plugin versions.
+	 *
+	 * @return void
+	 */
 	private static function maybe_migrate_data() {
 		global $wpdb;
 
@@ -618,6 +650,7 @@ class ADC_Activator {
 		$blacklist_table = $wpdb->prefix . 'adc_blacklist';
 		$columns         = $wpdb->get_col( "SHOW COLUMNS FROM `{$blacklist_table}`" );
 		if ( $columns && ! in_array( 'is_active', $columns, true ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
 			$wpdb->query( "ALTER TABLE `{$blacklist_table}` ADD COLUMN `is_active` TINYINT(1) DEFAULT 1" );
 		}
 
@@ -625,6 +658,7 @@ class ADC_Activator {
 		$product_types_table = $wpdb->prefix . 'adc_product_types';
 		$pt_columns          = $wpdb->get_col( "SHOW COLUMNS FROM `{$product_types_table}`" );
 		if ( $pt_columns && ! in_array( 'unit_name', $pt_columns, true ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
 			$wpdb->query( "ALTER TABLE `{$product_types_table}` ADD COLUMN `unit_name` VARCHAR(50) NOT NULL DEFAULT 'pieces' AFTER `name`" );
 		}
 

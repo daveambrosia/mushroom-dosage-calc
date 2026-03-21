@@ -30,7 +30,8 @@ $tables = array(
 );
 
 foreach ( $tables as $table ) {
-	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
+	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
 }
 
 /*
