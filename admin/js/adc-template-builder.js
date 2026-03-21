@@ -163,12 +163,30 @@
             }
         });
 
+        // Intercept the Pickr button click to scroll it into view BEFORE Pickr
+        // shows and Nanopop calculates position. The 'show' event fires too late.
+        var pcrButton = pickr.getRoot().button;
+        pcrButton.addEventListener('mousedown', function() {
+            pcrButton.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+        }, true); // capture phase, runs before Pickr's click handler
+
         pickr.on('show', function() {
             savedVal = inputEl.value;
             didSave = false;
-            // Scroll the trigger button into view so Nanopop can read its
-            // bounding rect correctly and position the popup next to it.
-            triggerEl.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+            // Force Nanopop to recalculate after scroll has settled.
+            // Pickr exposes _rePositioningPicker but it's private; calling show
+            // state change triggers Nanopop update via requestAnimationFrame.
+            requestAnimationFrame(function() {
+                if (pickr.isOpen()) {
+                    // Manually trigger reposition by accessing the internal nanopop
+                    var root = pickr.getRoot();
+                    if (root && root.app) {
+                        var rect = pcrButton.getBoundingClientRect();
+                        root.app.style.left = rect.left + 'px';
+                        root.app.style.top = (rect.bottom + 8) + 'px';
+                    }
+                }
+            });
         });
 
         pickr.on('save', function(color, instance) {
