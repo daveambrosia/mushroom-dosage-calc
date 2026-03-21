@@ -1,0 +1,16 @@
+# Composer dependencies (install via `composer install`)
+/vendor/
+composer.phar
+
+# PHPUnit generated files
+.phpunit.result.cache
+.phpunit.cache/
+
+# Build artifacts
+*.zip
+/build/
+
+# OS / editor
+.DS_Store
+.idea/
+*.swp
