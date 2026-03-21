@@ -261,10 +261,13 @@ class ADC_Edibles {
 			return new WP_Error( 'db_error', $wpdb->last_error );
 		}
 
-		// Clear cache after create
+		// Capture insert_id before clear_cache() which calls update_option() and resets $wpdb->insert_id.
+		$new_id = $wpdb->insert_id;
+
+		// Clear cache after create.
 		self::clear_cache();
 
-		return $wpdb->insert_id;
+		return $new_id;
 	}
 
 	/**

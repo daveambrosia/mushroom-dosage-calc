@@ -1,114 +1,51 @@
-workflows:
-  version: 2
-  main:
-    jobs:
-      - php56-build
-      - php70-build
-      - php71-build
-      - php72-build
-      - php73-build
-      - php74-build
+version: 2.1
 
-version: 2
-
-job-references:
-  mysql_image: &mysql_image
-    circleci/mysql:5.6
-
-  setup_environment: &setup_environment
-    name: "Setup Environment Variables"
-    command: |
-      echo "export PATH=$HOME/.composer/vendor/bin:$PATH" >> $BASH_ENV
-      source /home/circleci/.bashrc
-
-  install_dependencies: &install_dependencies
-    name: "Install Dependencies"
-    command: |
-      sudo apt-get update && sudo apt-get install subversion
-      sudo -E docker-php-ext-install mysqli
-      sudo sh -c "printf '\ndeb http://ftp.us.debian.org/debian sid main\n' >> /etc/apt/sources.list"
-      sudo apt-get update && sudo apt-get install mysql-client-5.7
-
-  php_job: &php_job
-    environment:
-      - WP_TESTS_DIR: "/tmp/wordpress-tests-lib"
-      - WP_CORE_DIR: "/tmp/wordpress/"
-    steps:
-      - checkout
-      - run: *setup_environment
-      - run: *install_dependencies
-      - run:
-          name: "Run Tests"
-          command: |
-            composer global require "phpunit/phpunit=5.7.*"
-            composer global require wp-coding-standards/wpcs
-            phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
-            phpcs
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
-            phpunit
-            WP_MULTISITE=1 phpunit
+orbs:
+  php: circleci/php@1.1.0
 
 jobs:
-  php56-build:
-    <<: *php_job
+  test:
     docker:
-      - image: circleci/php:5.6
-      - image: *mysql_image
+      - image: cimg/php:8.3
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+          MYSQL_USER: wp_test
+          MYSQL_PASSWORD: wp_test_ci
+    environment:
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
     steps:
       - checkout
-      - run: *setup_environment
-      - run: *install_dependencies
+      - php/install-composer
       - run:
-          name: "Run Tests"
+          name: Install dependencies
+          command: composer install --no-interaction --prefer-dist
+      - run:
+          name: Wait for MySQL
           command: |
-            composer global require "phpunit/phpunit=5.7.*"
-            composer global require wp-coding-standards/wpcs
-            phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
-            phpcs
-            SKIP_DB_CREATE=false
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 6.0 $SKIP_DB_CREATE
-            phpunit
-            WP_MULTISITE=1 phpunit
-            SKIP_DB_CREATE=true
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest $SKIP_DB_CREATE
-            phpunit
-            WP_MULTISITE=1 phpunit
-            SKIP_DB_CREATE=true
-            rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 trunk $SKIP_DB_CREATE
-            phpunit
-            WP_MULTISITE=1 phpunit
-            SKIP_DB_CREATE=true
+            for i in $(seq 1 30); do
+              mysql -h 127.0.0.1 -u root -proot -e "SELECT 1" 2>/dev/null && break
+              sleep 2
+            done
+      - run:
+          name: Install WP test suite
+          command: |
+            sudo apt-get install -y subversion 2>/dev/null || true
+            bash bin/install-wp-tests.sh wordpress_test wp_test wp_test_ci 127.0.0.1 latest
+      - run:
+          name: Run PHPCS
+          command: ~/.config/composer/vendor/bin/phpcs
+      - run:
+          name: Run PHPStan
+          command: ~/.config/composer/vendor/bin/phpstan analyse --level=5 --no-progress .
+      - run:
+          name: Run PHPUnit
+          command: |
+            export WP_TESTS_DIR=/tmp/wordpress-tests-lib
+            ./vendor/bin/phpunit
 
-  php70-build:
-    <<: *php_job
-    docker:
-      - image: circleci/php:7.0
-      - image: *mysql_image
-
-  php71-build:
-    <<: *php_job
-    docker:
-      - image: circleci/php:7.1
-      - image: *mysql_image
-
-  php72-build:
-    <<: *php_job
-    docker:
-      - image: circleci/php:7.2
-      - image: *mysql_image
-
-  php73-build:
-    <<: *php_job
-    docker:
-      - image: circleci/php:7.3
-      - image: *mysql_image
-
-  php74-build:
-    <<: *php_job
-    docker:
-      - image: circleci/php:7.4
-      - image: *mysql_image
+workflows:
+  main:
+    jobs:
+      - test

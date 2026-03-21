@@ -13,6 +13,57 @@
 class Test_ADC_Submissions extends WP_UnitTestCase {
 
 	/**
+	 * Disable transaction-based rollback so test data persists between DB calls.
+	 *
+	 * @var bool
+	 */
+	/**
+	 * Disable transaction rollback so plugin table inserts persist across calls.
+	 *
+	 * @var bool
+	 */
+	public static $use_transactions = false;
+
+	/**
+	 * Create plugin tables once before any tests in this class run.
+	 *
+	 * Uses setUpBeforeClass so tables exist before per-test transactions begin.
+	 * ADC_DB::init() forces the table prefix to match the test environment.
+	 *
+	 * @return void
+	 */
+	public static function setUpBeforeClass(): void {
+		parent::setUpBeforeClass();
+		ADC_DB::init();
+		if ( class_exists( 'ADC_Activator' ) ) {
+			ADC_Activator::activate();
+		}
+	}
+
+	/**
+	 * Disable WP test suite DB transaction wrapping.
+	 *
+	 * The plugin's custom tables (wptests_adc_*) are not visible after INSERT
+	 * inside a ROLLBACK transaction in MySQL REPEATABLE READ. We override these
+	 * to use manual cleanup instead, so create-then-get works correctly.
+	 *
+	 * @return void
+	 */
+	public function start_transaction(): void {
+		// No-op: skip transaction wrapping for plugin tables.
+	}
+
+	/**
+	 * Set up test environment.
+	 *
+	 * @return void
+	 */
+	public function set_up(): void {
+		parent::set_up();
+		ADC_DB::init();
+	}
+
+	/**
 	 * Test creating a submission.
 	 */
 	public function test_create_submission() {
@@ -207,10 +258,13 @@ class Test_ADC_Submissions extends WP_UnitTestCase {
 	 * Clean up after tests.
 	 */
 	public function tear_down(): void {
-		parent::tear_down();
-		// Clean up blacklist
+		// Clean up plugin test data since we disabled transaction rollback.
 		global $wpdb;
-		$table = ADC_DB::table( 'blacklist' );
-		$wpdb->query( "TRUNCATE TABLE $table" );
+		foreach ( array( 'strains', 'edibles', 'submissions', 'blacklist' ) as $t ) {
+			$table = ADC_DB::table( $t );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DELETE FROM `{$table}` WHERE id > 0" );
+		}
+		parent::tear_down();
 	}
 }

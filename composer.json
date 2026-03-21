@@ -1,0 +1,14 @@
+{
+    "name": "ambrosia-church/dosage-calculator",
+    "description": "Psilocybin dosage calculator WordPress plugin",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "yoast/phpunit-polyfills": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

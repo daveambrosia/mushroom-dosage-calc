@@ -168,12 +168,27 @@ class ADC_DB {
 	 */
 	public static function clear_rest_transients( $prefix ) {
 		global $wpdb;
+
+		// Delete from the DB (handles persistent object caches and direct DB storage).
 		$like = $wpdb->esc_like( '_transient_' . $prefix ) . '%';
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like ) );
 		$like_timeout = $wpdb->esc_like( '_transient_timeout_' . $prefix ) . '%';
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $like_timeout ) );
+
+		// Flush in-memory object cache so WP's transient layer sees the deletions.
+		// In test environments transients live in the object cache; raw SQL bypasses it.
+		// wp_cache_flush_group() is preferred but requires persistent cache support;
+		// fall back to flushing the 'transient' and 'options' groups which WP uses.
+		if ( function_exists( 'wp_cache_flush_group' ) ) {
+			wp_cache_flush_group( 'transient' );
+			wp_cache_flush_group( 'options' );
+		} else {
+			// Non-persistent cache: delete known WP internal cache keys for options/transients.
+			wp_cache_delete( 'alloptions', 'options' );
+			wp_cache_delete( 'notoptions', 'options' );
+		}
 	}
 
 	/**
