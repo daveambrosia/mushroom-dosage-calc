@@ -772,6 +772,7 @@
 }
 
 /* ---- Shared dose level colors (consistent across all templates) ---- */
+#adc-calculator[data-template="default"],
 #adc-calculator[data-template="brutal"],
 #adc-calculator[data-template="minimal"],
 #adc-calculator[data-template="dark"],
