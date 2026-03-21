@@ -137,6 +137,7 @@
             defaultRepresentation: 'HEX',
             comparison: true,
             closeWithKey: 'Escape',
+            autoReposition: true,
             swatches: defaultSwatches,
             i18n: {
                 'btn:save': 'Save',
@@ -165,6 +166,9 @@
         pickr.on('show', function() {
             savedVal = inputEl.value;
             didSave = false;
+            // Scroll the trigger button into view so Nanopop can read its
+            // bounding rect correctly and position the popup next to it.
+            triggerEl.scrollIntoView({ block: 'nearest', behavior: 'instant' });
         });
 
         pickr.on('save', function(color, instance) {
