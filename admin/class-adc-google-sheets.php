@@ -77,8 +77,8 @@ class ADC_Google_Sheets {
 	public static function build_export_url( $spreadsheet_id, $gid = '0' ) {
 		return sprintf(
 			'https://docs.google.com/spreadsheets/d/%s/export?format=csv&gid=%s',
-			urlencode( $spreadsheet_id ),
-			urlencode( $gid )
+			rawurlencode( $spreadsheet_id ),
+			rawurlencode( $gid )
 		);
 	}
 
@@ -161,6 +161,7 @@ class ADC_Google_Sheets {
 		$headers = array_map( 'strtolower', $headers );
 
 		// Parse data rows
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- standard fgetcsv() loop idiom.
 		while ( ( $values = fgetcsv( $stream ) ) !== false ) {
 			// Skip empty lines
 			if ( count( $values ) === 1 && trim( $values[0] ) === '' ) {

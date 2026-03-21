@@ -27,6 +27,8 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Header mappings for fuzzy matching (reused from CSV importer pattern).
+	 *
+	 * @var array<string, array<string>>
 	 */
 	private static $header_mappings = array(
 		'short_code'         => array( 'short_code', 'shortcode', 'short code', 'code', 'sku', 'id' ),
@@ -63,8 +65,10 @@ class ADC_Sheets_Importer {
 			'strains_gid'    => '',
 			'edibles_url'    => '',
 			'edibles_gid'    => '',
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- documenting valid options.
 			'import_mode'    => 'update', // 'add_new', 'update', 'replace'
 			'auto_sync'      => false,
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- documenting valid options.
 			'sync_frequency' => 'daily', // 'hourly', 'twicedaily', 'daily', 'weekly'
 			'notify_admin'   => false,
 		);
@@ -110,6 +114,8 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Schedule or unschedule the cron event.
+	 *
+	 * @param array $settings Sync settings.
 	 */
 	private static function manage_cron_schedule( $settings ) {
 		$next = wp_next_scheduled( self::CRON_HOOK );
@@ -128,11 +134,9 @@ class ADC_Sheets_Importer {
 			} else {
 				wp_schedule_event( time(), $recurrence, self::CRON_HOOK );
 			}
-		} else {
+		} elseif ( $next ) {
 			// Disable cron
-			if ( $next ) {
-				wp_unschedule_event( $next, self::CRON_HOOK );
-			}
+			wp_unschedule_event( $next, self::CRON_HOOK );
 		}
 	}
 
@@ -417,6 +421,10 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Find record by short_code.
+	 *
+	 * @param string $type       'strain' or 'edible'.
+	 * @param string $short_code Short code to search for.
+	 * @return array|null Row data or null.
 	 */
 	private static function find_by_short_code( $type, $short_code ) {
 		global $wpdb;
@@ -432,6 +440,10 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Find record by name (exact match).
+	 *
+	 * @param string $type 'strain' or 'edible'.
+	 * @param string $name Name to search for.
+	 * @return array|null Row data or null.
 	 */
 	private static function find_by_name( $type, $name ) {
 		global $wpdb;
@@ -448,6 +460,7 @@ class ADC_Sheets_Importer {
 	/**
 	 * Deactivate all records of a type (for replace mode).
 	 *
+	 * @param string $type 'strain' or 'edible'.
 	 * @return int Number of rows deactivated.
 	 */
 	private static function deactivate_all( $type ) {
@@ -458,6 +471,8 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Send email notification about sync results.
+	 *
+	 * @param array $log Sync log data.
 	 */
 	private static function send_notification( $log ) {
 		$admin_email = get_option( 'admin_email' );
@@ -502,6 +517,9 @@ class ADC_Sheets_Importer {
 
 	/**
 	 * Add custom cron schedule for weekly.
+	 *
+	 * @param array $schedules Existing cron schedules.
+	 * @return array Modified schedules.
 	 */
 	public static function add_cron_schedules( $schedules ) {
 		if ( ! isset( $schedules['weekly'] ) ) {

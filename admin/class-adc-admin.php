@@ -22,8 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Admin {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return self
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -31,6 +41,9 @@ class ADC_Admin {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. Initializes sub-modules and registers hooks.
+	 */
 	private function __construct() {
 		// Initialize sub-modules (registers their own AJAX/hooks)
 		ADC_Admin_Strains::get_instance();
@@ -71,6 +84,11 @@ class ADC_Admin {
 		}
 	}
 
+	/**
+	 * Register the admin menu and submenu pages.
+	 *
+	 * @return void
+	 */
 	public function add_menu() {
 		$strains          = ADC_Admin_Strains::get_instance();
 		$edibles          = ADC_Admin_Edibles::get_instance();

@@ -20,10 +20,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_DB {
 
-	/** @var string|null Cached table prefix (e.g. wp_adc_). */
+	/**
+	 * Cached table prefix, e.g. "wp_adc_".
+	 *
+	 * @var string|null
+	 */
 	private static $prefix;
 
-	/** @var array|null In-memory settings cache for current request. */
+	/**
+	 * In-memory settings cache for the current request.
+	 *
+	 * @var array|null
+	 */
 	private static $settings_cache = null;
 
 	/**
@@ -140,13 +148,13 @@ class ADC_DB {
 	/**
 	 * Get a single setting value.
 	 *
-	 * @param string $key     Setting key.
-	 * @param mixed  $default Default value if key not found.
-	 * @return mixed Setting value or default.
+	 * @param string $key      Setting key.
+	 * @param mixed  $fallback Fallback value if key not found.
+	 * @return mixed Setting value or fallback.
 	 */
-	public static function get_setting( $key, $default = null ) {
+	public static function get_setting( $key, $fallback = null ) {
 		$settings = self::get_settings();
-		return isset( $settings[ $key ] ) ? $settings[ $key ] : $default;
+		return isset( $settings[ $key ] ) ? $settings[ $key ] : $fallback;
 	}
 
 	/**

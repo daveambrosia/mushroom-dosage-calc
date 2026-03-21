@@ -29,6 +29,9 @@ class ADC_Strains {
 
 	/**
 	 * Get all strains (with caching for common queries)
+	 *
+	 * @param array $args Query arguments.
+	 * @return array Array of strain rows.
 	 */
 	public static function get_all( $args = array() ) {
 		global $wpdb;
@@ -185,6 +188,9 @@ class ADC_Strains {
 
 	/**
 	 * Get strain by ID
+	 *
+	 * @param int $id Strain ID.
+	 * @return array|null Strain row or null if not found.
 	 */
 	public static function get( $id ) {
 		global $wpdb;
@@ -201,6 +207,9 @@ class ADC_Strains {
 
 	/**
 	 * Get strain by short code
+	 *
+	 * @param string $short_code Short code identifier.
+	 * @return array|null Strain row or null if not found.
 	 */
 	public static function get_by_code( $short_code ) {
 		global $wpdb;
@@ -217,6 +226,9 @@ class ADC_Strains {
 
 	/**
 	 * Create a new strain
+	 *
+	 * @param array $data Strain data.
+	 * @return int|WP_Error Insert ID on success, WP_Error on failure.
 	 */
 	public static function create( $data ) {
 		global $wpdb;
@@ -271,6 +283,10 @@ class ADC_Strains {
 
 	/**
 	 * Update a strain
+	 *
+	 * @param int   $id   Strain ID.
+	 * @param array $data Strain data to update.
+	 * @return int|WP_Error Strain ID on success, WP_Error on failure.
 	 */
 	public static function update( $id, $data ) {
 		global $wpdb;
@@ -314,6 +330,9 @@ class ADC_Strains {
 
 	/**
 	 * Delete a strain
+	 *
+	 * @param int $id Strain ID.
+	 * @return int|WP_Error Strain ID on success, WP_Error on failure.
 	 */
 	public static function delete( $id ) {
 		global $wpdb;
@@ -332,6 +351,9 @@ class ADC_Strains {
 
 	/**
 	 * Sanitize strain data
+	 *
+	 * @param array $data Raw strain data to sanitize.
+	 * @return array Sanitized strain data.
 	 */
 	private static function sanitize( $data ) {
 		return array(
@@ -354,6 +376,10 @@ class ADC_Strains {
 
 	/**
 	 * Validate strain data
+	 *
+	 * @param array    $data       Strain data to validate.
+	 * @param int|null $exclude_id Strain ID to exclude from unique checks.
+	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
 	private static function validate( $data, $exclude_id = null ) {
 		global $wpdb;
@@ -421,6 +447,9 @@ class ADC_Strains {
 
 	/**
 	 * Format strain for API response
+	 *
+	 * @param array $strain Strain row from database.
+	 * @return array Formatted strain data for API.
 	 */
 	public static function format_for_api( $strain ) {
 		// Active potency: only psilocybin + psilocin are used in dose calculation

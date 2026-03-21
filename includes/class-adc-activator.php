@@ -17,9 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Activator {
 
-	/** @var array Activation errors collected during activate(). */
-	private static $activation_errors   = array();
-	/** @var array Activation warnings collected during activate(). */
+	/**
+	 * Activation errors collected during activate().
+	 *
+	 * @var array
+	 */
+	private static $activation_errors = array();
+
+	/**
+	 * Activation warnings collected during activate().
+	 *
+	 * @var array
+	 */
 	private static $activation_warnings = array();
 
 	/**

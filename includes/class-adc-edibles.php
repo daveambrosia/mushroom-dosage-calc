@@ -29,6 +29,9 @@ class ADC_Edibles {
 
 	/**
 	 * Get all edibles (with caching for common queries)
+	 *
+	 * @param array $args Query arguments.
+	 * @return array Array of edible rows.
 	 */
 	public static function get_all( $args = array() ) {
 		global $wpdb;
@@ -166,6 +169,9 @@ class ADC_Edibles {
 
 	/**
 	 * Get edible by ID
+	 *
+	 * @param int $id Edible ID.
+	 * @return array|null Edible row or null if not found.
 	 */
 	public static function get( $id ) {
 		global $wpdb;
@@ -182,6 +188,9 @@ class ADC_Edibles {
 
 	/**
 	 * Get edible by short code
+	 *
+	 * @param string $short_code Short code identifier.
+	 * @return array|null Edible row or null if not found.
 	 */
 	public static function get_by_code( $short_code ) {
 		global $wpdb;
@@ -198,6 +207,9 @@ class ADC_Edibles {
 
 	/**
 	 * Create a new edible
+	 *
+	 * @param array $data Edible data.
+	 * @return int|WP_Error Insert ID on success, WP_Error on failure.
 	 */
 	public static function create( $data ) {
 		global $wpdb;
@@ -257,6 +269,10 @@ class ADC_Edibles {
 
 	/**
 	 * Update an edible
+	 *
+	 * @param int   $id   Edible ID.
+	 * @param array $data Edible data to update.
+	 * @return int|WP_Error Edible ID on success, WP_Error on failure.
 	 */
 	public static function update( $id, $data ) {
 		global $wpdb;
@@ -301,6 +317,9 @@ class ADC_Edibles {
 
 	/**
 	 * Delete an edible
+	 *
+	 * @param int $id Edible ID.
+	 * @return int|WP_Error Edible ID on success, WP_Error on failure.
 	 */
 	public static function delete( $id ) {
 		global $wpdb;
@@ -319,6 +338,9 @@ class ADC_Edibles {
 
 	/**
 	 * Sanitize edible data
+	 *
+	 * @param array $data Raw edible data to sanitize.
+	 * @return array Sanitized edible data.
 	 */
 	private static function sanitize( $data ) {
 		$sanitized = array(
@@ -347,6 +369,10 @@ class ADC_Edibles {
 
 	/**
 	 * Validate edible data
+	 *
+	 * @param array    $data       Edible data to validate.
+	 * @param int|null $exclude_id Edible ID to exclude from unique checks.
+	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
 	private static function validate( $data, $exclude_id = null ) {
 		global $wpdb;
@@ -445,6 +471,9 @@ class ADC_Edibles {
 
 	/**
 	 * Format edible for API response
+	 *
+	 * @param array $edible Edible row from database.
+	 * @return array Formatted edible data for API.
 	 */
 	public static function format_for_api( $edible ) {
 		// Note: compound values are stored as mcg PER PIECE

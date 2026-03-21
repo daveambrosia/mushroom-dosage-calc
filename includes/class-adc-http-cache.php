@@ -110,6 +110,9 @@ class ADC_HTTP_Cache {
 
 	/**
 	 * Check whether a route matches one of the cacheable patterns.
+	 *
+	 * @param string $route REST API route path.
+	 * @return bool True if the route is cacheable.
 	 */
 	private static function is_cacheable_route( string $route ): bool {
 		foreach ( self::CACHEABLE_ROUTES as $pattern ) {
@@ -124,6 +127,9 @@ class ADC_HTTP_Cache {
 
 	/**
 	 * Generate a deterministic ETag from the response data.
+	 *
+	 * @param WP_REST_Response $response REST API response object.
+	 * @return string Quoted ETag hash string.
 	 */
 	private static function generate_etag( WP_REST_Response $response ): string {
 		$data = $response->get_data();

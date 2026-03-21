@@ -371,7 +371,10 @@ class ADC_JSON_Importer {
 	}
 
 	/**
-	 * Sanitize settings data from JSON import
+	 * Sanitize settings data from JSON import.
+	 *
+	 * @param array $data Raw settings data from JSON.
+	 * @return array Sanitized settings array.
 	 */
 	private static function sanitize_settings( $data ) {
 		if ( ! is_array( $data ) ) {
@@ -423,7 +426,11 @@ class ADC_JSON_Importer {
 	}
 
 	/**
-	 * Find existing entry by short code
+	 * Find existing entry by short code.
+	 *
+	 * @param string $code Short code to look up.
+	 * @param string $type Entry type ('strain' or 'edible').
+	 * @return array|null Existing record or null if not found.
 	 */
 	private static function find_by_code( $code, $type ) {
 		if ( empty( $code ) ) {

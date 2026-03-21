@@ -12,6 +12,11 @@
  */
 class Test_ADC_REST_API extends WP_UnitTestCase {
 
+	/**
+	 * REST server instance.
+	 *
+	 * @var WP_REST_Server
+	 */
 	protected $server;
 
 	/**
@@ -21,6 +26,7 @@ class Test_ADC_REST_API extends WP_UnitTestCase {
 		parent::set_up();
 
 		global $wp_rest_server;
+		// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found -- standard WP REST test bootstrap pattern.
 		$this->server = $wp_rest_server = new WP_REST_Server();
 		do_action( 'rest_api_init' );
 

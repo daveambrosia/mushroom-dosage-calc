@@ -19,8 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Admin_Strains {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return self
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -28,6 +38,9 @@ class ADC_Admin_Strains {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. Registers AJAX hooks.
+	 */
 	private function __construct() {
 		add_action( 'wp_ajax_adc_delete_strain', array( $this, 'ajax_delete_strain' ) );
 	}

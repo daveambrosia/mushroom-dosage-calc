@@ -23,6 +23,8 @@ class ADC_Template_CSS {
 	/**
 	 * Neutral fallback values for cleared color variables.
 	 * Must stay in sync with ADC_Template_Builder::$color_fallbacks.
+	 *
+	 * @var array<string, string>
 	 */
 	private static $color_fallbacks = array(
 		'bg'                 => 'transparent',

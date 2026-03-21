@@ -19,8 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Admin_Submissions {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return self
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -28,6 +38,9 @@ class ADC_Admin_Submissions {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. No hooks needed — rendering only.
+	 */
 	private function __construct() {
 		// No hooks needed — rendering only
 	}

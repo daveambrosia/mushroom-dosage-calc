@@ -18,6 +18,9 @@ class ADC_Submissions {
 
 	/**
 	 * Get all submissions
+	 *
+	 * @param array $args Optional. Query arguments including status, type, source, orderby, order, limit, offset.
+	 * @return array Array of submission rows.
 	 */
 	public static function get_all( $args = array() ) {
 		global $wpdb;
@@ -76,6 +79,9 @@ class ADC_Submissions {
 
 	/**
 	 * Get submission by ID
+	 *
+	 * @param int $id Submission ID.
+	 * @return array|null Submission row or null if not found.
 	 */
 	public static function get( $id ) {
 		global $wpdb;
@@ -92,6 +98,8 @@ class ADC_Submissions {
 
 	/**
 	 * Count submissions by status
+	 *
+	 * @return array Associative array with keys pending, approved, rejected, and total.
 	 */
 	public static function count_by_status() {
 		global $wpdb;
@@ -119,6 +127,9 @@ class ADC_Submissions {
 
 	/**
 	 * Create a new submission
+	 *
+	 * @param array $data Submission data including type, source, data, submitter_name, submitter_email, etc.
+	 * @return int|WP_Error Inserted submission ID on success, WP_Error on failure.
 	 */
 	public static function create( $data ) {
 		global $wpdb;
@@ -183,6 +194,10 @@ class ADC_Submissions {
 
 	/**
 	 * Approve a submission and move to system
+	 *
+	 * @param int    $id          Submission ID.
+	 * @param string $admin_notes Optional. Admin notes for the review.
+	 * @return int|WP_Error New strain/edible ID on success, WP_Error on failure.
 	 */
 	public static function approve( $id, $admin_notes = '' ) {
 		global $wpdb;
@@ -240,6 +255,10 @@ class ADC_Submissions {
 
 	/**
 	 * Reject a submission
+	 *
+	 * @param int    $id          Submission ID.
+	 * @param string $admin_notes Optional. Admin notes for the rejection.
+	 * @return bool|WP_Error True on success, false on DB failure, WP_Error if submission not found.
 	 */
 	public static function reject( $id, $admin_notes = '' ) {
 		global $wpdb;
@@ -266,6 +285,9 @@ class ADC_Submissions {
 
 	/**
 	 * Delete a submission
+	 *
+	 * @param int $id Submission ID.
+	 * @return bool True on success, false on failure.
 	 */
 	public static function delete( $id ) {
 		global $wpdb;
@@ -278,6 +300,9 @@ class ADC_Submissions {
 
 	/**
 	 * Bulk approve submissions
+	 *
+	 * @param array $ids Array of submission IDs to approve.
+	 * @return array Associative array with success and failed counts.
 	 */
 	public static function bulk_approve( $ids ) {
 		$results = array(
@@ -299,6 +324,9 @@ class ADC_Submissions {
 
 	/**
 	 * Bulk reject submissions
+	 *
+	 * @param array $ids Array of submission IDs to reject.
+	 * @return array Associative array with success and failed counts.
 	 */
 	public static function bulk_reject( $ids ) {
 		$results = array(
@@ -320,6 +348,9 @@ class ADC_Submissions {
 
 	/**
 	 * Bulk delete submissions
+	 *
+	 * @param array $ids Array of submission IDs to delete.
+	 * @return array Associative array with success and failed counts.
 	 */
 	public static function bulk_delete( $ids ) {
 		$results = array(
@@ -345,6 +376,10 @@ class ADC_Submissions {
 
 	/**
 	 * Check if IP or email is blacklisted
+	 *
+	 * @param string $type  Blacklist type, e.g. 'ip' or 'email'.
+	 * @param string $value The IP address or email to check.
+	 * @return bool True if blacklisted, false otherwise.
 	 */
 	public static function is_blacklisted( $type, $value ) {
 		global $wpdb;
@@ -368,6 +403,11 @@ class ADC_Submissions {
 
 	/**
 	 * Add to blacklist
+	 *
+	 * @param string $type   Blacklist type, e.g. 'ip' or 'email'.
+	 * @param string $value  The IP address or email to blacklist.
+	 * @param string $reason Optional. Reason for blacklisting.
+	 * @return int|false Inserted row ID on success, false on failure.
 	 */
 	public static function add_to_blacklist( $type, $value, $reason = '' ) {
 		global $wpdb;
@@ -389,6 +429,9 @@ class ADC_Submissions {
 
 	/**
 	 * Remove from blacklist
+	 *
+	 * @param int $id Blacklist entry ID.
+	 * @return bool True on success, false on failure.
 	 */
 	public static function remove_from_blacklist( $id ) {
 		global $wpdb;
@@ -401,6 +444,9 @@ class ADC_Submissions {
 
 	/**
 	 * Get all blacklist entries
+	 *
+	 * @param string|null $type Optional. Filter by blacklist type, e.g. 'ip' or 'email'.
+	 * @return array Array of blacklist entry rows.
 	 */
 	public static function get_blacklist( $type = null ) {
 		global $wpdb;
@@ -431,6 +477,12 @@ class ADC_Submissions {
 
 	/**
 	 * Block submitter (add IP and/or email to blacklist)
+	 *
+	 * @param int    $submission_id Submission ID to look up the submitter.
+	 * @param bool   $block_ip      Optional. Whether to block the submitter's IP address.
+	 * @param bool   $block_email   Optional. Whether to block the submitter's email address.
+	 * @param string $reason        Optional. Reason for blocking.
+	 * @return array|false Array of blocked types on success, false if submission not found.
 	 */
 	public static function block_submitter( $submission_id, $block_ip = true, $block_email = true, $reason = '' ) {
 		$submission = self::get( $submission_id );
@@ -459,6 +511,10 @@ class ADC_Submissions {
 
 	/**
 	 * Send notification email for new submission
+	 *
+	 * @param int   $id   Submission ID.
+	 * @param array $data Sanitized submission data.
+	 * @return void
 	 */
 	private static function maybe_send_notification( $id, $data ) {
 		$email = ADC_DB::get_setting( 'submission_notification_email', '' );
@@ -493,6 +549,9 @@ class ADC_Submissions {
 
 	/**
 	 * Format submission for API response
+	 *
+	 * @param array $submission Submission row from the database.
+	 * @return array Formatted submission data for API output.
 	 */
 	public static function format_for_api( $submission ) {
 		return array(

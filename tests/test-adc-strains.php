@@ -383,7 +383,7 @@ class Test_ADC_Strains extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function tear_down(): void {
+	public function tear_down(): void { // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found -- explicitly documents test cleanup intent.
 		parent::tear_down();
 	}
 }

@@ -19,8 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Admin_Settings {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return self
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -28,6 +38,9 @@ class ADC_Admin_Settings {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. Registers settings and admin notice hooks.
+	 */
 	private function __construct() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_notices', array( $this, 'display_admin_notices' ) );
@@ -56,21 +69,21 @@ class ADC_Admin_Settings {
 				$messages   = array();
 
 				if ( 'strains' === $reset_type ) {
-					$remaining = ADC_DB::reset_table( 'strains' );
+					$remaining = ADC_DB::reset_table( 'strains' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 					delete_transient( 'adc_strains_by_category' );
 					ADC_Strains::clear_cache();
 					$messages[] = 0 === $remaining ? 'All strain data has been cleared.' : "Warning: $remaining strains could not be deleted.";
 				} elseif ( 'edibles' === $reset_type ) {
-					$remaining = ADC_DB::reset_table( 'edibles' );
+					$remaining = ADC_DB::reset_table( 'edibles' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 					delete_transient( 'adc_edibles_by_type' );
 					$messages[] = 0 === $remaining ? 'All edible data has been cleared.' : "Warning: $remaining edibles could not be deleted.";
 				} elseif ( 'categories' === $reset_type ) {
-					ADC_DB::reset_table( 'categories' );
+					ADC_DB::reset_table( 'categories' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 					delete_transient( 'adc_categories' );
 					ADC_Strains::clear_cache();
 					$messages[] = 'All categories have been cleared.';
 				} elseif ( 'product_types' === $reset_type ) {
-					ADC_DB::reset_table( 'product_types' );
+					ADC_DB::reset_table( 'product_types' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 					delete_transient( 'adc_product_types' );
 					delete_transient( 'adc_product_types_with_counts' );
 					$messages[] = 'All product types have been cleared.';

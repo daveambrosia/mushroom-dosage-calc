@@ -20,10 +20,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Template_Builder {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var ADC_Template_Builder|null
+	 */
 	private static $instance = null;
 
 	/**
 	 * All CSS variables available for templates, grouped by section.
+	 *
+	 * @var array
 	 */
 	private static $variable_groups = array(
 		'Core Colors'       => array(
@@ -292,6 +299,8 @@ class ADC_Template_Builder {
 	/**
 	 * Neutral fallback values for cleared color variables.
 	 * When a user explicitly clears a color, these override the base defaults.
+	 *
+	 * @var array
 	 */
 	private static $color_fallbacks = array(
 		'bg'                 => 'transparent',
@@ -339,9 +348,16 @@ class ADC_Template_Builder {
 	/**
 	 * Built-in template defaults (mirrors calculator-themes.css).
 	 * Used for "Start from..." feature.
+	 *
+	 * @var array|null
 	 */
 	private static $builtin_templates = null;
 
+	/**
+	 * Get the singleton instance.
+	 *
+	 * @return ADC_Template_Builder
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -349,6 +365,9 @@ class ADC_Template_Builder {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. Registers admin hooks.
+	 */
 	private function __construct() {
 		// Handle redirect-based actions early (before headers are sent)
 		add_action( 'admin_init', array( $this, 'handle_early_actions' ) );
@@ -543,6 +562,8 @@ class ADC_Template_Builder {
 
 	/**
 	 * Save custom templates to the database.
+	 *
+	 * @param array $templates List of template data arrays to save.
 	 */
 	public static function save_custom_templates( $templates ) {
 		update_option( 'adc_custom_templates', wp_json_encode( array_values( $templates ) ) );
@@ -550,6 +571,9 @@ class ADC_Template_Builder {
 
 	/**
 	 * Get a single custom template by slug.
+	 *
+	 * @param string $slug Template slug to look up.
+	 * @return array|null Template data array or null if not found.
 	 */
 	public static function get_custom_template( $slug ) {
 		$templates = self::get_custom_templates();
@@ -563,6 +587,9 @@ class ADC_Template_Builder {
 
 	/**
 	 * Generate a slug from a template name.
+	 *
+	 * @param string $name Template display name.
+	 * @return string Slug prefixed with 'custom-'.
 	 */
 	private static function make_slug( $name ) {
 		$slug = sanitize_title( $name );
@@ -571,6 +598,9 @@ class ADC_Template_Builder {
 
 	/**
 	 * Generate CSS for a single custom template.
+	 *
+	 * @param array $template Template data array with slug and variables.
+	 * @return string Generated CSS string.
 	 */
 	public static function generate_template_css( $template ) {
 		if ( empty( $template['variables'] ) || ! is_array( $template['variables'] ) ) {
@@ -812,7 +842,7 @@ class ADC_Template_Builder {
 		}
 
 		// Generate new name and slug
-		$base_name       = $original_template['name'];
+		$base_name = $original_template['name'];
 		// translators: %s is the original template name being duplicated.
 		$new_name_prefix = sprintf( __( 'Copy of %s', 'ambrosia-dosage-calc' ), $base_name );
 		$new_name        = $new_name_prefix;
@@ -1281,6 +1311,8 @@ class ADC_Template_Builder {
 
 	/**
 	 * Tier assignments for accordion groups.
+	 *
+	 * @var array
 	 */
 	private static $group_tiers = array(
 		'Core Colors'       => 1,
@@ -1589,7 +1621,7 @@ class ADC_Template_Builder {
 							$tabact  = esc_attr( $vars['tab-active-bg'] ?? $accent );
 							$radius  = esc_attr( $vars['radius'] ?? '8px' );
 							?>
-						<?php // translators: %s is the built-in template name shown in the picker. ?>
+							<?php // translators: %s is the built-in template name shown in the picker. ?>
 						<div class="adc-picker-card" data-slug="<?php echo esc_attr( $slug ); ?>" tabindex="0" role="button" aria-label="<?php echo esc_attr( sprintf( __( 'Start from %s template', 'ambrosia-dosage-calc' ), $bt['name'] ) ); ?>">
 							<div class="adc-picker-preview" style="
 								background:<?php echo esc_attr( $bg ); ?>;
@@ -1683,6 +1715,8 @@ class ADC_Template_Builder {
 	 * Only allows: alphanumeric, spaces, #, ., (, ), comma, -, %, ', ", /, _
 	 *
 	 * @since 2.13.3
+	 * @param string $value Raw CSS value to sanitize.
+	 * @return string Sanitized CSS value.
 	 */
 	private static function sanitize_css_value( $value ) {
 		$v = trim( $value );
@@ -1718,6 +1752,9 @@ class ADC_Template_Builder {
 
 	/**
 	 * Get the type (color or text) for a given variable key.
+	 *
+	 * @param string $key CSS variable key name.
+	 * @return string Variable type ('color' or 'text').
 	 */
 	private static function get_variable_type( $key ) {
 		foreach ( self::$variable_groups as $vars ) {

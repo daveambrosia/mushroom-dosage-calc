@@ -98,10 +98,14 @@ class ADC_QR_Handler {
 	}
 
 	/**
-	 * Parse legacy URL format
+	 * Parse legacy URL format.
+	 *
 	 * Supports both:
 	 * - ?data=name:X,psilocybin:Y,psilocin:Z,...
 	 * - ?strain=X&psilocybin=Y&psilocin=Z&...
+	 *
+	 * @param string|array $url_or_params URL string or array of query parameters.
+	 * @return array Parsed compound data.
 	 */
 	public static function parse_legacy_url( $url_or_params ) {
 		$params = array();
@@ -235,7 +239,10 @@ class ADC_QR_Handler {
 	}
 
 	/**
-	 * Generate short URL for an item
+	 * Generate short URL for an item.
+	 *
+	 * @param string $short_code Item short code.
+	 * @return string Full short URL.
 	 */
 	public static function get_short_url( $short_code ) {
 		$path = ADC_DB::get_setting( 'short_url_path', 'c' );
@@ -243,7 +250,11 @@ class ADC_QR_Handler {
 	}
 
 	/**
-	 * Generate legacy URL for an item (for external producers)
+	 * Generate legacy URL for an item (for external producers).
+	 *
+	 * @param array  $data Compound/product data array.
+	 * @param string $type Item type ('strain' or 'edible').
+	 * @return string Full legacy URL with query parameters.
 	 */
 	public static function get_legacy_url( $data, $type = 'strain' ) {
 		$calculator_url = self::get_calculator_page_url();
@@ -319,7 +330,10 @@ class ADC_QR_Handler {
 	}
 
 	/**
-	 * Get calculator URL with params
+	 * Get calculator URL with params.
+	 *
+	 * @param array $params Query parameters to append.
+	 * @return string Calculator URL with query string.
 	 */
 	private static function get_calculator_url( $params = array() ) {
 		$base = self::get_calculator_page_url();

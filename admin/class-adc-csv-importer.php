@@ -18,6 +18,8 @@ class ADC_CSV_Importer {
 
 	/**
 	 * Header mappings for fuzzy matching
+	 *
+	 * @var array<string,string[]>
 	 */
 	private static $header_mappings = array(
 		'name'               => array( 'name', 'strain', 'strain name', 'product', 'product name', 'title' ),
@@ -250,6 +252,7 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 		$errors   = array();
 		$row_num  = 1;
 
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
 			++$row_num;
 
@@ -328,6 +331,8 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 
 	/**
 	 * Map CSV headers to field names using fuzzy matching
+	 *
+	 * @param array $headers CSV header row.
 	 */
 	private static function map_headers( $headers ) {
 		$map = array();
@@ -380,8 +385,12 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 
 	/**
 	 * Map a row of data using the column map
+	 *
+	 * @param array $row        Single CSV data row.
+	 * @param array $column_map Header-to-index mapping.
+	 * @param array $headers    Original CSV header row.
 	 */
-	private static function map_row( $row, $column_map, $headers ) {
+	private static function map_row( $row, $column_map, $headers ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		$data = array();
 
 		$fields = array(
@@ -423,6 +432,9 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 
 	/**
 	 * Find existing strain/edible by name
+	 *
+	 * @param string $name Strain or edible name.
+	 * @param string $type Import type ('strain' or 'edible').
 	 */
 	private static function find_existing( $name, $type ) {
 		global $wpdb;

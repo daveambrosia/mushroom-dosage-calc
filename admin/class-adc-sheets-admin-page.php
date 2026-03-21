@@ -50,6 +50,9 @@ class ADC_Sheets_Admin_Page {
 
 	/**
 	 * REST: Preview sheet data.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
 	public static function rest_preview( $request ) {
 		$url  = sanitize_text_field( $request->get_param( 'url' ) );
@@ -92,6 +95,9 @@ class ADC_Sheets_Admin_Page {
 
 	/**
 	 * REST: Run import.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
 	public static function rest_import( $request ) {
 		$url  = sanitize_text_field( $request->get_param( 'url' ) );
@@ -150,6 +156,9 @@ class ADC_Sheets_Admin_Page {
 
 	/**
 	 * Enqueue admin scripts for the Google Sheets page.
+	 *
+	 * @param string $hook Current admin page hook suffix.
+	 * @return void
 	 */
 	public static function enqueue_scripts( $hook ) {
 		if ( strpos( $hook, 'dosage-calculator-google-sheets' ) === false
@@ -343,7 +352,7 @@ class ADC_Sheets_Admin_Page {
 					</table>
 
 					<?php if ( $next_sync ) : ?>
-						<p><strong>Next scheduled sync:</strong> <?php echo esc_html( get_date_from_gmt( date( 'Y-m-d H:i:s', $next_sync ), 'M j, Y g:i A' ) ); ?></p>
+						<p><strong>Next scheduled sync:</strong> <?php echo esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next_sync ), 'M j, Y g:i A' ) ); ?></p>
 					<?php endif; ?>
 				</div>
 

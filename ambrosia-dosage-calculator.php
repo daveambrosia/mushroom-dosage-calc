@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable WordPress.Files.FileName.InvalidClassFileName,Universal.Files.SeparateFunctionsFromOO.Mixed -- standard WordPress plugin bootstrap pattern.
 /**
  * Plugin Name: Ambrosia Dosage Calculator
  * Plugin URI: https://ambrosia.church/calculator
@@ -28,6 +28,11 @@ define( 'ADC_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
  */
 class Ambrosia_Dosage_Calculator {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var Ambrosia_Dosage_Calculator|null
+	 */
 	private static $instance = null;
 
 	/**
@@ -114,6 +119,7 @@ class Ambrosia_Dosage_Calculator {
 
 		// Google Sheets: cron schedules, importer init, admin routes & scripts
 		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			// phpcs:ignore WordPress.WP.CronInterval.ChangeDetected -- interval value defined in ADC_Sheets_Importer::add_cron_schedules().
 			add_filter( 'cron_schedules', array( 'ADC_Sheets_Importer', 'add_cron_schedules' ) );
 			ADC_Sheets_Importer::init();
 			add_action( 'rest_api_init', array( 'ADC_Sheets_Admin_Page', 'register_routes' ) );
@@ -226,6 +232,8 @@ class Ambrosia_Dosage_Calculator {
 	 * Add adc_preview query var.
 	 *
 	 * @since 2.16.0
+	 * @param array $vars Existing registered query vars.
+	 * @return array Modified query vars with adc_preview added.
 	 */
 	public function add_preview_query_var( $vars ) {
 		$vars[] = 'adc_preview';

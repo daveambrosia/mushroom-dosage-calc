@@ -20,11 +20,22 @@ class ADC_Shortcode {
 
 	// Compound labels now defined in ADC_Constants::COMPOUND_LABELS
 
+	/**
+	 * Register shortcodes for the dosage calculator.
+	 *
+	 * @return void
+	 */
 	public static function register() {
 		add_shortcode( 'dosage_calculator', array( __CLASS__, 'render' ) );
 		add_shortcode( 'adc_calculator', array( __CLASS__, 'render' ) );
 	}
 
+	/**
+	 * Render the dosage calculator shortcode output.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 * @return string Calculator HTML output.
+	 */
 	public static function render( $atts ) {
 		// Load all settings once (avoids 12+ individual get_option calls)
 		$s = ADC_DB::get_settings();
@@ -369,7 +380,10 @@ class ADC_Shortcode {
 	}
 
 	/**
-	 * Generate compound input grid
+	 * Generate compound input grid.
+	 *
+	 * @param string $type Product type ('strain' or 'edible').
+	 * @return string HTML for the compound input grid.
 	 */
 	private static function compound_inputs( $type ) {
 		$compounds  = ADC_Constants::COMPOUNDS;

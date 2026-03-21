@@ -19,8 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ADC_Admin_Tools {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return self
+	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -28,6 +38,9 @@ class ADC_Admin_Tools {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor. Registers AJAX hooks.
+	 */
 	private function __construct() {
 		add_action( 'wp_ajax_adc_export', array( $this, 'handle_export' ) );
 	}
@@ -289,7 +302,10 @@ class ADC_Admin_Tools {
 	}
 
 	/**
-	 * Format strains for export (matches import format)
+	 * Format strains for export (matches import format).
+	 *
+	 * @param array $strains Array of strain rows from the database.
+	 * @return array Formatted strain data for export.
 	 */
 	private static function format_strains_for_export( $strains ) {
 		return array_map(
@@ -315,7 +331,10 @@ class ADC_Admin_Tools {
 	}
 
 	/**
-	 * Format edibles for export (matches import format)
+	 * Format edibles for export (matches import format).
+	 *
+	 * @param array $edibles Array of edible rows from the database.
+	 * @return array Formatted edible data for export.
 	 */
 	private static function format_edibles_for_export( $edibles ) {
 		return array_map(

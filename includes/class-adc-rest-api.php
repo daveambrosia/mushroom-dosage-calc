@@ -19,6 +19,11 @@ class ADC_REST_API {
 	/** Cache expiry for reference data */
 	const REF_CACHE_EXPIRY = 3600; // 1 hour
 
+	/**
+	 * Register all REST API routes for the plugin.
+	 *
+	 * @return void
+	 */
 	public static function register_routes() {
 		$namespace = 'adc/v1';
 
@@ -396,7 +401,10 @@ class ADC_REST_API {
 	// =========== PUBLIC ENDPOINTS ===========
 
 	/**
-	 * Get all strains
+	 * Get all strains.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
 	public static function get_strains( $request ) {
 		// Build cache key from request parameters
@@ -448,7 +456,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Get single strain
+	 * Get single strain by short code.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function get_strain( $request ) {
 		$code = $request->get_param( 'code' );
@@ -463,7 +474,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Get all edibles
+	 * Get all edibles.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
 	public static function get_edibles( $request ) {
 		// Build cache key from request parameters
@@ -523,7 +537,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Get single edible
+	 * Get single edible by short code.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function get_edible( $request ) {
 		$code = $request->get_param( 'code' );
@@ -538,7 +555,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Lookup by short code (strain or edible)
+	 * Lookup by short code (strain or edible).
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function lookup( $request ) {
 		$code = $request->get_param( 'code' );
@@ -569,7 +589,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Get categories (cached)
+	 * Get categories (cached).
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
 	public static function get_categories( $request ) {
 		$type = $request->get_param( 'type' ); // strain, edible, or null for all
@@ -609,17 +632,23 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Get product types (cached via ADC_Edibles)
+	 * Get product types (cached via ADC_Edibles).
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
-	public static function get_product_types( $request ) {
+	public static function get_product_types( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by REST API callback signature.
 		$types = ADC_Edibles::get_product_types();
 		return rest_ensure_response( $types );
 	}
 
 	/**
-	 * Get compounds (cached)
+	 * Get compounds (cached).
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
 	 */
-	public static function get_compounds( $request ) {
+	public static function get_compounds( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by REST API callback signature.
 		$cache_key = 'adc_compounds';
 		$cached    = get_transient( $cache_key );
 
@@ -645,10 +674,10 @@ class ADC_REST_API {
 	/**
 	 * Get public calculator settings
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request REST request object.
 	 * @return WP_REST_Response
 	 */
-	public static function get_settings( $request ) {
+	public static function get_settings( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by REST API callback signature.
 		$settings = ADC_DB::get_settings();
 
 		// Return only public settings (filter out sensitive ones)
@@ -680,7 +709,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Submit custom strain/edible
+	 * Submit custom strain/edible.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function submit_custom( $request ) {
 		$body = $request->get_json_params();
@@ -757,6 +789,12 @@ class ADC_REST_API {
 
 	// =========== ADMIN ENDPOINTS ===========
 
+	/**
+	 * Create a new strain via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_create_strain( $request ) {
 		$data   = $request->get_json_params();
 		$result = ADC_Strains::create( $data );
@@ -775,6 +813,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Update an existing strain via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_update_strain( $request ) {
 		$id   = $request->get_param( 'id' );
 		$data = $request->get_json_params();
@@ -795,6 +839,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Delete a strain via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_delete_strain( $request ) {
 		$id     = $request->get_param( 'id' );
 		$result = ADC_Strains::delete( $id );
@@ -806,6 +856,12 @@ class ADC_REST_API {
 		return rest_ensure_response( array( 'success' => true ) );
 	}
 
+	/**
+	 * Create a new edible via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_create_edible( $request ) {
 		$data   = $request->get_json_params();
 		$result = ADC_Edibles::create( $data );
@@ -824,6 +880,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Update an existing edible via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_update_edible( $request ) {
 		$id   = $request->get_param( 'id' );
 		$data = $request->get_json_params();
@@ -844,6 +906,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Delete an edible via admin API.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_delete_edible( $request ) {
 		$id     = $request->get_param( 'id' );
 		$result = ADC_Edibles::delete( $id );
@@ -855,6 +923,12 @@ class ADC_REST_API {
 		return rest_ensure_response( array( 'success' => true ) );
 	}
 
+	/**
+	 * Get all submissions for admin review.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response
+	 */
 	public static function admin_get_submissions( $request ) {
 		$status = $request->get_param( 'status' );
 		$type   = $request->get_param( 'type' );
@@ -877,6 +951,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Approve a submission and create the corresponding strain/edible.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_approve_submission( $request ) {
 		$id   = $request->get_param( 'id' );
 		$body = $request->get_json_params();
@@ -895,6 +975,12 @@ class ADC_REST_API {
 		);
 	}
 
+	/**
+	 * Reject a submission.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
+	 */
 	public static function admin_reject_submission( $request ) {
 		$id   = $request->get_param( 'id' );
 		$body = $request->get_json_params();
@@ -911,7 +997,10 @@ class ADC_REST_API {
 	// =========== EXPORT ENDPOINTS ===========
 
 	/**
-	 * Export strains as CSV or JSON
+	 * Export strains as CSV or JSON.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function admin_export_strains( $request ) {
 		$format  = $request->get_param( 'format' );
@@ -923,7 +1012,7 @@ class ADC_REST_API {
 
 		$filename = 'adc-strains-export-' . wp_date( 'Y-m-d' );
 
-		if ( $format === 'csv' ) {
+		if ( 'csv' === $format ) {
 			return self::export_strains_csv( $strains, $filename );
 		}
 
@@ -953,7 +1042,10 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Export edibles as CSV or JSON
+	 * Export edibles as CSV or JSON.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function admin_export_edibles( $request ) {
 		$format  = $request->get_param( 'format' );
@@ -965,7 +1057,7 @@ class ADC_REST_API {
 
 		$filename = 'adc-edibles-export-' . wp_date( 'Y-m-d' );
 
-		if ( $format === 'csv' ) {
+		if ( 'csv' === $format ) {
 			return self::export_edibles_csv( $edibles, $filename );
 		}
 
@@ -997,7 +1089,11 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Export strains as CSV with proper headers
+	 * Export strains as CSV with proper headers.
+	 *
+	 * @param array  $strains  Array of strain data.
+	 * @param string $filename Base filename for the export.
+	 * @return WP_REST_Response
 	 */
 	private static function export_strains_csv( $strains, $filename ) {
 		$csv_headers = array(
@@ -1039,7 +1135,11 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Export edibles as CSV with proper headers
+	 * Export edibles as CSV with proper headers.
+	 *
+	 * @param array  $edibles  Array of edible data.
+	 * @param string $filename Base filename for the export.
+	 * @return WP_REST_Response
 	 */
 	private static function export_edibles_csv( $edibles, $filename ) {
 		$csv_headers = array(
@@ -1085,7 +1185,12 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Send CSV file response via REST API
+	 * Send CSV file response via REST API.
+	 *
+	 * @param array  $headers  CSV column headers.
+	 * @param array  $rows     Array of row data arrays.
+	 * @param string $filename Download filename.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	private static function send_csv_response( $headers, $rows, $filename ) {
 		// Build CSV in memory
@@ -1118,7 +1223,12 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Send JSON file response via REST API
+	 * Send JSON file response via REST API.
+	 *
+	 * @param array  $data         Data to encode as JSON.
+	 * @param string $filename     Download filename.
+	 * @param string $content_type HTTP content type header value.
+	 * @return WP_REST_Response|WP_Error
 	 */
 	private static function send_file_response( $data, $filename, $content_type ) {
 		$json = wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
