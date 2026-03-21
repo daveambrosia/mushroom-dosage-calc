@@ -570,6 +570,11 @@ function adc_init() {
 	return Ambrosia_Dosage_Calculator::get_instance();
 }
 add_action( 'plugins_loaded', 'adc_init' );
+
+// ADC_Activator must be loaded before register_activation_hook fires,
+// which happens before plugins_loaded (i.e. before load_dependencies() runs).
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-adc-activator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-adc-db.php';
 register_activation_hook( __FILE__, array( 'ADC_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'ADC_Activator', 'deactivate' ) );
 
