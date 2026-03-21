@@ -5,12 +5,18 @@
  * Handles edible list, add/edit form, and delete AJAX.
  *
  * @since 2.13.0
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Admin_Edibles class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Admin_Edibles {
 
 	private static $instance = null;

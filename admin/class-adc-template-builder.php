@@ -6,12 +6,18 @@
  * that use the same CSS variable system as built-in templates.
  *
  * @since 2.13.0
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Template_Builder class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Template_Builder {
 
 	private static $instance = null;

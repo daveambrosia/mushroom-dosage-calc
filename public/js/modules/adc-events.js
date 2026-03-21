@@ -348,7 +348,8 @@
                     handleShareAction(data, shareDataRaw);
                 } catch (err) {
                     console.error('Share data parse error:', err, shareDataRaw);
-                    // Fallback to old behavior
+                    // JS-004 fix: notify user rather than silently falling back.
+                    adcError('Share data is invalid. Please refresh the page.');
                     const baseUrl = window.location.origin + window.location.pathname;
                     const shareUrl = baseUrl + '?share=' + encodeURIComponent(shareDataRaw);
                     if (navigator.clipboard && navigator.clipboard.writeText) {

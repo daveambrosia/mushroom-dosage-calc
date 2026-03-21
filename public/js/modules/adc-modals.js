@@ -400,6 +400,11 @@
         if (!shareData) return;
         try {
             const data = JSON.parse(decodeURIComponent(atob(shareData)));
+            // Validate structure before use (JS-003 fix).
+            if (!data || typeof data !== 'object' || !data.type) {
+                console.error('Invalid share data: missing required fields');
+                return;
+            }
             showSharedDosePopup(data);
         } catch (e) { console.error('Invalid share data:', e); }
     }

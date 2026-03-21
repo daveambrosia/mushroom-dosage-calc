@@ -1,670 +1,833 @@
 /**
  * Ambrosia Dosage Calculator - Visual Templates
- * Version: 3.0.0 (CSS Variable Architecture)
+ * Version: 4.0.0 (Full Variable Coverage)
  *
  * Each template is defined purely as CSS variable overrides.
  * The base calculator.css uses these variables for all styling.
  * No !important needed — variables cascade naturally.
  *
- * Templates: brutal, minimal, dark, nature, neon, paper, terminal, retro, flat, glass, amethyst, ocean, lagoon, slate, ember
+ * Dose level colors are consistent across all templates.
+ *
+ * Templates: default, brutal, minimal, dark, nature, glass, neon, paper, terminal, retro, flat, amethyst, ocean, lagoon, slate, ember
  */
 
 
-/* 1. BRUTAL */
+/* 0. DEFAULT */
+#adc-calculator[data-template="default"] {
+	--adc-text: #1e2a3a;
+	--adc-accent: #5b6aaf;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f7f9fc;
+	--adc-border: #5b6aaf;
+	--adc-border-width: 0.5px;
+	--adc-radius: 10px;
+	--adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	--adc-header-text: #000000;
+	--adc-header-border: none;
+	--adc-header-shadow: none;
+	--adc-tab-bg: #5b6aaf;
+	--adc-tab-text: #FFFFFF;
+	--adc-tab-active-bg: #D6DCFA;
+	--adc-tab-active-text: #1e2a3a;
+	--adc-body-bg: #D6DCFA;
+	--adc-input-bg: #f7f9fc;
+	--adc-input-border: #5B6AAF;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px #5B6AAF26;
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #1e2a3a;
+	--adc-btn-border: #e7f9fc;
+	--adc-btn-hover-bg: #f7f9fc;
+	--adc-btn-primary-bg: #5b6aaf;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #5b6aaf;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef0f0;
+	--adc-safety-border: #e8d0d0;
+	--adc-modal-header-bg: #5b6aaf;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: 2px solid #5B6AAF;
+	--adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* 1. BRUTAL — Bold, blocky, offset shadows, no curves */
 #adc-calculator[data-template="brutal"] {
-    --adc-bg: #fffef9;
-    --adc-text: #000000;
-    --adc-surface: #fffef9;
-    --adc-surface-alt: #f0f0e8;
-    --adc-border: #000000;
-    --adc-border-width: 3px;
-    --adc-radius: 0px;
-    --adc-shadow: 6px 6px 0 #000000;
-    --adc-header-bg: #ffde59;
-    --adc-header-text: #000000;
-    --adc-tab-bg: #fffef9;
-    --adc-tab-text: #000000;
-    --adc-tab-active-bg: #ffde59;
-    --adc-tab-active-text: #000000;
-    --adc-tab-hover-bg: #f0f0e8;
-    --adc-body-bg: #fffef9;
-    --adc-input-bg: #fffef9;
-    --adc-input-border: #000000;
-    --adc-input-focus-bg: #ffde59;
-    --adc-focus-ring: 0 0 0 3px rgba(0, 0, 0, 0.4);
-    --adc-btn-bg: #fffef9;
-    --adc-btn-text: #000000;
-    --adc-btn-border: #000000;
-    --adc-btn-hover-bg: #ffde59;
-    --adc-btn-primary-bg: #7bed9f;
-    --adc-btn-primary-text: #000000;
-    --adc-accent: #8B5CF6;
-    --adc-unit-active-bg: #74b9ff;
-    --adc-unit-active-text: #000000;
-    --adc-converter-bg: #74b9ff;
-    --adc-safety-bg: #ffe0e0;
-    --adc-safety-border: #000000;
-    --adc-modal-header-bg: #ffde59;
-    --adc-modal-header-text: #000000;
-    --adc-font-heading: 'Space Mono', monospace;
-    --adc-font-body: 'Work Sans', sans-serif;
-    --adc-container-border: none;
+	--adc-bg: #fffef9;
+	--adc-text: #000000;
+	--adc-accent: #8B5CF6;
+	--adc-surface: #fffef9;
+	--adc-surface-alt: #f0f0e8;
+	--adc-border: #000000;
+	--adc-border-width: 3px;
+	--adc-radius: 0px;
+	--adc-shadow: 6px 6px 0 #000000;
+	--adc-shadow-offset: 6px;
+	--adc-header-bg: #ffde59;
+	--adc-header-text: #000000;
+	--adc-tab-bg: #fffef9;
+	--adc-tab-text: #000000;
+	--adc-tab-active-bg: #ffde59;
+	--adc-tab-active-text: #000000;
+	--adc-tab-hover-bg: #f0f0e8;
+	--adc-body-bg: #fffef9;
+	--adc-input-bg: #fffef9;
+	--adc-input-border: #000000;
+	--adc-input-focus-bg: #ffde59;
+	--adc-focus-ring: 0 0 0 3px rgba(0,0,0,0.4);
+	--adc-btn-bg: #fffef9;
+	--adc-btn-text: #000000;
+	--adc-btn-border: #000000;
+	--adc-btn-hover-bg: #ffde59;
+	--adc-btn-primary-bg: #7bed9f;
+	--adc-btn-primary-text: #000000;
+	--adc-unit-active-bg: #74b9ff;
+	--adc-unit-active-text: #000000;
+	--adc-safety-bg: #ffe0e0;
+	--adc-safety-border: #000000;
+	--adc-warning: #ff5c5c;
+	--adc-warning-bg: #ffe0e0;
+	--adc-modal-header-bg: #ffde59;
+	--adc-modal-header-text: #000000;
+	--adc-container-border: none;
+	--adc-accent-yellow: #ffde59;
+	--adc-accent-green: #7bed9f;
+	--adc-accent-blue: #74b9ff;
+	--adc-accent-purple: #a29bfe;
+	--adc-font-heading: 'Space Mono', monospace;
+	--adc-font-body: 'Work Sans', sans-serif;
+	--adc-font-mono: 'Space Mono', monospace;
 }
 
-/* 2. MINIMAL */
+/* 2. MINIMAL — Clean, airy, barely-there borders */
 #adc-calculator[data-template="minimal"] {
-    --adc-bg: #ffffff;
-    --adc-text: #374151;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #f9fafb;
-    --adc-border: #e5e7eb;
-    --adc-border-width: 1px;
-    --adc-radius: 12px;
-    --adc-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    --adc-header-bg: #f9fafb;
-    --adc-header-text: #374151;
-    --adc-tab-bg: #f9fafb;
-    --adc-tab-text: #6b7280;
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #3b82f6;
-    --adc-tab-hover-bg: #f3f4f6;
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #f9fafb;
-    --adc-input-border: #d1d5db;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px rgba(59,130,246,0.15);
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #374151;
-    --adc-btn-border: #d1d5db;
-    --adc-btn-hover-bg: #f3f4f6;
-    --adc-btn-primary-bg: #3b82f6;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #3b82f6;
-    --adc-unit-active-bg: #3b82f6;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f0f7ff;
-    --adc-safety-bg: #fef2f2;
-    --adc-safety-border: #fecaca;
-    --adc-modal-header-bg: #f9fafb;
-    --adc-modal-header-text: #374151;
-    --adc-font-heading: 'Inter', -apple-system, system-ui, sans-serif;
-    --adc-font-body: 'Inter', -apple-system, system-ui, sans-serif;
-    --adc-container-border: none;
+	--adc-bg: #ffffff;
+	--adc-text: #374151;
+	--adc-accent: #3b82f6;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f9fafb;
+	--adc-border: #e5e7eb;
+	--adc-border-width: 1px;
+	--adc-radius: 12px;
+	--adc-shadow: 0 1px 3px rgba(0,0,0,0.06);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #f9fafb;
+	--adc-header-text: #374151;
+	--adc-tab-bg: #f9fafb;
+	--adc-tab-text: #6b7280;
+	--adc-tab-active-bg: #ffffff;
+	--adc-tab-active-text: #3b82f6;
+	--adc-tab-hover-bg: #f3f4f6;
+	--adc-body-bg: #ffffff;
+	--adc-input-bg: #f9fafb;
+	--adc-input-border: #d1d5db;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(59,130,246,0.12);
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #374151;
+	--adc-btn-border: #d1d5db;
+	--adc-btn-hover-bg: #f3f4f6;
+	--adc-btn-primary-bg: #3b82f6;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #3b82f6;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef2f2;
+	--adc-safety-border: #fecaca;
+	--adc-warning: #ef4444;
+	--adc-warning-bg: #fef2f2;
+	--adc-modal-header-bg: #f9fafb;
+	--adc-modal-header-text: #374151;
+	--adc-container-border: none;
+	--adc-accent-yellow: #fbbf24;
+	--adc-accent-green: #34d399;
+	--adc-accent-blue: #60a5fa;
+	--adc-accent-purple: #a78bfa;
+	--adc-font-heading: 'Inter', -apple-system, system-ui, sans-serif;
+	--adc-font-body: 'Inter', -apple-system, system-ui, sans-serif;
+	--adc-font-mono: 'SF Mono', 'Fira Code', monospace;
 }
 
-/* 3. DARK */
+/* 3. DARK — Slate blue dark mode, purple accents */
 #adc-calculator[data-template="dark"] {
-    --adc-bg: #0f172a;
-    --adc-text: #e2e8f0;
-    --adc-surface: #1e293b;
-    --adc-surface-alt: #334155;
-    --adc-border: #475569;
-    --adc-border-width: 1px;
-    --adc-radius: 12px;
-    --adc-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    --adc-header-bg: #1e293b;
-    --adc-header-text: #f1f5f9;
-    --adc-tab-bg: #1e293b;
-    --adc-tab-text: #94a3b8;
-    --adc-tab-active-bg: #334155;
-    --adc-tab-active-text: #a78bfa;
-    --adc-tab-hover-bg: #273548;
-    --adc-body-bg: #1e293b;
-    --adc-input-bg: #0f172a;
-    --adc-input-border: #475569;
-    --adc-input-focus-bg: #1e293b;
-    --adc-focus-ring: 0 0 0 3px rgba(167,139,250,0.2);
-    --adc-btn-bg: #334155;
-    --adc-btn-text: #e2e8f0;
-    --adc-btn-border: #475569;
-    --adc-btn-hover-bg: #475569;
-    --adc-btn-primary-bg: #a78bfa;
-    --adc-btn-primary-text: #0f172a;
-    --adc-accent: #a78bfa;
-    --adc-unit-active-bg: #a78bfa;
-    --adc-unit-active-text: #0f172a;
-    --adc-converter-bg: #1a2744;
-    --adc-safety-bg: #2a1a1a;
-    --adc-safety-border: #7f1d1d;
-    --adc-modal-header-bg: #334155;
-    --adc-modal-header-text: #f1f5f9;
-    --adc-font-heading: 'JetBrains Mono', 'Fira Code', monospace;
-    --adc-font-body: 'Inter', -apple-system, system-ui, sans-serif;
-    --adc-container-border: none;
+	--adc-bg: #0f172a;
+	--adc-text: #e2e8f0;
+	--adc-accent: #a78bfa;
+	--adc-surface: #1e293b;
+	--adc-surface-alt: #334155;
+	--adc-border: #475569;
+	--adc-border-width: 1px;
+	--adc-radius: 12px;
+	--adc-shadow: 0 4px 6px rgba(0,0,0,0.3);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #1e293b;
+	--adc-header-text: #f1f5f9;
+	--adc-tab-bg: #1e293b;
+	--adc-tab-text: #94a3b8;
+	--adc-tab-active-bg: #334155;
+	--adc-tab-active-text: #a78bfa;
+	--adc-tab-hover-bg: #273548;
+	--adc-body-bg: #1e293b;
+	--adc-input-bg: #0f172a;
+	--adc-input-border: #475569;
+	--adc-input-focus-bg: #1e293b;
+	--adc-focus-ring: 0 0 0 3px rgba(167,139,250,0.25);
+	--adc-btn-bg: #334155;
+	--adc-btn-text: #e2e8f0;
+	--adc-btn-border: #475569;
+	--adc-btn-hover-bg: #475569;
+	--adc-btn-primary-bg: #a78bfa;
+	--adc-btn-primary-text: #0f172a;
+	--adc-unit-active-bg: #a78bfa;
+	--adc-unit-active-text: #0f172a;
+	--adc-safety-bg: #2a1a1a;
+	--adc-safety-border: #7f1d1d;
+	--adc-warning: #f87171;
+	--adc-warning-bg: #2a1a1a;
+	--adc-modal-header-bg: #334155;
+	--adc-modal-header-text: #f1f5f9;
+	--adc-container-border: none;
+	--adc-accent-yellow: #fbbf24;
+	--adc-accent-green: #4ade80;
+	--adc-accent-blue: #60a5fa;
+	--adc-accent-purple: #c4b5fd;
+	--adc-font-heading: 'JetBrains Mono', 'Fira Code', monospace;
+	--adc-font-body: 'Inter', -apple-system, system-ui, sans-serif;
+	--adc-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* 4. NATURE */
+/* 4. NATURE — Earthy greens and browns, organic feel */
 #adc-calculator[data-template="nature"] {
-    --adc-bg: #f0e8d8;
-    --adc-text: #3d2b1a;
-    --adc-surface: #faf3e4;
-    --adc-surface-alt: #ede0c8;
-    --adc-border: #c4a882;
-    --adc-border-width: 2px;
-    --adc-radius: 8px;
-    --adc-shadow: 0 2px 8px rgba(139,94,60,0.15);
-    --adc-header-bg: #5d8a66;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #5d8a66;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #faf3e4;
-    --adc-tab-active-text: #3d2b1a;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #faf3e4;
-    --adc-input-bg: #faf3e4;
-    --adc-input-border: #c4a882;
-    --adc-input-focus-bg: #fff8e8;
-    --adc-focus-ring: 0 0 0 3px rgba(93,138,102,0.2);
-    --adc-btn-bg: #faf3e4;
-    --adc-btn-text: #3d2b1a;
-    --adc-btn-border: #c4a882;
-    --adc-btn-hover-bg: #ede0c8;
-    --adc-btn-primary-bg: #5d8a66;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #5d8a66;
-    --adc-unit-active-bg: #5d8a66;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #e8dcc8;
-    --adc-safety-bg: #f5e8e0;
-    --adc-safety-border: #c4a882;
-    --adc-modal-header-bg: #5d8a66;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: Georgia, 'Times New Roman', serif;
-    --adc-font-body: Georgia, serif;
-    --adc-container-border: none;
+	--adc-bg: #f0e8d8;
+	--adc-text: #3d2b1a;
+	--adc-accent: #5d8a66;
+	--adc-surface: #faf3e4;
+	--adc-surface-alt: #ede0c8;
+	--adc-border: #c4a882;
+	--adc-border-width: 2px;
+	--adc-radius: 8px;
+	--adc-shadow: 0 2px 8px rgba(139,94,60,0.15);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #5d8a66;
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: #5d8a66;
+	--adc-tab-text: rgba(255,255,255,0.8);
+	--adc-tab-active-bg: #faf3e4;
+	--adc-tab-active-text: #3d2b1a;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: #faf3e4;
+	--adc-input-bg: #faf3e4;
+	--adc-input-border: #c4a882;
+	--adc-input-focus-bg: #fff8e8;
+	--adc-focus-ring: 0 0 0 3px rgba(93,138,102,0.2);
+	--adc-btn-bg: #faf3e4;
+	--adc-btn-text: #3d2b1a;
+	--adc-btn-border: #c4a882;
+	--adc-btn-hover-bg: #ede0c8;
+	--adc-btn-primary-bg: #5d8a66;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #5d8a66;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #f5e8e0;
+	--adc-safety-border: #c4a882;
+	--adc-warning: #c0392b;
+	--adc-warning-bg: #f5e8e0;
+	--adc-modal-header-bg: #5d8a66;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: none;
+	--adc-accent-yellow: #d4a843;
+	--adc-accent-green: #6a9f5e;
+	--adc-accent-blue: #6e8fa5;
+	--adc-accent-purple: #8a7bac;
+	--adc-font-heading: Georgia, 'Times New Roman', serif;
+	--adc-font-body: Georgia, serif;
+	--adc-font-mono: 'Courier New', Courier, monospace;
 }
 
-/* 5. GLASS */
+/* 5. GLASS — Frosted glassmorphism, gradient backdrop */
 #adc-calculator[data-template="glass"] {
-    --adc-bg: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
-    --adc-text: #ffffff;
-    --adc-surface: rgba(255,255,255,0.12);
-    --adc-surface-alt: rgba(255,255,255,0.08);
-    --adc-border: rgba(255,255,255,0.2);
-    --adc-border-width: 1px;
-    --adc-radius: 16px;
-    --adc-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    --adc-header-bg: rgba(255,255,255,0.1);
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: rgba(255,255,255,0.1);
-    --adc-tab-text: rgba(255,255,255,0.7);
-    --adc-tab-active-bg: rgba(255,255,255,0.2);
-    --adc-tab-active-text: #ffffff;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: rgba(255,255,255,0.08);
-    --adc-input-bg: rgba(255,255,255,0.1);
-    --adc-input-border: rgba(255,255,255,0.2);
-    --adc-input-focus-bg: rgba(255,255,255,0.15);
-    --adc-focus-ring: 0 0 0 3px rgba(255,255,255,0.2);
-    --adc-btn-bg: rgba(255,255,255,0.15);
-    --adc-btn-text: #ffffff;
-    --adc-btn-border: rgba(255,255,255,0.2);
-    --adc-btn-hover-bg: rgba(255,255,255,0.25);
-    --adc-btn-primary-bg: rgba(255,255,255,0.25);
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #f0abfc;
-    --adc-unit-active-bg: rgba(255,255,255,0.25);
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: rgba(255,255,255,0.08);
-    --adc-safety-bg: rgba(255,100,100,0.15);
-    --adc-safety-border: rgba(255,100,100,0.3);
-    --adc-modal-header-bg: rgba(255,255,255,0.15);
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: 'Poppins', -apple-system, sans-serif;
-    --adc-font-body: 'Poppins', -apple-system, sans-serif;
-    --adc-container-border: none;
+	--adc-bg: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
+	--adc-text: #ffffff;
+	--adc-accent: #f0abfc;
+	--adc-surface: rgba(255,255,255,0.12);
+	--adc-surface-alt: rgba(255,255,255,0.08);
+	--adc-border: rgba(255,255,255,0.2);
+	--adc-border-width: 1px;
+	--adc-radius: 16px;
+	--adc-shadow: 0 8px 32px rgba(0,0,0,0.2);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: rgba(255,255,255,0.1);
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: rgba(255,255,255,0.1);
+	--adc-tab-text: rgba(255,255,255,0.7);
+	--adc-tab-active-bg: rgba(255,255,255,0.2);
+	--adc-tab-active-text: #ffffff;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: rgba(255,255,255,0.08);
+	--adc-input-bg: rgba(255,255,255,0.1);
+	--adc-input-border: rgba(255,255,255,0.2);
+	--adc-input-focus-bg: rgba(255,255,255,0.15);
+	--adc-focus-ring: 0 0 0 3px rgba(255,255,255,0.2);
+	--adc-btn-bg: rgba(255,255,255,0.15);
+	--adc-btn-text: #ffffff;
+	--adc-btn-border: rgba(255,255,255,0.2);
+	--adc-btn-hover-bg: rgba(255,255,255,0.25);
+	--adc-btn-primary-bg: rgba(255,255,255,0.25);
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: rgba(255,255,255,0.25);
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: rgba(255,100,100,0.15);
+	--adc-safety-border: rgba(255,100,100,0.3);
+	--adc-warning: #fca5a5;
+	--adc-warning-bg: rgba(255,100,100,0.15);
+	--adc-modal-header-bg: rgba(255,255,255,0.15);
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: none;
+	--adc-accent-yellow: #fde68a;
+	--adc-accent-green: #6ee7b7;
+	--adc-accent-blue: #93c5fd;
+	--adc-accent-purple: #d8b4fe;
+	--adc-font-heading: 'Poppins', -apple-system, sans-serif;
+	--adc-font-body: 'Poppins', -apple-system, sans-serif;
+	--adc-font-mono: 'Fira Code', monospace;
 }
 
-/* 6. NEON */
+/* 6. NEON — Cyberpunk black with electric green glow */
 #adc-calculator[data-template="neon"] {
-    --adc-bg: #000000;
-    --adc-text: #00ff80;
-    --adc-surface: #0a0a0a;
-    --adc-surface-alt: #111111;
-    --adc-border: #00ff80;
-    --adc-border-width: 1px;
-    --adc-radius: 0px;
-    --adc-shadow: 0 0 10px rgba(0,255,128,0.3);
-    --adc-header-bg: #0a0a0a;
-    --adc-header-text: #00ff80;
-    --adc-tab-bg: #0a0a0a;
-    --adc-tab-text: #00ff80;
-    --adc-tab-active-bg: #1a1a1a;
-    --adc-tab-active-text: #00ff80;
-    --adc-tab-hover-bg: #111111;
-    --adc-body-bg: #0a0a0a;
-    --adc-input-bg: #000000;
-    --adc-input-border: #00ff80;
-    --adc-input-focus-bg: #0a1a0a;
-    --adc-focus-ring: 0 0 8px rgba(0,255,128,0.4);
-    --adc-btn-bg: #0a0a0a;
-    --adc-btn-text: #00ff80;
-    --adc-btn-border: #00ff80;
-    --adc-btn-hover-bg: #1a1a1a;
-    --adc-btn-primary-bg: #00ff80;
-    --adc-btn-primary-text: #000000;
-    --adc-accent: #ff0080;
-    --adc-unit-active-bg: #00ff80;
-    --adc-unit-active-text: #000000;
-    --adc-converter-bg: #0a0a0a;
-    --adc-safety-bg: #1a0a0a;
-    --adc-safety-border: #ff0080;
-    --adc-modal-header-bg: #0a0a0a;
-    --adc-modal-header-text: #00ff80;
-    --adc-font-heading: 'Space Mono', monospace;
-    --adc-font-body: 'Space Mono', monospace;
-    --adc-container-border: none;
+	--adc-bg: #000000;
+	--adc-text: #00ff80;
+	--adc-accent: #ff0080;
+	--adc-surface: #0a0a0a;
+	--adc-surface-alt: #111111;
+	--adc-border: #00ff80;
+	--adc-border-width: 1px;
+	--adc-radius: 0px;
+	--adc-shadow: 0 0 10px rgba(0,255,128,0.3);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #0a0a0a;
+	--adc-header-text: #00ff80;
+	--adc-tab-bg: #0a0a0a;
+	--adc-tab-text: #00ff80;
+	--adc-tab-active-bg: #1a1a1a;
+	--adc-tab-active-text: #00ff80;
+	--adc-tab-hover-bg: #111111;
+	--adc-body-bg: #0a0a0a;
+	--adc-input-bg: #000000;
+	--adc-input-border: #00ff80;
+	--adc-input-focus-bg: #0a1a0a;
+	--adc-focus-ring: 0 0 8px rgba(0,255,128,0.4);
+	--adc-btn-bg: #0a0a0a;
+	--adc-btn-text: #00ff80;
+	--adc-btn-border: #00ff80;
+	--adc-btn-hover-bg: #1a1a1a;
+	--adc-btn-primary-bg: #00ff80;
+	--adc-btn-primary-text: #000000;
+	--adc-unit-active-bg: #00ff80;
+	--adc-unit-active-text: #000000;
+	--adc-safety-bg: #1a0a0a;
+	--adc-safety-border: #ff0080;
+	--adc-warning: #ff0080;
+	--adc-warning-bg: #1a0a0a;
+	--adc-modal-header-bg: #0a0a0a;
+	--adc-modal-header-text: #00ff80;
+	--adc-container-border: none;
+	--adc-accent-yellow: #ffe600;
+	--adc-accent-green: #00ff80;
+	--adc-accent-blue: #00e5ff;
+	--adc-accent-purple: #d600ff;
+	--adc-font-heading: 'Space Mono', monospace;
+	--adc-font-body: 'Space Mono', monospace;
+	--adc-font-mono: 'Space Mono', monospace;
 }
 
-/* 7. PAPER */
+/* 7. PAPER — Scholarly, aged parchment feel */
 #adc-calculator[data-template="paper"] {
-    --adc-bg: #faf7f2;
-    --adc-text: #2c2417;
-    --adc-surface: #faf7f2;
-    --adc-surface-alt: #f0ebe0;
-    --adc-border: #d4c9b0;
-    --adc-border-width: 0px;
-    --adc-radius: 2px;
-    --adc-shadow: none;
-    --adc-header-bg: #f0ebe0;
-    --adc-header-text: #2c2417;
-    --adc-tab-bg: #f0ebe0;
-    --adc-tab-text: #8b7e6a;
-    --adc-tab-active-bg: #faf7f2;
-    --adc-tab-active-text: #2c2417;
-    --adc-tab-hover-bg: #e8e0d0;
-    --adc-body-bg: #faf7f2;
-    --adc-input-bg: #faf7f2;
-    --adc-input-border: #d4c9b0;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 2px rgba(139,105,20,0.15);
-    --adc-btn-bg: #f0ebe0;
-    --adc-btn-text: #2c2417;
-    --adc-btn-border: #d4c9b0;
-    --adc-btn-hover-bg: #e8e0d0;
-    --adc-btn-primary-bg: #8b6914;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #8b6914;
-    --adc-unit-active-bg: #8b6914;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f0ebe0;
-    --adc-safety-bg: #f5ece0;
-    --adc-safety-border: #d4c9b0;
-    --adc-modal-header-bg: #f0ebe0;
-    --adc-modal-header-text: #2c2417;
-    --adc-font-heading: 'Courier New', Courier, monospace;
-    --adc-font-body: Georgia, serif;
-    --adc-container-border: none;
+	--adc-bg: #faf7f2;
+	--adc-text: #2c2417;
+	--adc-accent: #8b6914;
+	--adc-surface: #faf7f2;
+	--adc-surface-alt: #f0ebe0;
+	--adc-border: #d4c9b0;
+	--adc-border-width: 0px;
+	--adc-radius: 2px;
+	--adc-shadow: none;
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #f0ebe0;
+	--adc-header-text: #2c2417;
+	--adc-tab-bg: #f0ebe0;
+	--adc-tab-text: #8b7e6a;
+	--adc-tab-active-bg: #faf7f2;
+	--adc-tab-active-text: #2c2417;
+	--adc-tab-hover-bg: #e8e0d0;
+	--adc-body-bg: #faf7f2;
+	--adc-input-bg: #faf7f2;
+	--adc-input-border: #d4c9b0;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 2px rgba(139,105,20,0.15);
+	--adc-btn-bg: #f0ebe0;
+	--adc-btn-text: #2c2417;
+	--adc-btn-border: #d4c9b0;
+	--adc-btn-hover-bg: #e8e0d0;
+	--adc-btn-primary-bg: #8b6914;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #8b6914;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #f5ece0;
+	--adc-safety-border: #d4c9b0;
+	--adc-warning: #a0522d;
+	--adc-warning-bg: #f5ece0;
+	--adc-modal-header-bg: #f0ebe0;
+	--adc-modal-header-text: #2c2417;
+	--adc-container-border: none;
+	--adc-accent-yellow: #c8a84e;
+	--adc-accent-green: #6a8a5e;
+	--adc-accent-blue: #5a7a8a;
+	--adc-accent-purple: #7a6a8a;
+	--adc-font-heading: 'Courier New', Courier, monospace;
+	--adc-font-body: Georgia, serif;
+	--adc-font-mono: 'Courier New', Courier, monospace;
 }
 
-/* 8. TERMINAL */
+/* 8. TERMINAL — Command-line green-on-black, all mono */
 #adc-calculator[data-template="terminal"] {
-    --adc-bg: #0d1117;
-    --adc-text: #00ff41;
-    --adc-surface: #161b22;
-    --adc-surface-alt: #1c2333;
-    --adc-border: #00ff41;
-    --adc-border-width: 1px;
-    --adc-radius: 0px;
-    --adc-shadow: none;
-    --adc-header-bg: #161b22;
-    --adc-header-text: #00ff41;
-    --adc-tab-bg: #161b22;
-    --adc-tab-text: #00ff41;
-    --adc-tab-active-bg: #0d1117;
-    --adc-tab-active-text: #00ff41;
-    --adc-tab-hover-bg: #1c2333;
-    --adc-body-bg: #0d1117;
-    --adc-input-bg: #0d1117;
-    --adc-input-border: #00ff41;
-    --adc-input-focus-bg: #161b22;
-    --adc-focus-ring: 0 0 6px rgba(0,255,65,0.3);
-    --adc-btn-bg: #161b22;
-    --adc-btn-text: #00ff41;
-    --adc-btn-border: #00ff41;
-    --adc-btn-hover-bg: #1c2333;
-    --adc-btn-primary-bg: #00ff41;
-    --adc-btn-primary-text: #0d1117;
-    --adc-accent: #00ff41;
-    --adc-unit-active-bg: #00ff41;
-    --adc-unit-active-text: #0d1117;
-    --adc-converter-bg: #161b22;
-    --adc-safety-bg: #1a1117;
-    --adc-safety-border: #ff4141;
-    --adc-modal-header-bg: #161b22;
-    --adc-modal-header-text: #00ff41;
-    --adc-font-heading: 'Courier New', monospace;
-    --adc-font-body: 'Courier New', monospace;
-    --adc-container-border: none;
+	--adc-bg: #0d1117;
+	--adc-text: #00ff41;
+	--adc-accent: #00ff41;
+	--adc-surface: #161b22;
+	--adc-surface-alt: #1c2333;
+	--adc-border: #00ff41;
+	--adc-border-width: 1px;
+	--adc-radius: 0px;
+	--adc-shadow: none;
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #161b22;
+	--adc-header-text: #00ff41;
+	--adc-tab-bg: #161b22;
+	--adc-tab-text: #00ff41;
+	--adc-tab-active-bg: #0d1117;
+	--adc-tab-active-text: #00ff41;
+	--adc-tab-hover-bg: #1c2333;
+	--adc-body-bg: #0d1117;
+	--adc-input-bg: #0d1117;
+	--adc-input-border: #00ff41;
+	--adc-input-focus-bg: #161b22;
+	--adc-focus-ring: 0 0 6px rgba(0,255,65,0.3);
+	--adc-btn-bg: #161b22;
+	--adc-btn-text: #00ff41;
+	--adc-btn-border: #00ff41;
+	--adc-btn-hover-bg: #1c2333;
+	--adc-btn-primary-bg: #00ff41;
+	--adc-btn-primary-text: #0d1117;
+	--adc-unit-active-bg: #00ff41;
+	--adc-unit-active-text: #0d1117;
+	--adc-safety-bg: #1a1117;
+	--adc-safety-border: #ff4141;
+	--adc-warning: #ff4141;
+	--adc-warning-bg: #1a1117;
+	--adc-modal-header-bg: #161b22;
+	--adc-modal-header-text: #00ff41;
+	--adc-container-border: none;
+	--adc-accent-yellow: #ffff00;
+	--adc-accent-green: #00ff41;
+	--adc-accent-blue: #00bfff;
+	--adc-accent-purple: #bf00ff;
+	--adc-font-heading: 'Courier New', monospace;
+	--adc-font-body: 'Courier New', monospace;
+	--adc-font-mono: 'Courier New', monospace;
 }
 
-/* 9. RETRO */
+/* 9. RETRO — 70s amber warmth, chunky offset shadows */
 #adc-calculator[data-template="retro"] {
-    --adc-bg: #1a0a00;
-    --adc-text: #f5c87a;
-    --adc-surface: #f5c87a;
-    --adc-surface-alt: #e8b860;
-    --adc-border: #8b4513;
-    --adc-border-width: 3px;
-    --adc-radius: 8px;
-    --adc-shadow: 4px 4px 0 #8b4513;
-    --adc-header-bg: #8b4513;
-    --adc-header-text: #f5c87a;
-    --adc-tab-bg: #8b4513;
-    --adc-tab-text: #f5c87a;
-    --adc-tab-active-bg: #f5c87a;
-    --adc-tab-active-text: #1a0a00;
-    --adc-tab-hover-bg: #a0522d;
-    --adc-body-bg: #f5c87a;
-    --adc-input-bg: #f5c87a;
-    --adc-input-border: #8b4513;
-    --adc-input-focus-bg: #ffe0a0;
-    --adc-focus-ring: 0 0 0 3px rgba(0, 0, 0, 0.3);
-    --adc-btn-bg: #f5c87a;
-    --adc-btn-text: #1a0a00;
-    --adc-btn-border: #8b4513;
-    --adc-btn-hover-bg: #e8b860;
-    --adc-btn-primary-bg: #e8842c;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #ff6b1a;
-    --adc-unit-active-bg: #e8842c;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #e8b860;
-    --adc-safety-bg: #e8c898;
-    --adc-safety-border: #8b4513;
-    --adc-modal-header-bg: #8b4513;
-    --adc-modal-header-text: #f5c87a;
-    --adc-font-heading: 'Courier New', monospace;
-    --adc-font-body: Georgia, serif;
-    --adc-container-border: none;
+	--adc-bg: #1a0a00;
+	--adc-text: #f5c87a;
+	--adc-accent: #ff6b1a;
+	--adc-surface: #f5c87a;
+	--adc-surface-alt: #e8b860;
+	--adc-border: #8b4513;
+	--adc-border-width: 3px;
+	--adc-radius: 8px;
+	--adc-shadow: 4px 4px 0 #8b4513;
+	--adc-shadow-offset: 4px;
+	--adc-header-bg: #8b4513;
+	--adc-header-text: #f5c87a;
+	--adc-tab-bg: #8b4513;
+	--adc-tab-text: #f5c87a;
+	--adc-tab-active-bg: #f5c87a;
+	--adc-tab-active-text: #1a0a00;
+	--adc-tab-hover-bg: #a0522d;
+	--adc-body-bg: #f5c87a;
+	--adc-input-bg: #f5c87a;
+	--adc-input-border: #8b4513;
+	--adc-input-focus-bg: #ffe0a0;
+	--adc-focus-ring: 0 0 0 3px rgba(0,0,0,0.3);
+	--adc-btn-bg: #f5c87a;
+	--adc-btn-text: #1a0a00;
+	--adc-btn-border: #8b4513;
+	--adc-btn-hover-bg: #e8b860;
+	--adc-btn-primary-bg: #e8842c;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #e8842c;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #e8c898;
+	--adc-safety-border: #8b4513;
+	--adc-warning: #cc3300;
+	--adc-warning-bg: #e8c898;
+	--adc-modal-header-bg: #8b4513;
+	--adc-modal-header-text: #f5c87a;
+	--adc-container-border: none;
+	--adc-accent-yellow: #f5c87a;
+	--adc-accent-green: #8fbc6a;
+	--adc-accent-blue: #6a9fbc;
+	--adc-accent-purple: #a07bc8;
+	--adc-font-heading: 'Courier New', monospace;
+	--adc-font-body: Georgia, serif;
+	--adc-font-mono: 'Courier New', monospace;
 }
 
-/* 10. FLAT */
+/* 10. FLAT — No shadows, no borders, bold color blocks */
 #adc-calculator[data-template="flat"] {
-    --adc-bg: #f0f2f5;
-    --adc-text: #1a1a1a;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #f5f5f5;
-    --adc-border: #e5e7eb;
-    --adc-border-width: 0px;
-    --adc-radius: 8px;
-    --adc-shadow: none;
-    --adc-header-bg: #e5e7eb;
-    --adc-header-text: #1a1a1a;
-    --adc-tab-bg: #e5e7eb;
-    --adc-tab-text: #6b7280;
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #1a1a1a;
-    --adc-tab-hover-bg: #d1d5db;
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #f5f5f5;
-    --adc-input-border: #e5e7eb;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px rgba(59,130,246,0.15);
-    --adc-btn-bg: #f5f5f5;
-    --adc-btn-text: #1a1a1a;
-    --adc-btn-border: #e5e7eb;
-    --adc-btn-hover-bg: #e5e7eb;
-    --adc-btn-primary-bg: #3b82f6;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #3b82f6;
-    --adc-unit-active-bg: #3b82f6;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f0f2f5;
-    --adc-safety-bg: #fef2f2;
-    --adc-safety-border: #fecaca;
-    --adc-modal-header-bg: #f0f2f5;
-    --adc-modal-header-text: #1a1a1a;
-    --adc-font-heading: -apple-system, system-ui, sans-serif;
-    --adc-font-body: -apple-system, system-ui, sans-serif;
-    --adc-container-border: none;
+	--adc-bg: #f0f2f5;
+	--adc-text: #1a1a1a;
+	--adc-accent: #3b82f6;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f5f5f5;
+	--adc-border: #e5e7eb;
+	--adc-border-width: 0px;
+	--adc-radius: 8px;
+	--adc-shadow: none;
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #3b82f6;
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: #3b82f6;
+	--adc-tab-text: rgba(255,255,255,0.75);
+	--adc-tab-active-bg: #ffffff;
+	--adc-tab-active-text: #3b82f6;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: #ffffff;
+	--adc-input-bg: #f5f5f5;
+	--adc-input-border: #e5e7eb;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(59,130,246,0.15);
+	--adc-btn-bg: #f5f5f5;
+	--adc-btn-text: #1a1a1a;
+	--adc-btn-border: transparent;
+	--adc-btn-hover-bg: #e5e7eb;
+	--adc-btn-primary-bg: #3b82f6;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #3b82f6;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef2f2;
+	--adc-safety-border: #fecaca;
+	--adc-warning: #ef4444;
+	--adc-warning-bg: #fef2f2;
+	--adc-modal-header-bg: #3b82f6;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: none;
+	--adc-accent-yellow: #f59e0b;
+	--adc-accent-green: #10b981;
+	--adc-accent-blue: #3b82f6;
+	--adc-accent-purple: #8b5cf6;
+	--adc-font-heading: -apple-system, system-ui, sans-serif;
+	--adc-font-body: -apple-system, system-ui, sans-serif;
+	--adc-font-mono: 'SF Mono', 'Fira Code', monospace;
 }
 
-/* 11. AMETHYST */
+/* 11. AMETHYST — Rich purple crystal, elegant and soft */
 #adc-calculator[data-template="amethyst"] {
-    --adc-bg: #f0eef5;
-    --adc-text: #2d2b3a;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #faf9fc;
-    --adc-border: #7B68AE;
-    --adc-border-width: 1px;
-    --adc-radius: 10px;
-    --adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --adc-header-bg: #7B68AE;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #7B68AE;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #2d2b3a;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #faf9fc;
-    --adc-input-border: #eaf9fc;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px #7B68AE26;
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #2d2b3a;
-    --adc-btn-border: #eaf9fc;
-    --adc-btn-hover-bg: #faf9fc;
-    --adc-btn-primary-bg: #7B68AE;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #7B68AE;
-    --adc-unit-active-bg: #7B68AE;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #faf9fc;
-    --adc-safety-bg: #fef0f0;
-    --adc-safety-border: #e8d0d0;
-    --adc-modal-header-bg: #7B68AE;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-container-border: 2px solid #7B68AE;
+	--adc-bg: #f3f0f8;
+	--adc-text: #2d2640;
+	--adc-accent: #7c3aed;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f8f6fc;
+	--adc-border: #7c3aed;
+	--adc-border-width: 1px;
+	--adc-radius: 14px;
+	--adc-shadow: 0 4px 16px rgba(124,58,237,0.1);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #7c3aed;
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: #7c3aed;
+	--adc-tab-text: rgba(255,255,255,0.8);
+	--adc-tab-active-bg: #ede9fe;
+	--adc-tab-active-text: #5b21b6;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: #ede9fe;
+	--adc-input-bg: #f8f6fc;
+	--adc-input-border: #c4b5fd;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(124,58,237,0.2);
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #2d2640;
+	--adc-btn-border: #ddd6fe;
+	--adc-btn-hover-bg: #f8f6fc;
+	--adc-btn-primary-bg: #7c3aed;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #7c3aed;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef0f0;
+	--adc-safety-border: #e8d0d0;
+	--adc-warning: #dc2626;
+	--adc-warning-bg: #fef0f0;
+	--adc-modal-header-bg: #7c3aed;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: 2px solid #7c3aed;
+	--adc-accent-yellow: #f59e0b;
+	--adc-accent-green: #34d399;
+	--adc-accent-blue: #818cf8;
+	--adc-accent-purple: #c4b5fd;
+	--adc-font-heading: 'Poppins', -apple-system, sans-serif;
+	--adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-mono: 'Fira Code', monospace;
 }
 
-/* 12. OCEAN */
+/* 12. OCEAN — Deep navy blue, crisp white, nautical feel */
 #adc-calculator[data-template="ocean"] {
-    --adc-bg: #eef2f9;
-    --adc-text: #1e2a3a;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #f7f9fc;
-    --adc-border: #5B6AAF;
-    --adc-border-width: 1px;
-    --adc-radius: 10px;
-    --adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --adc-header-bg: #5B6AAF;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #5B6AAF;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #1e2a3a;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #f7f9fc;
-    --adc-input-border: #e7f9fc;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px #5B6AAF26;
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #1e2a3a;
-    --adc-btn-border: #e7f9fc;
-    --adc-btn-hover-bg: #f7f9fc;
-    --adc-btn-primary-bg: #5B6AAF;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #5B6AAF;
-    --adc-unit-active-bg: #5B6AAF;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f7f9fc;
-    --adc-safety-bg: #fef0f0;
-    --adc-safety-border: #e8d0d0;
-    --adc-modal-header-bg: #5B6AAF;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-container-border: 2px solid #5B6AAF;
+	--adc-bg: #0c1929;
+	--adc-text: #cbd5e1;
+	--adc-accent: #38bdf8;
+	--adc-surface: #162338;
+	--adc-surface-alt: #1e3048;
+	--adc-border: #2a4a6b;
+	--adc-border-width: 1px;
+	--adc-radius: 10px;
+	--adc-shadow: 0 4px 12px rgba(0,0,0,0.3);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #1e3a5f;
+	--adc-header-text: #e0f2fe;
+	--adc-tab-bg: #1e3a5f;
+	--adc-tab-text: #7dd3fc;
+	--adc-tab-active-bg: #0c4a6e;
+	--adc-tab-active-text: #38bdf8;
+	--adc-tab-hover-bg: #1e4a70;
+	--adc-body-bg: #162338;
+	--adc-input-bg: #0c1929;
+	--adc-input-border: #2a4a6b;
+	--adc-input-focus-bg: #162338;
+	--adc-focus-ring: 0 0 0 3px rgba(56,189,248,0.25);
+	--adc-btn-bg: #1e3048;
+	--adc-btn-text: #cbd5e1;
+	--adc-btn-border: #2a4a6b;
+	--adc-btn-hover-bg: #2a4a6b;
+	--adc-btn-primary-bg: #0284c7;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #0284c7;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #2a1a1e;
+	--adc-safety-border: #6b2a2a;
+	--adc-warning: #fb7185;
+	--adc-warning-bg: #2a1a1e;
+	--adc-modal-header-bg: #1e3a5f;
+	--adc-modal-header-text: #e0f2fe;
+	--adc-container-border: none;
+	--adc-accent-yellow: #fbbf24;
+	--adc-accent-green: #34d399;
+	--adc-accent-blue: #38bdf8;
+	--adc-accent-purple: #a78bfa;
+	--adc-font-heading: 'Inter', -apple-system, system-ui, sans-serif;
+	--adc-font-body: 'Inter', -apple-system, system-ui, sans-serif;
+	--adc-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* 13. LAGOON */
+/* 13. LAGOON — Warm teal, tropical, bright and inviting */
 #adc-calculator[data-template="lagoon"] {
-    --adc-bg: #ecf5f5;
-    --adc-text: #1a3333;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #f5fafa;
-    --adc-border: #2A7B7B;
-    --adc-border-width: 1px;
-    --adc-radius: 10px;
-    --adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --adc-header-bg: #2A7B7B;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #2A7B7B;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #1a3333;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #f5fafa;
-    --adc-input-border: #e5fafa;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px #2A7B7B26;
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #1a3333;
-    --adc-btn-border: #e5fafa;
-    --adc-btn-hover-bg: #f5fafa;
-    --adc-btn-primary-bg: #2A7B7B;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #2A7B7B;
-    --adc-unit-active-bg: #2A7B7B;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f5fafa;
-    --adc-safety-bg: #fef0f0;
-    --adc-safety-border: #e8d0d0;
-    --adc-modal-header-bg: #2A7B7B;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-container-border: 2px solid #2A7B7B;
+	--adc-bg: #f0fdf9;
+	--adc-text: #134e4a;
+	--adc-accent: #14b8a6;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f0fdfa;
+	--adc-border: #14b8a6;
+	--adc-border-width: 1px;
+	--adc-radius: 16px;
+	--adc-shadow: 0 2px 12px rgba(20,184,166,0.12);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #0d9488;
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: #0d9488;
+	--adc-tab-text: rgba(255,255,255,0.85);
+	--adc-tab-active-bg: #ccfbf1;
+	--adc-tab-active-text: #134e4a;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: #ccfbf1;
+	--adc-input-bg: #f0fdfa;
+	--adc-input-border: #5eead4;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(20,184,166,0.2);
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #134e4a;
+	--adc-btn-border: #99f6e4;
+	--adc-btn-hover-bg: #f0fdfa;
+	--adc-btn-primary-bg: #14b8a6;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #14b8a6;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef2f2;
+	--adc-safety-border: #fecaca;
+	--adc-warning: #ef4444;
+	--adc-warning-bg: #fef2f2;
+	--adc-modal-header-bg: #0d9488;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: 2px solid #14b8a6;
+	--adc-accent-yellow: #fbbf24;
+	--adc-accent-green: #34d399;
+	--adc-accent-blue: #22d3ee;
+	--adc-accent-purple: #a78bfa;
+	--adc-font-heading: 'Poppins', -apple-system, sans-serif;
+	--adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-mono: 'SF Mono', 'Fira Code', monospace;
 }
 
-/* 14. SLATE */
+/* 14. SLATE — Professional charcoal, corporate clean */
 #adc-calculator[data-template="slate"] {
-    --adc-bg: #f0f0f2;
-    --adc-text: #1a1a2e;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #f8f8f9;
-    --adc-border: #4A4A5A;
-    --adc-border-width: 1px;
-    --adc-radius: 10px;
-    --adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --adc-header-bg: #4A4A5A;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #4A4A5A;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #1a1a2e;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #f8f8f9;
-    --adc-input-border: #e8f8f9;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px #4A4A5A26;
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #1a1a2e;
-    --adc-btn-border: #e8f8f9;
-    --adc-btn-hover-bg: #f8f8f9;
-    --adc-btn-primary-bg: #4A4A5A;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #4A4A5A;
-    --adc-unit-active-bg: #4A4A5A;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #f8f8f9;
-    --adc-safety-bg: #fef0f0;
-    --adc-safety-border: #e8d0d0;
-    --adc-modal-header-bg: #4A4A5A;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-container-border: 2px solid #4A4A5A;
+	--adc-bg: #f8fafc;
+	--adc-text: #1e293b;
+	--adc-accent: #475569;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #f1f5f9;
+	--adc-border: #cbd5e1;
+	--adc-border-width: 1px;
+	--adc-radius: 6px;
+	--adc-shadow: 0 1px 3px rgba(0,0,0,0.08);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #1e293b;
+	--adc-header-text: #f8fafc;
+	--adc-tab-bg: #334155;
+	--adc-tab-text: #94a3b8;
+	--adc-tab-active-bg: #f8fafc;
+	--adc-tab-active-text: #1e293b;
+	--adc-tab-hover-bg: #475569;
+	--adc-body-bg: #ffffff;
+	--adc-input-bg: #f1f5f9;
+	--adc-input-border: #cbd5e1;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(71,85,105,0.15);
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #334155;
+	--adc-btn-border: #cbd5e1;
+	--adc-btn-hover-bg: #f1f5f9;
+	--adc-btn-primary-bg: #334155;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #334155;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef2f2;
+	--adc-safety-border: #fecaca;
+	--adc-warning: #dc2626;
+	--adc-warning-bg: #fef2f2;
+	--adc-modal-header-bg: #1e293b;
+	--adc-modal-header-text: #f8fafc;
+	--adc-container-border: none;
+	--adc-accent-yellow: #eab308;
+	--adc-accent-green: #22c55e;
+	--adc-accent-blue: #3b82f6;
+	--adc-accent-purple: #8b5cf6;
+	--adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-mono: 'SF Mono', Menlo, monospace;
 }
 
-/* 15. EMBER */
+/* 15. EMBER — Warm rust and burnt orange, cozy autumn */
 #adc-calculator[data-template="ember"] {
-    --adc-bg: #f5eeeb;
-    --adc-text: #2d1f1a;
-    --adc-surface: #ffffff;
-    --adc-surface-alt: #fcf9f7;
-    --adc-border: #A85A32;
-    --adc-border-width: 1px;
-    --adc-radius: 10px;
-    --adc-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --adc-header-bg: #A85A32;
-    --adc-header-text: #ffffff;
-    --adc-tab-bg: #A85A32;
-    --adc-tab-text: rgba(255,255,255,0.8);
-    --adc-tab-active-bg: #ffffff;
-    --adc-tab-active-text: #2d1f1a;
-    --adc-tab-hover-bg: rgba(255,255,255,0.15);
-    --adc-body-bg: #ffffff;
-    --adc-input-bg: #fcf9f7;
-    --adc-input-border: #ecf9f7;
-    --adc-input-focus-bg: #ffffff;
-    --adc-focus-ring: 0 0 0 3px #A85A3226;
-    --adc-btn-bg: #ffffff;
-    --adc-btn-text: #2d1f1a;
-    --adc-btn-border: #ecf9f7;
-    --adc-btn-hover-bg: #fcf9f7;
-    --adc-btn-primary-bg: #A85A32;
-    --adc-btn-primary-text: #ffffff;
-    --adc-accent: #A85A32;
-    --adc-unit-active-bg: #A85A32;
-    --adc-unit-active-text: #ffffff;
-    --adc-converter-bg: #fcf9f7;
-    --adc-safety-bg: #fef0f0;
-    --adc-safety-border: #e8d0d0;
-    --adc-modal-header-bg: #A85A32;
-    --adc-modal-header-text: #ffffff;
-    --adc-font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --adc-container-border: 2px solid #A85A32;
+	--adc-bg: #fdf2e9;
+	--adc-text: #431407;
+	--adc-accent: #c2410c;
+	--adc-surface: #ffffff;
+	--adc-surface-alt: #fff7ed;
+	--adc-border: #c2410c;
+	--adc-border-width: 1.5px;
+	--adc-radius: 10px;
+	--adc-shadow: 0 2px 10px rgba(194,65,12,0.12);
+	--adc-shadow-offset: 0px;
+	--adc-header-bg: #c2410c;
+	--adc-header-text: #ffffff;
+	--adc-tab-bg: #c2410c;
+	--adc-tab-text: rgba(255,255,255,0.85);
+	--adc-tab-active-bg: #ffedd5;
+	--adc-tab-active-text: #9a3412;
+	--adc-tab-hover-bg: rgba(255,255,255,0.15);
+	--adc-body-bg: #ffedd5;
+	--adc-input-bg: #fff7ed;
+	--adc-input-border: #fed7aa;
+	--adc-input-focus-bg: #ffffff;
+	--adc-focus-ring: 0 0 0 3px rgba(194,65,12,0.18);
+	--adc-btn-bg: #ffffff;
+	--adc-btn-text: #431407;
+	--adc-btn-border: #fed7aa;
+	--adc-btn-hover-bg: #fff7ed;
+	--adc-btn-primary-bg: #c2410c;
+	--adc-btn-primary-text: #ffffff;
+	--adc-unit-active-bg: #c2410c;
+	--adc-unit-active-text: #ffffff;
+	--adc-safety-bg: #fef2f2;
+	--adc-safety-border: #fecaca;
+	--adc-warning: #b91c1c;
+	--adc-warning-bg: #fef2f2;
+	--adc-modal-header-bg: #c2410c;
+	--adc-modal-header-text: #ffffff;
+	--adc-container-border: 2px solid #c2410c;
+	--adc-accent-yellow: #f59e0b;
+	--adc-accent-green: #65a30d;
+	--adc-accent-blue: #0ea5e9;
+	--adc-accent-purple: #a855f7;
+	--adc-font-heading: Georgia, 'Times New Roman', serif;
+	--adc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+	--adc-font-mono: 'Courier New', Courier, monospace;
 }
 
-/* Tabbed template container styles */
-#adc-calculator[data-template="amethyst"] .adc-tab-container { border: var(--adc-container-border); border-radius: var(--adc-radius); overflow: hidden; }
-#adc-calculator[data-template="amethyst"] .adc-tabs { border: none; border-radius: 0; }
-#adc-calculator[data-template="amethyst"] .adc-tab { margin: 0; border-radius: 0; }
-#adc-calculator[data-template="amethyst"] .adc-body { border: none; border-radius: 0; }
-#adc-calculator[data-template="ocean"] .adc-tab-container { border: var(--adc-container-border); border-radius: var(--adc-radius); overflow: hidden; }
-#adc-calculator[data-template="ocean"] .adc-tabs { border: none; border-radius: 0; }
-#adc-calculator[data-template="ocean"] .adc-tab { margin: 0; border-radius: 0; }
-#adc-calculator[data-template="ocean"] .adc-body { border: none; border-radius: 0; }
-#adc-calculator[data-template="lagoon"] .adc-tab-container { border: var(--adc-container-border); border-radius: var(--adc-radius); overflow: hidden; }
-#adc-calculator[data-template="lagoon"] .adc-tabs { border: none; border-radius: 0; }
-#adc-calculator[data-template="lagoon"] .adc-tab { margin: 0; border-radius: 0; }
-#adc-calculator[data-template="lagoon"] .adc-body { border: none; border-radius: 0; }
-#adc-calculator[data-template="slate"] .adc-tab-container { border: var(--adc-container-border); border-radius: var(--adc-radius); overflow: hidden; }
-#adc-calculator[data-template="slate"] .adc-tabs { border: none; border-radius: 0; }
-#adc-calculator[data-template="slate"] .adc-tab { margin: 0; border-radius: 0; }
-#adc-calculator[data-template="slate"] .adc-body { border: none; border-radius: 0; }
+/* ---- Shared dose level colors (consistent across all templates) ---- */
+#adc-calculator[data-template="brutal"],
+#adc-calculator[data-template="minimal"],
+#adc-calculator[data-template="dark"],
+#adc-calculator[data-template="nature"],
+#adc-calculator[data-template="glass"],
+#adc-calculator[data-template="neon"],
+#adc-calculator[data-template="paper"],
+#adc-calculator[data-template="terminal"],
+#adc-calculator[data-template="retro"],
+#adc-calculator[data-template="flat"],
+#adc-calculator[data-template="amethyst"],
+#adc-calculator[data-template="ocean"],
+#adc-calculator[data-template="lagoon"],
+#adc-calculator[data-template="slate"],
+#adc-calculator[data-template="ember"] {
+	--adc-color-microdose: #5468ad;
+	--adc-color-perceivable: #4f9350;
+	--adc-color-intense: #e2a03f;
+	--adc-color-profound: #c04c32;
+	--adc-color-breakthrough: #83318a;
+}
+
+/* ---- Template-specific structural overrides ---- */
+
+/* Tabbed container layout for bordered templates */
+#adc-calculator[data-template="amethyst"] .adc-tab-container,
+#adc-calculator[data-template="lagoon"] .adc-tab-container,
 #adc-calculator[data-template="ember"] .adc-tab-container { border: var(--adc-container-border); border-radius: var(--adc-radius); overflow: hidden; }
+#adc-calculator[data-template="amethyst"] .adc-tabs,
+#adc-calculator[data-template="lagoon"] .adc-tabs,
 #adc-calculator[data-template="ember"] .adc-tabs { border: none; border-radius: 0; }
+#adc-calculator[data-template="amethyst"] .adc-tab,
+#adc-calculator[data-template="lagoon"] .adc-tab,
 #adc-calculator[data-template="ember"] .adc-tab { margin: 0; border-radius: 0; }
+#adc-calculator[data-template="amethyst"] .adc-body,
+#adc-calculator[data-template="lagoon"] .adc-body,
 #adc-calculator[data-template="ember"] .adc-body { border: none; border-radius: 0; }
 
-/* adc-body defaults per template */
-#adc-calculator[data-template="brutal"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="minimal"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="dark"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="nature"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="glass"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="neon"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="paper"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="terminal"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="retro"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="flat"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="amethyst"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="ocean"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="lagoon"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
-#adc-calculator[data-template="slate"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
+/* Body backgrounds */
+#adc-calculator[data-template="brutal"] .adc-body,
+#adc-calculator[data-template="minimal"] .adc-body,
+#adc-calculator[data-template="dark"] .adc-body,
+#adc-calculator[data-template="nature"] .adc-body,
+#adc-calculator[data-template="glass"] .adc-body,
+#adc-calculator[data-template="neon"] .adc-body,
+#adc-calculator[data-template="paper"] .adc-body,
+#adc-calculator[data-template="terminal"] .adc-body,
+#adc-calculator[data-template="retro"] .adc-body,
+#adc-calculator[data-template="flat"] .adc-body,
+#adc-calculator[data-template="amethyst"] .adc-body,
+#adc-calculator[data-template="ocean"] .adc-body,
+#adc-calculator[data-template="lagoon"] .adc-body,
+#adc-calculator[data-template="slate"] .adc-body,
 #adc-calculator[data-template="ember"] .adc-body { background: var(--adc-body-bg); padding: 1rem; }
 
-/* Glass: backdrop-filter for frosted effect */
+/* Glass: gradient background + frosted blur */
 #adc-calculator[data-template="glass"] { background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777) !important; }
 #adc-calculator[data-template="glass"] .adc-box,
 #adc-calculator[data-template="glass"] .adc-body,

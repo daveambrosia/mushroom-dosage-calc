@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **URL**: https://members.tail5d8649.ts.net/wordpress/ (Tailscale VPN). Also accessible via https://localhost/wordpress on the server itself.
 - **Plugin path**: `/var/www/html/wordpress/wp-content/plugins/ambrosia-dosage-calculator`
 - **Before any code change**, create a zip backup: `zip -r /home/dave/backup/ambrosia-dosage-calculator-$(date +%Y%m%d-%H%M%S).zip /var/www/html/wordpress/wp-content/plugins/ambrosia-dosage-calculator/`
+- **Markdown viewer**: To share a `.md` file with the user for review, copy it to `/home/dave/.openclaw/workspace/` and provide the link: `https://members.tail5d8649.ts.net/viewmd/?p=<filename>.md`
 - **PHP version**: 8.3 on server (minimum 8.0)
 - **WordPress**: 6.0+ (tested up to 6.4)
 - **Admin login**: francis / password123 (testing only)

@@ -85,104 +85,6 @@
         });
     }
 
-    // ---- Color Harmony ----
-    function adcHexToHsl(hex) {
-        hex = hex.replace('#', '');
-        if (hex.length === 3) hex = hex.split('').map(function(c){ return c+c; }).join('');
-        var r = parseInt(hex.substr(0,2),16)/255;
-        var g = parseInt(hex.substr(2,2),16)/255;
-        var b = parseInt(hex.substr(4,2),16)/255;
-        var max = Math.max(r,g,b), min = Math.min(r,g,b);
-        var h, s, l = (max+min)/2;
-        if (max === min) {
-            h = s = 0;
-        } else {
-            var d = max - min;
-            s = l > 0.5 ? d/(2-max-min) : d/(max+min);
-            switch(max) {
-                case r: h = ((g-b)/d + (g<b?6:0))/6; break;
-                case g: h = ((b-r)/d + 2)/6; break;
-                case b: h = ((r-g)/d + 4)/6; break;
-            }
-        }
-        return { h: h*360, s: s*100, l: l*100 };
-    }
-
-    function adcHslToHex(h, s, l) {
-        h = ((h % 360) + 360) % 360;
-        s /= 100; l /= 100;
-        var c = (1 - Math.abs(2*l-1)) * s;
-        var x = c * (1 - Math.abs((h/60)%2 - 1));
-        var m = l - c/2;
-        var r, g, b;
-        if (h<60)       { r=c; g=x; b=0; }
-        else if (h<120) { r=x; g=c; b=0; }
-        else if (h<180) { r=0; g=c; b=x; }
-        else if (h<240) { r=0; g=x; b=c; }
-        else if (h<300) { r=x; g=0; b=c; }
-        else            { r=c; g=0; b=x; }
-        var toHex = function(v) { var hx = Math.round((v+m)*255).toString(16); return hx.length===1 ? '0'+hx : hx; };
-        return '#' + toHex(r) + toHex(g) + toHex(b);
-    }
-
-    function adcGetHarmonies(hex, type) {
-        var hsl = adcHexToHsl(hex);
-        switch(type) {
-            case 'complementary': return [adcHslToHex(hsl.h+180, hsl.s, hsl.l)];
-            case 'analogous': return [adcHslToHex(hsl.h-30, hsl.s, hsl.l), adcHslToHex(hsl.h+30, hsl.s, hsl.l)];
-            case 'triadic': return [adcHslToHex(hsl.h+120, hsl.s, hsl.l), adcHslToHex(hsl.h+240, hsl.s, hsl.l)];
-            default: return [];
-        }
-    }
-
-    function adcInitHarmonyToolbars() {
-        document.querySelectorAll('.adc-harmony-toolbar').forEach(function(toolbar) {
-            var inputId = toolbar.dataset.for;
-            var inputEl = document.getElementById(inputId);
-            if (!inputEl) return;
-
-            ['complementary', 'analogous', 'triadic'].forEach(function(type) {
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'adc-harmony-btn';
-                btn.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-                btn.addEventListener('click', function() {
-                    var hex = inputEl.value;
-                    if (!hex || !/^#[0-9a-fA-F]{3,8}$/.test(hex)) return;
-
-                    var oldChips = toolbar.querySelectorAll('.adc-harmony-chips');
-                    for (var i = 0; i < oldChips.length; i++) {
-                        toolbar.removeChild(oldChips[i]);
-                    }
-
-                    var harmonies = adcGetHarmonies(hex, type);
-                    var chipsContainer = document.createElement('span');
-                    chipsContainer.className = 'adc-harmony-chips';
-                    harmonies.forEach(function(h) {
-                        var chip = document.createElement('span');
-                        chip.className = 'adc-harmony-chip';
-                        chip.style.backgroundColor = h;
-                        chip.title = h;
-                        chip.addEventListener('click', function() {
-                            inputEl.value = h;
-                            var key = inputEl.dataset.key;
-                            if (pickrInstances[key]) {
-                                pickrInstances[key].setColor(h, true);
-                            }
-                            adcAddRecentColor(h);
-                            debouncedPreview();
-                            adcUpdateContrastCheck();
-                            formDirty = true;
-                        });
-                        chipsContainer.appendChild(chip);
-                    });
-                    toolbar.appendChild(chipsContainer);
-                });
-                toolbar.appendChild(btn);
-            });
-        });
-    }
-
     // ---- Eyedropper (progressive enhancement) ----
     function adcInitEyedroppers() {
         if (!('EyeDropper' in window)) return;
@@ -421,22 +323,29 @@
         }
 
         var vars = {};
+        var clearVars = [];
 
-        // Collect color picker values
+        // Collect color picker values — track empty ones as cleared
         $('.adc-color-picker-input').each(function() {
             var key = $(this).data('key');
             var val = $(this).val();
-            if (key && val && /^#[0-9a-fA-F]{3,8}$/.test(val)) {
+            if (!key) return;
+            if (val && /^#[0-9a-fA-F]{3,8}$/.test(val)) {
                 vars[key] = val;
+            } else {
+                clearVars.push(key);
             }
         });
 
-        // Collect text input values (layout, fonts, shadows, borders)
+        // Collect text input values — track empty ones as cleared
         $('.adc-tb-text-input').each(function() {
             var key = $(this).data('key');
             var val = $(this).val();
-            if (key && val) {
+            if (!key) return;
+            if (val) {
                 vars[key] = val;
+            } else {
+                clearVars.push(key);
             }
         });
 
@@ -444,6 +353,7 @@
             previewIframe.contentWindow.postMessage({
                 type: 'adc_preview_vars',
                 vars: vars,
+                clearVars: clearVars,
             }, window.location.origin);
         } catch(e) {
             console.warn('ADC preview postMessage failed:', e);
@@ -631,7 +541,6 @@
                 card.appendChild(palette);
             });
             adcRenderRecentPalettes();
-            adcInitHarmonyToolbars();
             adcInitEyedroppers();
         }
 

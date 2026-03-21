@@ -1,12 +1,19 @@
 <?php
 /**
  * Edibles CRUD operations - Version 2.0 - Performance Optimized
+ *
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Edibles class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Edibles {
 
 	/** Cache key prefix */
@@ -118,16 +125,16 @@ class ADC_Edibles {
 			usort(
 				$results,
 				function ( $a, $b ) {
-					$parse              = function ( $name ) {
+					$parse                = function ( $name ) {
 						if ( preg_match( '/^(.+?)\s*\(\s*([\d,]+)\s*mcg\s*\)\s*$/', $name, $m ) ) {
 							return array( strtolower( trim( $m[1] ) ), (int) str_replace( ',', '', $m[2] ) );
 						}
 						return array( strtolower( trim( $name ) ), 0 );
 					};
-					list($nameA, $mcgA) = $parse( $a['name'] );
-					list($nameB, $mcgB) = $parse( $b['name'] );
-					$cmp                = strcmp( $nameA, $nameB );
-					return 0 !== $cmp ? $cmp : ( $mcgA - $mcgB );
+					list($name_a, $mcg_a) = $parse( $a['name'] );
+					list($name_b, $mcg_b) = $parse( $b['name'] );
+					$cmp                  = strcmp( $name_a, $name_b );
+					return 0 !== $cmp ? $cmp : ( $mcg_a - $mcg_b );
 				}
 			);
 		}

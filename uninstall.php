@@ -10,8 +10,8 @@
  */
 
 // Abort if not called by WordPress uninstall process.
-if (!defined('WP_UNINSTALL_PLUGIN')) {
-    exit;
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+	exit;
 }
 
 global $wpdb;
@@ -20,34 +20,34 @@ global $wpdb;
  * 1. Drop all adc_* custom tables.
  */
 $tables = array(
-    $wpdb->prefix . 'adc_strains',
-    $wpdb->prefix . 'adc_edibles',
-    $wpdb->prefix . 'adc_categories',
-    $wpdb->prefix . 'adc_product_types',
-    $wpdb->prefix . 'adc_compounds',
-    $wpdb->prefix . 'adc_submissions',
-    $wpdb->prefix . 'adc_blacklist',
+	$wpdb->prefix . 'adc_strains',
+	$wpdb->prefix . 'adc_edibles',
+	$wpdb->prefix . 'adc_categories',
+	$wpdb->prefix . 'adc_product_types',
+	$wpdb->prefix . 'adc_compounds',
+	$wpdb->prefix . 'adc_submissions',
+	$wpdb->prefix . 'adc_blacklist',
 );
 
-foreach ($tables as $table) {
-    $wpdb->query("DROP TABLE IF EXISTS `{$table}`"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+foreach ( $tables as $table ) {
+	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 }
 
 /*
  * 2. Delete all adc_* options.
  */
-$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'adc\_%'");
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'adc\_%'" );
 
 /*
  * 3. Clear all adc_* transients (including timeout entries).
  */
-$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc\_%'");
-$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc\_%'");
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc\_%'" );
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc\_%'" );
 
 /*
  * 4. Clear any site transients (multisite).
  */
-if (is_multisite()) {
-    $wpdb->query("DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE '_site_transient_adc\_%'");
-    $wpdb->query("DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE '_site_transient_timeout_adc\_%'");
+if ( is_multisite() ) {
+	$wpdb->query( "DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE '_site_transient_adc\_%'" );
+	$wpdb->query( "DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE '_site_transient_timeout_adc\_%'" );
 }

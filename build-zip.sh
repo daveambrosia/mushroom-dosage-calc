@@ -24,6 +24,16 @@ fi
 echo "Building Ambrosia Dosage Calculator v$NEW_VERSION"
 echo "================================================"
 
+# PHP lint check before packaging (BUG-001 prevention).
+echo "Running PHP syntax check..."
+LINT_ERRORS=$(find "$PLUGIN_DIR" -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; 2>&1 | grep -v "No syntax errors")
+if [ -n "$LINT_ERRORS" ]; then
+    echo "ERROR: PHP syntax errors found:"
+    echo "$LINT_ERRORS"
+    exit 1
+fi
+echo "PHP syntax: OK"
+
 # Update version in plugin header
 sed -i "s/Version: [0-9.]*/Version: $NEW_VERSION/" "$PLUGIN_FILE"
 

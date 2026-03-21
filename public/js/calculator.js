@@ -7,16 +7,16 @@
 
 /**
  * Ambrosia Dosage Calculator v2.1
- * 
+ *
  * Psilocybin dosage calculator for mushrooms and edibles.
  * Supports lab-tested products, custom entries, QR code scanning, and sharing.
- * 
+ *
  * @package Ambrosia_Dosage_Calculator
  * @since 2.0.0
  */
 
-(function() {
-    'use strict';
+(function () {
+	'use strict';
 /**
  * Constants — Part of calculator.js
  * Built by: bash public/js/build-js.sh
@@ -24,81 +24,89 @@
  * Edit the module files in public/js/modules/ then rebuild.
  */
 
-    // ============================================================================
-    // CONSTANTS
-    // ============================================================================
-    
-    /**
-     * Experience levels with dosage ranges (mcg psilocybin per lb body weight)
-     */
-    const EXPERIENCE_LEVELS = Object.freeze([
-        { id: 'microdose', name: 'Microdose', icon: '○', mcgPerLbMin: 1, mcgPerLbMax: 10, description: 'Subtle effects without significant alterations in perception.' },
-        { id: 'perceivable', name: 'Perceivable', icon: '◐', mcgPerLbMin: 10, mcgPerLbMax: 50, description: 'Noticeable changes in perception of environment and self.' },
-        { id: 'intense', name: 'Intense', icon: '●', mcgPerLbMin: 50, mcgPerLbMax: 100, description: 'Stronger effects on perception and mood.' },
-        { id: 'profound', name: 'Profound', icon: '◉', mcgPerLbMin: 100, mcgPerLbMax: 180, description: 'Spiritual or deeply introspective experiences.' },
-        { id: 'breakthrough', name: 'Breakthrough', icon: '✦', mcgPerLbMin: 180, mcgPerLbMax: 200, description: 'Transformative spiritual visions and breakthrough experiences.' }
-    ]);
+	// ============================================================================
+	// CONSTANTS
+	// ============================================================================
 
-    /**
-     * LocalStorage keys
-     */
-    /**
-     * localStorage schema version. Bump to invalidate all stored data on structure changes.
-     */
-    const STORAGE_VERSION = '1';
-    const STORAGE_VERSION_KEY = 'adc-storage-version';
-    
-    const STORAGE_KEYS = Object.freeze({
-        customStrains: 'adc-custom-strains',
-        customEdibles: 'adc-custom-edibles',
-        customStrain: 'adc-custom-strain-inline',
-        customEdible: 'adc-custom-edible-inline',
-        scannedStrains: 'adc-scanned-strains',
-        scannedEdibles: 'adc-scanned-edibles',
-        preferences: 'adc-preferences',
-        dontkeep: 'adc-DONTKEEP'
-    });
+	/**
+	 * Experience levels with dosage ranges (mcg psilocybin per lb body weight)
+	 */
+	const EXPERIENCE_LEVELS = Object.freeze(
+		[
+		{ id: 'microdose', name: 'Microdose', icon: '○', mcgPerLbMin: 1, mcgPerLbMax: 10, description: 'Subtle effects without significant alterations in perception.' },
+		{ id: 'perceivable', name: 'Perceivable', icon: '◐', mcgPerLbMin: 10, mcgPerLbMax: 50, description: 'Noticeable changes in perception of environment and self.' },
+		{ id: 'intense', name: 'Intense', icon: '●', mcgPerLbMin: 50, mcgPerLbMax: 100, description: 'Stronger effects on perception and mood.' },
+		{ id: 'profound', name: 'Profound', icon: '◉', mcgPerLbMin: 100, mcgPerLbMax: 180, description: 'Spiritual or deeply introspective experiences.' },
+		{ id: 'breakthrough', name: 'Breakthrough', icon: '✦', mcgPerLbMin: 180, mcgPerLbMax: 200, description: 'Transformative spiritual visions and breakthrough experiences.' }
+		]
+	);
 
-    /**
-     * Compound names used throughout the calculator
-     */
-    const COMPOUNDS = Object.freeze(['psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin']);
-    
-    const COMPOUND_NAMES = Object.freeze({
-        psilocybin: 'Psilocybin',
-        psilocin: 'Psilocin', 
-        norpsilocin: 'Norpsilocin',
-        baeocystin: 'Baeocystin',
-        norbaeocystin: 'Norbaeocystin',
-        aeruginascin: 'Aeruginascin'
-    });
+	/**
+	 * LocalStorage keys
+	 */
+	/**
+	 * localStorage schema version. Bump to invalidate all stored data on structure changes.
+	 */
+	const STORAGE_VERSION     = '1';
+	const STORAGE_VERSION_KEY = 'adc-storage-version';
 
-    /**
-     * Check if custom values are empty (all zeros or unset)
-     */
-    const isCustomEmpty = (custom) => {
-        return !custom || COMPOUNDS.every(c => !custom[c] || custom[c] === 0);
-    };
+	const STORAGE_KEYS = Object.freeze(
+		{
+			customStrains: 'adc-custom-strains',
+			customEdibles: 'adc-custom-edibles',
+			customStrain: 'adc-custom-strain-inline',
+			customEdible: 'adc-custom-edible-inline',
+			scannedStrains: 'adc-scanned-strains',
+			scannedEdibles: 'adc-scanned-edibles',
+			preferences: 'adc-preferences',
+			dontkeep: 'adc-DONTKEEP'
+		}
+	);
 
-    /**
-     * Weight limits
-     */
-    const WEIGHT_LIMITS = Object.freeze({
-        lbs: { min: 75, max: 600 },
-        kg: { min: 34, max: 272 }
-    });
+	/**
+	 * Compound names used throughout the calculator
+	 */
+	const COMPOUNDS = Object.freeze( ['psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin'] );
 
-    /**
-     * Per-level collapse state
-     */
-    const collapsedLevels = { mushroom: new Set(), edible: new Set() };
-    const LEVEL_COLLAPSE_KEY = 'adc_level_collapse_v1';
-    const LEVEL_IDS = ['microdose', 'perceivable', 'intense', 'profound', 'breakthrough'];
+	const COMPOUND_NAMES = Object.freeze(
+		{
+			psilocybin: 'Psilocybin',
+			psilocin: 'Psilocin',
+			norpsilocin: 'Norpsilocin',
+			baeocystin: 'Baeocystin',
+			norbaeocystin: 'Norbaeocystin',
+			aeruginascin: 'Aeruginascin'
+		}
+	);
 
-    /**
-     * Debug mode - set to true for verbose logging
-     */
-    const DEBUG = false;
+	/**
+	 * Check if custom values are empty (all zeros or unset)
+	 */
+	const isCustomEmpty = (custom) => {
+		return ! custom || COMPOUNDS.every( c => ! custom[c] || custom[c] === 0 );
+	};
+
+	/**
+	 * Weight limits
+	 */
+	const WEIGHT_LIMITS = Object.freeze(
+		{
+			lbs: { min: 75, max: 600 },
+			kg: { min: 34, max: 272 }
+		}
+	);
+
+	/**
+	 * Per-level collapse state
+	 */
+	const collapsedLevels    = { mushroom: new Set(), edible: new Set() };
+	const LEVEL_COLLAPSE_KEY = 'adc_level_collapse_v1';
+	const LEVEL_IDS          = ['microdose', 'perceivable', 'intense', 'profound', 'breakthrough'];
+
+	/**
+	 * Debug mode - set to true for verbose logging
+	 */
+	const DEBUG = false;
 /**
  * State — Part of calculator.js
  * Built by: bash public/js/build-js.sh
@@ -106,43 +114,43 @@
  * Edit the module files in public/js/modules/ then rebuild.
  */
 
-    // ============================================================================
-    // FOCUS TRAP UTILITY (F-002: Accessibility)
-    // ============================================================================
-    
-    let previousFocusElement = null;
-    let activeModalCleanup = null;
+	// ============================================================================
+	// FOCUS TRAP UTILITY (F-002: Accessibility)
+	// ============================================================================
 
-    // ============================================================================
-    // STATE
-    // ============================================================================
-    
-    const state = {
-        activeTab: 'mushrooms',
-        weightLbs: 150,
-        displayUnit: 'lbs',
-        daysSinceLastDose: 28,
-        sensitivity: 100,
-        strainId: '',
-        customStrain: createEmptyCompounds(),
-        edibleId: '',
-        customEdible: { ...createEmptyCompounds(), piecesPerPackage: 0 },
-        editingStrainId: null,
-        editingEdibleId: null,
-        strains: [],
-        edibles: [],
-        unitMap: {},
-        customStrains: {},
-        customEdibles: {},
-        scannedStrains: {},
-        scannedEdibles: {},
-        storageConsent: false,
-        config: {}
-    };
+	let previousFocusElement = null;
+	let activeModalCleanup   = null;
 
-    function createEmptyCompounds() {
-        return { psilocybin: 0, psilocin: 0, norpsilocin: 0, baeocystin: 0, norbaeocystin: 0, aeruginascin: 0 };
-    }
+	// ============================================================================
+	// STATE
+	// ============================================================================
+
+	const state = {
+		activeTab: 'mushrooms',
+		weightLbs: 150,
+		displayUnit: 'lbs',
+		daysSinceLastDose: 28,
+		sensitivity: 100,
+		strainId: '',
+		customStrain: createEmptyCompounds(),
+		edibleId: '',
+		customEdible: { ...createEmptyCompounds(), piecesPerPackage: 0 },
+		editingStrainId: null,
+		editingEdibleId: null,
+		strains: [],
+		edibles: [],
+		unitMap: {},
+		customStrains: {},
+		customEdibles: {},
+		scannedStrains: {},
+		scannedEdibles: {},
+		storageConsent: false,
+		config: {}
+	};
+
+	function createEmptyCompounds() {
+		return { psilocybin: 0, psilocin: 0, norpsilocin: 0, baeocystin: 0, norbaeocystin: 0, aeruginascin: 0 };
+	}
 /**
  * Storage — Part of calculator.js
  * Built by: bash public/js/build-js.sh
@@ -416,49 +424,49 @@
  * Edit the module files in public/js/modules/ then rebuild.
  */
 
-    // ============================================================================
-    // DOM ELEMENTS
-    // ============================================================================
-    
-    let elements = {};
+	// ============================================================================
+	// DOM ELEMENTS
+	// ============================================================================
 
-    function cacheElements() {
-        const $ = (sel) => document.querySelector(sel);
-        const $$ = (sel) => document.querySelectorAll(sel);
-        elements = {
-            calculator: $('#adc-calculator'),
-            tabMushrooms: $('#adc-tab-mushrooms'),
-            tabEdibles: $('#adc-tab-edibles'),
-            contentMushrooms: $('#adc-content-mushrooms'),
-            contentEdibles: $('#adc-content-edibles'),
-            weightInput: $('#adc-weight'),
-            unitToggle: $$('.adc-unit-toggle button'),
-            toleranceSelect: $('#adc-tolerance'),
-            toleranceDisplay: $('#adc-tolerance-display'),
-            sensitivitySlider: $('#adc-sensitivity-slider'),
-            sensitivityInput: $('#adc-sensitivity-input'),
-            strainSelect: $('#adc-strain-select'),
-            strainPotency: $('#adc-strain-potency'),
-            strainControls: $('#adc-strain-controls'),
-            customStrainWrapper: $('#adc-custom-strain-wrapper'),
-            edibleSelect: $('#adc-edible-select'),
-            edibleInfo: $('#adc-edible-info'),
-            edibleControls: $('#adc-edible-controls'),
-            customEdibleWrapper: $('#adc-custom-edible-wrapper'),
-            mushroomResults: $('#adc-mushroom-results'),
-            edibleResults: $('#adc-edible-results'),
-            mushroomSummary: $('#adc-mushroom-summary'),
-            edibleSummary: $('#adc-edible-summary'),
-            converterSection: $('#adc-converter-section'),
-            converterStrain: $('#adc-converter-strain'),
-            mcgInput: $('#adc-mcg-input'),
-            gramsInput: $('#adc-grams-input'),
-            converterBreakdown: $('#adc-converter-breakdown'),
-            storageConsent: $('#adc-storage-consent'),
-            strainModal: $('#adc-strain-modal'),
-            edibleModal: $('#adc-edible-modal')
-        };
-    }
+	let elements = {};
+
+function cacheElements() {
+	const $  = (sel) => document.querySelector( sel );
+	const $$ = (sel) => document.querySelectorAll( sel );
+	elements = {
+		calculator: $( '#adc-calculator' ),
+		tabMushrooms: $( '#adc-tab-mushrooms' ),
+		tabEdibles: $( '#adc-tab-edibles' ),
+		contentMushrooms: $( '#adc-content-mushrooms' ),
+		contentEdibles: $( '#adc-content-edibles' ),
+		weightInput: $( '#adc-weight' ),
+		unitToggle: $$( '.adc-unit-toggle button' ),
+		toleranceSelect: $( '#adc-tolerance' ),
+		toleranceDisplay: $( '#adc-tolerance-display' ),
+		sensitivitySlider: $( '#adc-sensitivity-slider' ),
+		sensitivityInput: $( '#adc-sensitivity-input' ),
+		strainSelect: $( '#adc-strain-select' ),
+		strainPotency: $( '#adc-strain-potency' ),
+		strainControls: $( '#adc-strain-controls' ),
+		customStrainWrapper: $( '#adc-custom-strain-wrapper' ),
+		edibleSelect: $( '#adc-edible-select' ),
+		edibleInfo: $( '#adc-edible-info' ),
+		edibleControls: $( '#adc-edible-controls' ),
+		customEdibleWrapper: $( '#adc-custom-edible-wrapper' ),
+		mushroomResults: $( '#adc-mushroom-results' ),
+		edibleResults: $( '#adc-edible-results' ),
+		mushroomSummary: $( '#adc-mushroom-summary' ),
+		edibleSummary: $( '#adc-edible-summary' ),
+		converterSection: $( '#adc-converter-section' ),
+		converterStrain: $( '#adc-converter-strain' ),
+		mcgInput: $( '#adc-mcg-input' ),
+		gramsInput: $( '#adc-grams-input' ),
+		converterBreakdown: $( '#adc-converter-breakdown' ),
+		storageConsent: $( '#adc-storage-consent' ),
+		strainModal: $( '#adc-strain-modal' ),
+		edibleModal: $( '#adc-edible-modal' )
+	};
+}
 /**
  * UI Rendering — Part of calculator.js
  * Built by: bash public/js/build-js.sh
@@ -1311,6 +1319,11 @@
         if (!shareData) return;
         try {
             const data = JSON.parse(decodeURIComponent(atob(shareData)));
+            // Validate structure before use (JS-003 fix).
+            if (!data || typeof data !== 'object' || !data.type) {
+                console.error('Invalid share data: missing required fields');
+                return;
+            }
             showSharedDosePopup(data);
         } catch (e) { console.error('Invalid share data:', e); }
     }
@@ -1768,6 +1781,9 @@
     }
 
     function updateTabStops() {
+        // Use tabIndex=0 (natural DOM order) for reachable inputs,
+        // tabIndex=-1 for inputs hidden inside collapsed sections.
+        // WCAG 2.4.3: positive tabindex values are prohibited.
         const adjustmentsSection = document.querySelector('[data-section="adjustments"]');
         if (!adjustmentsSection) return;
         const isCollapsed = adjustmentsSection.classList.contains('adc-collapsed');
@@ -1779,20 +1795,20 @@
         const toleranceInput = document.getElementById('adc-tolerance');
         const sensitivityInput = document.getElementById('adc-sensitivity-input');
         
-        if (weightInput) weightInput.tabIndex = 1;
+        if (weightInput) weightInput.tabIndex = 0;
         
         if (isCollapsed) {
             if (toleranceInput) toleranceInput.tabIndex = -1;
             if (sensitivityInput) sensitivityInput.tabIndex = -1;
-            if (strainSelect) strainSelect.tabIndex = 2;
-            if (converterInput) converterInput.tabIndex = 3;
-            if (gramsInput) gramsInput.tabIndex = 4;
+            if (strainSelect) strainSelect.tabIndex = 0;
+            if (converterInput) converterInput.tabIndex = 0;
+            if (gramsInput) gramsInput.tabIndex = 0;
         } else {
-            if (toleranceInput) toleranceInput.tabIndex = 2;
-            if (sensitivityInput) sensitivityInput.tabIndex = 3;
-            if (strainSelect) strainSelect.tabIndex = 4;
-            if (converterInput) converterInput.tabIndex = 5;
-            if (gramsInput) gramsInput.tabIndex = 6;
+            if (toleranceInput) toleranceInput.tabIndex = 0;
+            if (sensitivityInput) sensitivityInput.tabIndex = 0;
+            if (strainSelect) strainSelect.tabIndex = 0;
+            if (converterInput) converterInput.tabIndex = 0;
+            if (gramsInput) gramsInput.tabIndex = 0;
         }
     }
 
@@ -2203,7 +2219,8 @@
                     handleShareAction(data, shareDataRaw);
                 } catch (err) {
                     console.error('Share data parse error:', err, shareDataRaw);
-                    // Fallback to old behavior
+                    // JS-004 fix: notify user rather than silently falling back.
+                    adcError('Share data is invalid. Please refresh the page.');
                     const baseUrl = window.location.origin + window.location.pathname;
                     const shareUrl = baseUrl + '?share=' + encodeURIComponent(shareDataRaw);
                     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2284,92 +2301,121 @@
  * Edit the module files in public/js/modules/ then rebuild.
  */
 
-    // ============================================================================
-    // INITIALIZATION
-    // ============================================================================
-    
-    async function init() {
-        const calculator = document.getElementById('adc-calculator');
-        if (!calculator) return;
-        if (typeof adcConfig !== 'undefined') {
-            state.config = adcConfig.settings || {};
-            state.strains = adcConfig.strains || [];
-            state.edibles = adcConfig.edibles || [];
-            state.unitMap = adcConfig.unitMap || {};
-        } else {
-            state.config = { showEdibles: true, showMushrooms: true, showQuickConverter: true, showCompoundBreakdown: true, allowCustom: true, allowSubmit: true };
-        }
-        cacheElements();
-        loadPreferences();
-        loadLevelCollapseState();
-        parseUrlParams();
-        const urlTab = getTabFromUrl();
-        if (urlTab) state.activeTab = urlTab;
-        const searchParams = new URLSearchParams(window.location.search);
-        const typeParam = searchParams.get('type') || searchParams.get('t');
-        const urlSpecifiedTab = urlTab || typeParam === 'edible' || typeParam === 'strain' || typeParam === 'e' || typeParam === 'm';
-        populateStrainSelect();
-        populateEdibleSelect();
-        // Always lazy-load from REST (data no longer inlined in page)
-        await Promise.all([fetchStrains(), fetchEdibles()]);
-        bindEvents();
-        // Sync state.activeTab from DOM (PHP/inline script sets initial state, no flash)
-        const domHasEdibles = elements.calculator?.classList.contains('adc-tab-edibles');
-        // Only use DOM state if URL params didnt specify a tab
-        if (!urlSpecifiedTab) state.activeTab = domHasEdibles ? 'edibles' : 'mushrooms';
-        else handleTabChange(state.activeTab);
-        // Set hash if not already correct
-        const currentHash = window.location.hash;
-        const expectedHash = state.activeTab === 'edibles' ? '#edibles' : '#mushrooms';
-        if (currentHash !== expectedHash && currentHash !== '#edibles' && currentHash !== '#mushrooms') {
-            history.replaceState(null, '', expectedHash);
-        }
-        if (state.strainId && elements.strainSelect) elements.strainSelect.value = state.strainId;
-        if (state.edibleId && elements.edibleSelect) elements.edibleSelect.value = state.edibleId;
-        if (elements.toleranceSelect) elements.toleranceSelect.value = String(state.daysSinceLastDose);
-        elements.unitToggle?.forEach(b => { b.classList.toggle('active', b.dataset.unit === state.displayUnit); b.setAttribute('aria-pressed', b.dataset.unit === state.displayUnit ? 'true' : 'false'); });
-        if (elements.storageConsent) {
-            const dontkeep = localStorage.getItem(STORAGE_KEYS.dontkeep);
-            elements.storageConsent.checked = dontkeep !== 'true';
-            state.storageConsent = dontkeep !== 'true';
-        }
-        checkForSharedDose();
-        updateAll();
-        initCollapsible();
-        initLevelCollapse();
-        initResizeListener();
-        if (DEBUG) console.log('ADC Calculator v' + (typeof adcData !== 'undefined' ? adcData.version : '2.1') + ' initialized');
-    }
+	// ============================================================================
+	// INITIALIZATION
+	// ============================================================================
 
-    async function fetchStrains() {
-        if (typeof adcData === 'undefined') return;
-        try {
-            const response = await fetch(adcData.restUrl + 'strains');
-            const data = await response.json();
-            state.strains = data.strains || [];
-        } catch (e) {
-            console.error('Error fetching strains:', e);
-        }
-        state._strainsLoaded = true;
-        populateStrainSelect();
-    }
+	async function init() {
+		const calculator = document.getElementById( 'adc-calculator' );
+	if ( ! calculator) {
+		return;
+	}
+	if (typeof adcConfig !== 'undefined') {
+		state.config  = adcConfig.settings || {};
+		state.strains = adcConfig.strains || [];
+		state.edibles = adcConfig.edibles || [];
+		state.unitMap = adcConfig.unitMap || {};
+	} else {
+		state.config = { showEdibles: true, showMushrooms: true, showQuickConverter: true, showCompoundBreakdown: true, allowCustom: true, allowSubmit: true };
+	}
+		cacheElements();
+		loadPreferences();
+		// Apply admin-configured defaults if no saved preference exists (JS-005 fix).
+		if ( ! state.strainId && state.config.defaultStrain ) {
+			state.strainId = state.config.defaultStrain;
+		}
+		if ( ! state.edibleId && state.config.defaultEdible ) {
+			state.edibleId = state.config.defaultEdible;
+		}
+		loadLevelCollapseState();
+		parseUrlParams();
+		const urlTab = getTabFromUrl();
+	if (urlTab) {
+		state.activeTab = urlTab;
+	}
+		const searchParams    = new URLSearchParams( window.location.search );
+		const typeParam       = searchParams.get( 'type' ) || searchParams.get( 't' );
+		const urlSpecifiedTab = urlTab || typeParam === 'edible' || typeParam === 'strain' || typeParam === 'e' || typeParam === 'm';
+		populateStrainSelect();
+		populateEdibleSelect();
+		// Always lazy-load from REST (data no longer inlined in page)
+		await Promise.all( [fetchStrains(), fetchEdibles()] );
+		bindEvents();
+		// Sync state.activeTab from DOM (PHP/inline script sets initial state, no flash)
+		const domHasEdibles = elements.calculator?.classList.contains( 'adc-tab-edibles' );
+		// Only use DOM state if URL params didnt specify a tab
+	if ( ! urlSpecifiedTab) {
+		state.activeTab = domHasEdibles ? 'edibles' : 'mushrooms';
+	} else {
+		handleTabChange( state.activeTab );
+	}
+		// Set hash if not already correct
+		const currentHash  = window.location.hash;
+		const expectedHash = state.activeTab === 'edibles' ? '#edibles' : '#mushrooms';
+	if (currentHash !== expectedHash && currentHash !== '#edibles' && currentHash !== '#mushrooms') {
+		history.replaceState( null, '', expectedHash );
+	}
+	if (state.strainId && elements.strainSelect) {
+		elements.strainSelect.value = state.strainId;
+	}
+	if (state.edibleId && elements.edibleSelect) {
+		elements.edibleSelect.value = state.edibleId;
+	}
+	if (elements.toleranceSelect) {
+		elements.toleranceSelect.value = String( state.daysSinceLastDose );
+	}
+		elements.unitToggle?.forEach( b => { b.classList.toggle( 'active', b.dataset.unit === state.displayUnit ); b.setAttribute( 'aria-pressed', b.dataset.unit === state.displayUnit ? 'true' : 'false' ); } );
+	if (elements.storageConsent) {
+		const dontkeep                  = localStorage.getItem( STORAGE_KEYS.dontkeep );
+		elements.storageConsent.checked = dontkeep !== 'true';
+		state.storageConsent            = dontkeep !== 'true';
+	}
+		checkForSharedDose();
+		updateAll();
+		initCollapsible();
+		initLevelCollapse();
+		initResizeListener();
+	if (DEBUG) {
+		console.log( 'ADC Calculator v' + (typeof adcData !== 'undefined' ? adcData.version : '2.1') + ' initialized' );
+	}
+	}
 
-    async function fetchEdibles() {
-        if (typeof adcData === 'undefined') return;
-        try {
-            const response = await fetch(adcData.restUrl + 'edibles');
-            const data = await response.json();
-            state.edibles = data.edibles || [];
-            state.unitMap = data.unitMap || {};
-        } catch (e) {
-            console.error('Error fetching edibles:', e);
-        }
-        state._ediblesLoaded = true;
-        populateEdibleSelect();
-    }
+	async function fetchStrains() {
+		if (typeof adcData === 'undefined') {
+			return;
+		}
+		try {
+			const response = await fetch( adcData.restUrl + 'strains' );
+			const data     = await response.json();
+			state.strains  = data.strains || [];
+		} catch (e) {
+			console.error( 'Error fetching strains:', e );
+		}
+		state._strainsLoaded = true;
+		populateStrainSelect();
+	}
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-    else init();
+	async function fetchEdibles() {
+		if (typeof adcData === 'undefined') {
+			return;
+		}
+		try {
+			const response = await fetch( adcData.restUrl + 'edibles' );
+			const data     = await response.json();
+			state.edibles  = data.edibles || [];
+			state.unitMap  = data.unitMap || {};
+		} catch (e) {
+			console.error( 'Error fetching edibles:', e );
+		}
+		state._ediblesLoaded = true;
+		populateEdibleSelect();
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener( 'DOMContentLoaded', init );
+	} else {
+		init();
+	}
 /**
  * IIFE Close — Part of calculator.js
  * Built by: bash public/js/build-js.sh

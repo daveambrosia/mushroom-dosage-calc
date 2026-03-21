@@ -1,7 +1,7 @@
 /**
  * Ambrosia Dosage Calculator - Admin Styles
  * Version: 2.8.0
- * 
+ *
  * Table of Contents:
  * 1. Base & Layout
  * 2. Dashboard Cards
@@ -20,233 +20,233 @@
  */
 
 /* ============================================================================
-   1. BASE & LAYOUT
-   ============================================================================ */
+	1. BASE & LAYOUT
+	============================================================================ */
 
 .adc-admin {
-    max-width: 1200px;
+	max-width: 1200px;
 }
 
 .adc-admin h1 {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .adc-admin h2 {
-    border-bottom: 1px solid #c3c4c7;
-    font-size: 1.2em;
-    margin: 2em 0 0.5em;
-    padding-bottom: 8px;
+	border-bottom: 1px solid #c3c4c7;
+	font-size: 1.2em;
+	margin: 2em 0 0.5em;
+	padding-bottom: 8px;
 }
 
 .adc-admin h2:first-of-type {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .adc-admin .page-title-action {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .adc-two-col {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr 1fr;
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: 1fr 1fr;
 }
 
 /* ============================================================================
-   2. DASHBOARD CARDS
-   ============================================================================ */
+	2. DASHBOARD CARDS
+	============================================================================ */
 
 .adc-dashboard-cards {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    margin-bottom: 24px;
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	margin-bottom: 24px;
 }
 
 .adc-card {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 8px;
-    overflow: hidden;
-    padding: 24px;
-    position: relative;
-    text-align: center;
-    transition: all 0.2s ease;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	overflow: hidden;
+	padding: 24px;
+	position: relative;
+	text-align: center;
+	transition: all 0.2s ease;
 }
 
 .adc-card:hover {
-    border-color: #2271b1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	border-color: #2271b1;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .adc-card h3 {
-    color: #1d2327;
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin: 0;
+	color: #1d2327;
+	font-size: 2.5rem;
+	font-weight: 600;
+	margin: 0;
 }
 
 .adc-card p {
-    color: #1d2327;
-    font-size: 14px;
-    font-weight: 500;
-    margin: 8px 0 4px;
+	color: #1d2327;
+	font-size: 14px;
+	font-weight: 500;
+	margin: 8px 0 4px;
 }
 
 .adc-card-sub {
-    color: #646970;
-    font-size: 13px;
+	color: #646970;
+	font-size: 13px;
 }
 
 .adc-card-alert {
-    background: linear-gradient(135deg, #fff8e5 0%, #fff 100%);
-    border-color: #dba617;
+	background: linear-gradient(135deg, #fff8e5 0%, #fff 100%);
+	border-color: #dba617;
 }
 
 .adc-card-alert h3 {
-    color: #996800;
+	color: #996800;
 }
 
 .adc-card-success {
-    background: linear-gradient(135deg, #edfaef 0%, #fff 100%);
-    border-color: #46b450;
+	background: linear-gradient(135deg, #edfaef 0%, #fff 100%);
+	border-color: #46b450;
 }
 
 .adc-card-success h3 {
-    color: #1e7e34;
+	color: #1e7e34;
 }
 
 /* ============================================================================
-   3. QUICK ACTIONS
-   ============================================================================ */
+	3. QUICK ACTIONS
+	============================================================================ */
 
 .adc-quick-actions {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	margin-bottom: 24px;
+	padding: 20px;
 }
 
 .adc-quick-actions h2 {
-    border-bottom: none;
-    color: #646970;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    margin: 0 0 16px;
-    padding: 0;
-    text-transform: uppercase;
+	border-bottom: none;
+	color: #646970;
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	margin: 0 0 16px;
+	padding: 0;
+	text-transform: uppercase;
 }
 
 .adc-quick-actions .button {
-    margin-bottom: 8px;
-    margin-right: 8px;
+	margin-bottom: 8px;
+	margin-right: 8px;
 }
 
 .adc-quick-actions .button-warning {
-    background: #f0ad4e;
-    border-color: #eea236;
-    color: #fff;
+	background: #f0ad4e;
+	border-color: #eea236;
+	color: #fff;
 }
 
 .adc-quick-actions .button-warning:hover {
-    background: #ec971f;
-    border-color: #d58512;
-    color: #fff;
+	background: #ec971f;
+	border-color: #d58512;
+	color: #fff;
 }
 
 /* ============================================================================
-   4. SHORTCODE HELP
-   ============================================================================ */
+	4. SHORTCODE HELP
+	============================================================================ */
 
 .adc-shortcode-help {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    padding: 24px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	margin-bottom: 24px;
+	padding: 24px;
 }
 
 .adc-shortcode-help h2 {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .adc-shortcode-help h3 {
-    margin-top: 24px;
+	margin-top: 24px;
 }
 
 .adc-shortcode-help > code {
-    background: #f6f7f7;
-    border: 1px solid #c3c4c7;
-    border-radius: 4px;
-    display: inline-block !important;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 14px;
-    padding: 12px 16px;
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	display: inline-block !important;
+	font-family: Consolas, Monaco, monospace;
+	font-size: 14px;
+	padding: 12px 16px;
 }
 
 .adc-shortcode-help table code {
-    background: #f6f7f7;
-    border-radius: 3px;
-    font-size: 12px;
-    padding: 2px 6px;
+	background: #f6f7f7;
+	border-radius: 3px;
+	font-size: 12px;
+	padding: 2px 6px;
 }
 
 /* ============================================================================
-   5. FORMS
-   ============================================================================ */
+	5. FORMS
+	============================================================================ */
 
 .adc-admin .form-table th {
-    padding-top: 15px;
-    width: 200px;
+	padding-top: 15px;
+	width: 200px;
 }
 
 .adc-admin .form-table td {
-    padding-top: 10px;
+	padding-top: 10px;
 }
 
 .adc-admin .required {
-    color: #d63638;
+	color: #d63638;
 }
 
 .adc-admin .description {
-    color: #646970;
-    font-style: italic;
-    margin-top: 4px;
+	color: #646970;
+	font-style: italic;
+	margin-top: 4px;
 }
 
 /* ============================================================================
-   6. TABLES
-   ============================================================================ */
+	6. TABLES
+	============================================================================ */
 
 .adc-admin .wp-list-table {
-    border-radius: 4px;
-    overflow: hidden;
+	border-radius: 4px;
+	overflow: hidden;
 }
 
 .adc-admin .wp-list-table thead th {
-    font-weight: 600;
+	font-weight: 600;
 }
 
 .adc-admin .wp-list-table code {
-    background: #f0f0f1;
-    border-radius: 3px;
-    font-size: 12px;
-    padding: 2px 6px;
+	background: #f0f0f1;
+	border-radius: 3px;
+	font-size: 12px;
+	padding: 2px 6px;
 }
 
 .adc-admin .wp-list-table .no-items td {
-    color: #646970;
-    font-style: italic;
-    padding: 40px;
-    text-align: center;
+	color: #646970;
+	font-style: italic;
+	padding: 40px;
+	text-align: center;
 }
 
 .adc-admin .wp-list-table td .button {
-    margin: 2px;
+	margin: 2px;
 }
 
 /* Submissions table column widths */
@@ -264,351 +264,351 @@
 #adc-submissions-form .wp-list-table td:nth-child(6) { width: 8%; }
 
 #adc-submissions-form .wp-list-table td:nth-child(7) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
 }
 
 #adc-submissions-form .wp-list-table td:nth-child(7) .button {
-    margin: 0;
+	margin: 0;
 }
 
 #adc-submissions-form .wp-list-table td:nth-child(7) .button:first-child {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 #adc-submissions-form .wp-list-table td:nth-child(7) .button:last-child {
-    margin-right: 0;
+	margin-right: 0;
 }
 
 .adc-admin .row-actions {
-    color: #787c82;
+	color: #787c82;
 }
 
 .adc-admin .row-actions a {
-    color: #2271b1;
+	color: #2271b1;
 }
 
 /* Delete links styled as buttons now use .adc-btn-delete class */
 
 /* ============================================================================
-   7. STATUS INDICATORS
-   ============================================================================ */
+	7. STATUS INDICATORS
+	============================================================================ */
 
 .adc-status-active,
 .adc-admin .status-active {
-    color: #00a32a;
-    font-weight: 500;
+	color: #00a32a;
+	font-weight: 500;
 }
 
 .adc-status-inactive,
 .adc-admin .status-inactive {
-    color: #787c82;
+	color: #787c82;
 }
 
 .adc-status-pending,
 .adc-admin .status-pending {
-    color: #dba617;
-    font-weight: 500;
+	color: #dba617;
+	font-weight: 500;
 }
 
 /* ============================================================================
-   8. SUBMISSIONS
-   ============================================================================ */
+	8. SUBMISSIONS
+	============================================================================ */
 
 .adc-admin .subsubsub {
-    margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 
 /* ============================================================================
-   9. QR GENERATOR
-   ============================================================================ */
+	9. QR GENERATOR
+	============================================================================ */
 
 /* Layout */
 .adc-qr-layout {
-    display: flex;
-    gap: 2rem;
+	display: flex;
+	gap: 2rem;
 }
 
 .adc-qr-controls {
-    flex: 1;
-    max-width: 400px;
+	flex: 1;
+	max-width: 400px;
 }
 
 .adc-qr-preview {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 8px;
-    flex: 2;
-    padding: 24px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	flex: 2;
+	padding: 24px;
 }
 
 .adc-qr-preview canvas,
 .adc-qr-preview img {
-    height: auto;
-    max-width: 100%;
+	height: auto;
+	max-width: 100%;
 }
 
 /* Tabs */
 .adc-qr-tabs {
-    display: flex;
-    margin-bottom: 1rem;
+	display: flex;
+	margin-bottom: 1rem;
 }
 
 .adc-qr-tab {
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    flex: 1;
-    padding: 0.5rem;
-    text-align: center;
+	background: #f0f0f0;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	flex: 1;
+	padding: 0.5rem;
+	text-align: center;
 }
 
 .adc-qr-tab.active {
-    background: #fff;
-    border-bottom-color: #fff;
+	background: #fff;
+	border-bottom-color: #fff;
 }
 
 /* Search */
 .adc-qr-search {
-    margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .adc-qr-search input {
-    padding: 0.5rem;
-    width: 100%;
+	padding: 0.5rem;
+	width: 100%;
 }
 
 /* List */
 .adc-qr-list {
-    border: 1px solid #ccc;
-    max-height: 300px;
-    overflow-y: auto;
+	border: 1px solid #ccc;
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 .adc-qr-item {
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    display: flex;
-    padding: 0.5rem;
+	border-bottom: 1px solid #eee;
+	cursor: pointer;
+	display: flex;
+	padding: 0.5rem;
 }
 
 .adc-qr-item:hover {
-    background: #f9f9f9;
+	background: #f9f9f9;
 }
 
 .adc-qr-item input {
-    margin-right: 0.5rem;
+	margin-right: 0.5rem;
 }
 
 .adc-qr-item-name {
-    flex: 1;
+	flex: 1;
 }
 
 .adc-qr-item-code {
-    color: #666;
-    font-size: 0.85em;
+	color: #666;
+	font-size: 0.85em;
 }
 
 /* Options & Actions */
 .adc-qr-options {
-    margin-top: 1rem;
+	margin-top: 1rem;
 }
 
 .adc-qr-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 1rem;
 }
 
 /* Preview Area */
 .adc-qr-preview-area {
-    background: #f9f9f9;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    min-height: 400px;
-    padding: 1rem;
+	background: #f9f9f9;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	min-height: 400px;
+	padding: 1rem;
 }
 
 .adc-qr-placeholder {
-    color: #666;
-    padding: 2rem;
-    text-align: center;
-    width: 100%;
+	color: #666;
+	padding: 2rem;
+	text-align: center;
+	width: 100%;
 }
 
 .adc-qr-item-preview {
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    text-align: center;
+	background: #fff;
+	border: 1px solid #ddd;
+	padding: 1rem;
+	text-align: center;
 }
 
 .adc-qr-item-preview canvas {
-    height: 150px !important;
-    width: 150px !important;
+	height: 150px !important;
+	width: 150px !important;
 }
 
 .adc-qr-size-label {
-    color: #666;
-    font-size: 0.85em;
-    margin: 0.5rem 0;
+	color: #666;
+	font-size: 0.85em;
+	margin: 0.5rem 0;
 }
 
 .adc-qr-label {
-    font-size: 0.85em;
-    margin-top: 0.5rem;
+	font-size: 0.85em;
+	margin-top: 0.5rem;
 }
 
 /* Legacy Section */
 .adc-qr-legacy-section {
-    border-top: 1px solid #ccc;
-    margin-top: 2rem;
-    padding-top: 2rem;
+	border-top: 1px solid #ccc;
+	margin-top: 2rem;
+	padding-top: 2rem;
 }
 
 .adc-legacy-result {
-    background: #f9f9f9;
-    margin-top: 1rem;
-    padding: 1rem;
+	background: #f9f9f9;
+	margin-top: 1rem;
+	padding: 1rem;
 }
 
 .adc-legacy-qr {
-    margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .adc-legacy-url {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
 }
 
 .adc-legacy-url input {
-    flex: 1;
+	flex: 1;
 }
 
 @media (max-width: 782px) {
-    .adc-qr-layout {
-        flex-direction: column;
-    }
-    
-    .adc-qr-controls {
-        max-width: none;
-    }
+	.adc-qr-layout {
+		flex-direction: column;
+	}
+
+	.adc-qr-controls {
+		max-width: none;
+	}
 }
 
 /* ============================================================================
-   10. LOADING STATES
-   ============================================================================ */
+	10. LOADING STATES
+	============================================================================ */
 
 .adc-admin .loading {
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
+	opacity: 0.6;
+	pointer-events: none;
+	position: relative;
 }
 
 .adc-admin .loading::after {
-    animation: adc-spin 0.8s linear infinite;
-    border: 3px solid #c3c4c7;
-    border-radius: 50%;
-    border-top-color: #2271b1;
-    content: '';
-    height: 24px;
-    left: 50%;
-    margin: -12px 0 0 -12px;
-    position: absolute;
-    top: 50%;
-    width: 24px;
+	animation: adc-spin 0.8s linear infinite;
+	border: 3px solid #c3c4c7;
+	border-radius: 50%;
+	border-top-color: #2271b1;
+	content: '';
+	height: 24px;
+	left: 50%;
+	margin: -12px 0 0 -12px;
+	position: absolute;
+	top: 50%;
+	width: 24px;
 }
 
 @keyframes adc-spin {
-    to {
-        transform: rotate(360deg);
-    }
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .adc-admin tr.deleting {
-    background: #fcf0f1 !important;
-    transition: opacity 0.3s ease;
+	background: #fcf0f1 !important;
+	transition: opacity 0.3s ease;
 }
 
 /* ============================================================================
-   11. NOTICES
-   ============================================================================ */
+	11. NOTICES
+	============================================================================ */
 
 .adc-admin .notice {
-    margin: 15px 0;
+	margin: 15px 0;
 }
 
 /* ============================================================================
-   12. NOTES MODAL
-   ============================================================================ */
+	12. NOTES MODAL
+	============================================================================ */
 
 .adc-notes-modal {
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100000;
+	align-items: center;
+	background: rgba(0, 0, 0, 0.5);
+	display: none;
+	height: 100%;
+	justify-content: center;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100000;
 }
 
 .adc-notes-modal.show {
-    display: flex;
+	display: flex;
 }
 
 .adc-notes-modal-content {
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    max-height: 80vh;
-    max-width: 500px;
-    overflow-y: auto;
-    padding: 20px 24px;
-    width: 90%;
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	max-height: 80vh;
+	max-width: 500px;
+	overflow-y: auto;
+	padding: 20px 24px;
+	width: 90%;
 }
 
 .adc-notes-modal-header {
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
+	align-items: center;
+	border-bottom: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	padding-bottom: 12px;
 }
 
 .adc-notes-modal-header h3 {
-    font-size: 1.1em;
-    margin: 0;
+	font-size: 1.1em;
+	margin: 0;
 }
 
 .adc-notes-modal-close {
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    font-size: 24px;
-    line-height: 1;
-    padding: 0;
+	background: none;
+	border: none;
+	color: #666;
+	cursor: pointer;
+	font-size: 24px;
+	line-height: 1;
+	padding: 0;
 }
 
 .adc-notes-modal-close:hover {
-    color: #000;
+	color: #000;
 }
 
 .adc-notes-modal-body {
-    line-height: 1.5;
-    white-space: pre-wrap;
+	line-height: 1.5;
+	white-space: pre-wrap;
 }
 
 /* ============================================================================
-   12b. ACCESSIBILITY - FOCUS INDICATORS
-   ============================================================================ */
+	12b. ACCESSIBILITY - FOCUS INDICATORS
+	============================================================================ */
 
 /* Visible focus indicators for keyboard navigation */
 .adc-admin button:focus-visible,
@@ -617,545 +617,571 @@
 .adc-admin input:focus-visible,
 .adc-admin select:focus-visible,
 .adc-admin textarea:focus-visible {
-    outline: 2px solid #2271b1;
-    outline-offset: 2px;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
 }
 
 /* Modal close buttons */
 .adc-notes-modal-close:focus-visible {
-    outline: 2px solid #2271b1;
-    outline-offset: 2px;
-    border-radius: 4px;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+	border-radius: 4px;
 }
 
 /* Remove focus outline for mouse users (keep for keyboard) */
 .adc-admin button:focus:not(:focus-visible),
 .adc-admin .button:focus:not(:focus-visible),
 .adc-admin a:focus:not(:focus-visible) {
-    outline: none;
+	outline: none;
 }
 
 /* Skip link for accessibility (hidden until focused) */
 .adc-skip-link {
-    background: #2271b1;
-    clip: rect(1px, 1px, 1px, 1px);
-    color: #fff;
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    height: auto;
-    left: 5px;
-    line-height: normal;
-    padding: 15px 23px 14px;
-    position: absolute;
-    text-decoration: none;
-    top: 5px;
-    width: auto;
-    z-index: 100000;
+	background: #2271b1;
+	clip: rect(1px, 1px, 1px, 1px);
+	color: #fff;
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	position: absolute;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
 }
 
 .adc-skip-link:focus {
-    clip: auto;
+	clip: auto;
 }
 
 /* ============================================================================
-   13. MEDIA QUERIES
-   ============================================================================ */
+	13. MEDIA QUERIES
+	============================================================================ */
 
 @media (max-width: 1024px) {
-    .adc-two-col {
-        grid-template-columns: 1fr;
-    }
+	.adc-two-col {
+		grid-template-columns: 1fr;
+	}
 }
 
 @media (max-width: 782px) {
-    .adc-admin h1 {
-        font-size: 1.5em;
-    }
-    
-    .adc-admin .form-table th {
-        padding-bottom: 0;
-        width: auto;
-    }
-    
-    .adc-admin .nav-tab-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    
-    .adc-admin .nav-tab {
-        flex: 1;
-        padding: 8px 12px;
-        text-align: center;
-    }
-    
-    .adc-dashboard-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .adc-card {
-        padding: 16px;
-    }
-    
-    .adc-card h3 {
-        font-size: 2rem;
-    }
-    
-    .adc-quick-actions .button {
-        display: flex !important;
-        align-items: baseline;
-        margin-right: 0;
-        text-align: center;
-        width: 100%;
-    }
-    
-    /* Submissions table - card layout on mobile */
-    #adc-submissions-form .wp-list-table thead {
-        display: none;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody tr {
-        background: #fff;
-        border: 1px solid #ccd0d4;
-        border-radius: 4px;
-        display: flex !important;
-        align-items: baseline;
-        margin-bottom: 16px;
-        padding: 12px;
-        position: relative;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td,
-    #adc-submissions-form .wp-list-table tbody th {
-        border: none;
-        display: flex !important;
-        align-items: baseline;
-        padding: 4px 0;
-        text-align: left !important;
-        width: 100% !important;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody th.check-column {
-        left: 12px;
-        padding: 0;
-        position: absolute;
-        top: 12px;
-        width: auto !important;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(2) {
-        background: #f0f0f1;
-        border-radius: 3px;
-        display: inline-block !important;
-        font-size: 0.85em;
-        margin-bottom: 4px;
-        margin-left: 28px;
-        padding: 2px 8px !important;
-        text-transform: uppercase;
-        width: auto !important;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(3) {
-        margin-top: 4px;
-        padding-left: 0 !important;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(3) strong {
-        font-size: 1.1em;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(4) {
-        border-top: 1px dashed #ddd;
-        margin-top: 8px;
-        padding-top: 8px;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(5),
-    #adc-submissions-form .wp-list-table tbody td:nth-child(6) {
-        color: #666;
-        font-size: 0.9em;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(7) {
-        border-top: 1px solid #eee;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-        padding-top: 12px;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(7) .button {
-        flex: 1;
-        min-width: calc(50% - 4px);
-        padding: 6px 8px;
-        text-align: center;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(7) .button-primary {
-        flex: 2;
-    }
+	.adc-admin h1 {
+		font-size: 1.5em;
+	}
+
+	.adc-admin .form-table th {
+		padding-bottom: 0;
+		width: auto;
+	}
+
+	.adc-admin .nav-tab-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.adc-admin .nav-tab {
+		flex: 1;
+		padding: 8px 12px;
+		text-align: center;
+	}
+
+	.adc-dashboard-cards {
+		grid-template-columns: 1fr;
+	}
+
+	.adc-card {
+		padding: 16px;
+	}
+
+	.adc-card h3 {
+		font-size: 2rem;
+	}
+
+	.adc-quick-actions .button {
+		display: flex !important;
+		align-items: baseline;
+		margin-right: 0;
+		text-align: center;
+		width: 100%;
+	}
+
+	/* Submissions table - card layout on mobile */
+	#adc-submissions-form .wp-list-table thead {
+		display: none;
+	}
+
+	#adc-submissions-form .wp-list-table tbody tr {
+		background: #fff;
+		border: 1px solid #ccd0d4;
+		border-radius: 4px;
+		display: flex !important;
+		align-items: baseline;
+		margin-bottom: 16px;
+		padding: 12px;
+		position: relative;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td,
+	#adc-submissions-form .wp-list-table tbody th {
+		border: none;
+		display: flex !important;
+		align-items: baseline;
+		padding: 4px 0;
+		text-align: left !important;
+		width: 100% !important;
+	}
+
+	#adc-submissions-form .wp-list-table tbody th.check-column {
+		left: 12px;
+		padding: 0;
+		position: absolute;
+		top: 12px;
+		width: auto !important;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(2) {
+		background: #f0f0f1;
+		border-radius: 3px;
+		display: inline-block !important;
+		font-size: 0.85em;
+		margin-bottom: 4px;
+		margin-left: 28px;
+		padding: 2px 8px !important;
+		text-transform: uppercase;
+		width: auto !important;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(3) {
+		margin-top: 4px;
+		padding-left: 0 !important;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(3) strong {
+		font-size: 1.1em;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(4) {
+		border-top: 1px dashed #ddd;
+		margin-top: 8px;
+		padding-top: 8px;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(5),
+	#adc-submissions-form .wp-list-table tbody td:nth-child(6) {
+		color: #666;
+		font-size: 0.9em;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(7) {
+		border-top: 1px solid #eee;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 12px;
+		padding-top: 12px;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(7) .button {
+		flex: 1;
+		min-width: calc(50% - 4px);
+		padding: 6px 8px;
+		text-align: center;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(7) .button-primary {
+		flex: 2;
+	}
 }
 
 @media (max-width: 480px) {
-    #adc-submissions-form .wp-list-table tbody td:nth-child(5) {
-        word-break: break-all;
-    }
-    
-    #adc-submissions-form .wp-list-table tbody td:nth-child(7) .button {
-        flex: none;
-        min-width: 100%;
-    }
+	#adc-submissions-form .wp-list-table tbody td:nth-child(5) {
+		word-break: break-all;
+	}
+
+	#adc-submissions-form .wp-list-table tbody td:nth-child(7) .button {
+		flex: none;
+		min-width: 100%;
+	}
 }
 
 /* ============================================================================
-   14. PRINT STYLES
-   ============================================================================ */
+	14. PRINT STYLES
+	============================================================================ */
 
 @media print {
-    .adc-admin .page-title-action,
-    .adc-admin .row-actions,
-    .adc-admin .subsubsub,
-    .adc-quick-actions {
-        display: none !important;
-    }
+	.adc-admin .page-title-action,
+	.adc-admin .row-actions,
+	.adc-admin .subsubsub,
+	.adc-quick-actions {
+		display: none !important;
+	}
 }
 
 /* ============================================================================
-   15. REFACTORED INLINE STYLES
-   ============================================================================ */
+	15. REFACTORED INLINE STYLES
+	============================================================================ */
 
 /* Status indicators (duplicate removed — base definitions in Section 7) */
 
 /* Button variants */
 .adc-btn-warning,
 .button.adc-btn-warning {
-    background: #f0ad4e !important;
-    border-color: #eea236 !important;
-    color: #fff !important;
+	background: #f0ad4e !important;
+	border-color: #eea236 !important;
+	color: #fff !important;
 }
 
 .adc-btn-warning:hover,
 .button.adc-btn-warning:hover {
-    background: #ec971f !important;
-    border-color: #d58512 !important;
-    color: #fff !important;
+	background: #ec971f !important;
+	border-color: #d58512 !important;
+	color: #fff !important;
 }
 
 /* Delete/Danger button */
 .adc-btn-delete,
 .adc-btn-danger {
-    background: #dc3545 !important;
-    border-color: #dc3545 !important;
-    color: #fff !important;
+	background: #dc3545 !important;
+	border-color: #dc3545 !important;
+	color: #fff !important;
 }
 
 .adc-btn-delete:hover,
 .adc-btn-danger:hover {
-    background: #c82333 !important;
-    border-color: #bd2130 !important;
-    color: #fff !important;
+	background: #c82333 !important;
+	border-color: #bd2130 !important;
+	color: #fff !important;
 }
 
 /* A-009: Distinct Approve/Reject button colors */
 .adc-btn-approve,
 .button.adc-btn-approve {
-    background: #00a32a !important;
-    border-color: #00a32a !important;
-    color: #fff !important;
+	background: #00a32a !important;
+	border-color: #00a32a !important;
+	color: #fff !important;
 }
 
 .adc-btn-approve:hover,
 .button.adc-btn-approve:hover {
-    background: #008a20 !important;
-    border-color: #007a1c !important;
-    color: #fff !important;
+	background: #008a20 !important;
+	border-color: #007a1c !important;
+	color: #fff !important;
 }
 
 .adc-btn-reject,
 .button.adc-btn-reject {
-    background: #d63638 !important;
-    border-color: #d63638 !important;
-    color: #fff !important;
+	background: #d63638 !important;
+	border-color: #d63638 !important;
+	color: #fff !important;
 }
 
 .adc-btn-reject:hover,
 .button.adc-btn-reject:hover {
-    background: #b32d2e !important;
-    border-color: #a02526 !important;
-    color: #fff !important;
+	background: #b32d2e !important;
+	border-color: #a02526 !important;
+	color: #fff !important;
 }
 
 /* Action cells - consistent button layout */
 .adc-actions-cell {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
 }
 
 .adc-actions-cell .button {
-    margin: 0 !important;
+	margin: 0 !important;
 }
 
 /* Details modal enhancements */
 .adc-details-modal-content {
-    max-width: 600px;
+	max-width: 600px;
 }
 
 .adc-details-modal-body {
-    max-height: 70vh;
-    overflow-y: auto;
+	max-height: 70vh;
+	overflow-y: auto;
 }
 
 /* Short inputs */
 .adc-input-short {
-    width: 60px;
+	width: 60px;
 }
 
 /* Two-column layout margin */
 .adc-two-col-spaced {
-    margin-top: 1rem;
+	margin-top: 1rem;
 }
 
 /* Inline forms */
 .adc-inline-form {
-    display: inline;
+	display: inline;
 }
 
 /* Details modal table styles */
 .adc-details-table {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .adc-details-section-title {
-    margin: 15px 0 10px;
+	margin: 15px 0 10px;
 }
 
 .adc-user-agent {
-    word-break: break-all;
-    font-size: 0.85em;
+	word-break: break-all;
+	font-size: 0.85em;
 }
 
 /* ============================================================================
 
 
 /* ============================================================================
-   16. MOBILE RESPONSIVE ADMIN TABLES
-   ============================================================================ */
+	16. MOBILE RESPONSIVE ADMIN TABLES
+	============================================================================ */
 
 @media screen and (max-width: 600px) {
-    /* Reset table display */
-    .adc-admin .wp-list-table,
-    .adc-admin .wp-list-table tbody,
-    .adc-admin .wp-list-table tr,
-    .adc-admin .wp-list-table td {
-        display: block !important;
-        width: 100% !important;
-    }
-    
-    /* Hide headers */
-    .adc-admin .wp-list-table thead {
-        display: none !important;
-    }
-    
-    /* Card styling for rows */
-    .adc-admin .wp-list-table tbody tr {
-        background: #fff;
-        border: 1px solid #c3c4c7;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        padding: 0;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    /* Cell styling */
-    .adc-admin .wp-list-table tbody td {
-        padding: 10px 16px !important;
-        border-bottom: 1px solid #f0f0f1 !important;
-        text-align: left !important;
-        position: relative;
-    }
-    
-    .adc-admin .wp-list-table tbody td:last-child {
-        border-bottom: none !important;
-    }
-    
-    /* Add labels via ::before */
-    .adc-admin .wp-list-table tbody td[data-label]::before {
-        content: attr(data-label) ": ";
-        font-weight: 600;
-        color: #1d2327;
-        display: inline;
-    }
-    
-    /* Name cell - card header */
-    .adc-admin .wp-list-table tbody td[data-label="Name"] {
-        background: #f6f7f7;
-        font-size: 15px;
-        font-weight: 600;
-        border-bottom: 2px solid #2271b1 !important;
-    }
-    
-    .adc-admin .wp-list-table tbody td[data-label="Name"]::before {
-        display: none;
-    }
-    
-    /* Status cell - no label */
-    .adc-admin .wp-list-table tbody td[data-label="Status"]::before {
-        display: none;
-    }
-    
-    /* Actions cell */
-    .adc-admin .wp-list-table tbody td[data-label="Actions"],
-    .adc-admin .wp-list-table tbody td.adc-actions-cell {
-        background: #f6f7f7;
-        display: flex !important;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 12px 16px !important;
-    }
-    
-    .adc-admin .wp-list-table tbody td[data-label="Actions"]::before {
-        display: none;
-    }
-    
-    .adc-admin .wp-list-table tbody td[data-label="Actions"] .button,
-    .adc-admin .wp-list-table tbody td.adc-actions-cell .button {
-        flex: 1 1 calc(50% - 4px);
-        font-size: 13px !important;
-        min-width: 80px;
-        padding: 12px 16px !important;
-        text-align: center;
-    }
-    
-    .adc-admin .wp-list-table tbody td[data-label="Actions"] .button:only-child,
-    .adc-admin .wp-list-table tbody td.adc-actions-cell .button:only-child {
-        flex: 1 1 100%;
-    }
+	/* Reset table display */
+	.adc-admin .wp-list-table,
+	.adc-admin .wp-list-table tbody,
+	.adc-admin .wp-list-table tr,
+	.adc-admin .wp-list-table td {
+		display: block !important;
+		width: 100% !important;
+	}
+
+	/* Hide headers */
+	.adc-admin .wp-list-table thead {
+		display: none !important;
+	}
+
+	/* Card styling for rows */
+	.adc-admin .wp-list-table tbody tr {
+		background: #fff;
+		border: 1px solid #c3c4c7;
+		border-radius: 8px;
+		margin-bottom: 16px;
+		padding: 0;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+		overflow: hidden;
+	}
+
+	/* Cell styling */
+	.adc-admin .wp-list-table tbody td {
+		padding: 10px 16px !important;
+		border-bottom: 1px solid #f0f0f1 !important;
+		text-align: left !important;
+		position: relative;
+	}
+
+	.adc-admin .wp-list-table tbody td:last-child {
+		border-bottom: none !important;
+	}
+
+	/* Add labels via ::before */
+	.adc-admin .wp-list-table tbody td[data-label]::before {
+		content: attr(data-label) ": ";
+		font-weight: 600;
+		color: #1d2327;
+		display: inline;
+	}
+
+	/* Name cell - card header */
+	.adc-admin .wp-list-table tbody td[data-label="Name"] {
+		background: #f6f7f7;
+		font-size: 15px;
+		font-weight: 600;
+		border-bottom: 2px solid #2271b1 !important;
+	}
+
+	.adc-admin .wp-list-table tbody td[data-label="Name"]::before {
+		display: none;
+	}
+
+	/* Status cell - no label */
+	.adc-admin .wp-list-table tbody td[data-label="Status"]::before {
+		display: none;
+	}
+
+	/* Actions cell */
+	.adc-admin .wp-list-table tbody td[data-label="Actions"],
+	.adc-admin .wp-list-table tbody td.adc-actions-cell {
+		background: #f6f7f7;
+		display: flex !important;
+		flex-wrap: wrap;
+		gap: 8px;
+		padding: 12px 16px !important;
+	}
+
+	.adc-admin .wp-list-table tbody td[data-label="Actions"]::before {
+		display: none;
+	}
+
+	.adc-admin .wp-list-table tbody td[data-label="Actions"] .button,
+	.adc-admin .wp-list-table tbody td.adc-actions-cell .button {
+		flex: 1 1 calc(50% - 4px);
+		font-size: 13px !important;
+		min-width: 80px;
+		padding: 12px 16px !important;
+		text-align: center;
+	}
+
+	.adc-admin .wp-list-table tbody td[data-label="Actions"] .button:only-child,
+	.adc-admin .wp-list-table tbody td.adc-actions-cell .button:only-child {
+		flex: 1 1 100%;
+	}
 }
 
 /* Mobile labels - hidden on desktop, shown on mobile */
 .adc-mobile-label {
-    display: none;
+	display: none;
 }
 
 @media screen and (max-width: 600px) {
-    .adc-mobile-label {
-        display: inline;
-        font-weight: 600;
-        color: #1d2327;
-    }
+	.adc-mobile-label {
+		display: inline;
+		font-weight: 600;
+		color: #1d2327;
+	}
 }
 
 /* Settings page checkbox spacing */
 .adc-admin .form-table td label {
-    display: block;
-    margin-bottom: 4px;
-    padding: 2px 0;
+	display: block;
+	margin-bottom: 4px;
+	padding: 2px 0;
 }
 
 .adc-admin .form-table td label:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 /* ============================================================================
-   SETTINGS TABS
-   ============================================================================ */
+	SETTINGS TABS
+	============================================================================ */
 .adc-settings-tabs {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .adc-tab-panel {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-top: none;
-    padding: 20px 24px;
-    margin-bottom: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-top: none;
+	padding: 20px 24px;
+	margin-bottom: 20px;
 }
 
 .adc-tab-panel h2 {
-    margin-top: 0;
+	margin-top: 0;
+}
+
+/* Sticky save bar — always visible at bottom of viewport */
+#adc-submit-bar {
+	position: sticky;
+	bottom: 0;
+	z-index: 100;
+	background: #f0f0f1;
+	border-top: 1px solid #c3c4c7;
+	padding: 10px 24px;
+	box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+#adc-submit-bar .submit {
+	margin: 0;
+	padding: 0;
+}
+#adc-submit-bar input[type="submit"] {
+	margin: 0;
+}
+@media (max-width: 782px) {
+	#adc-submit-bar {
+		padding: 10px 16px;
+	}
+	#adc-submit-bar input[type="submit"] {
+		width: 100%;
+	}
 }
 
 .adc-color-table td {
-    padding: 6px 10px 6px 0;
-    vertical-align: middle;
+	padding: 6px 10px 6px 0;
+	vertical-align: middle;
 }
 
 .adc-color-table td:first-child {
-    width: 120px;
-    font-weight: 600;
+	width: 120px;
+	font-weight: 600;
 }
 
 .adc-color-picker {
-    vertical-align: middle;
-    height: 32px;
-    width: 50px;
-    padding: 2px;
-    cursor: pointer;
+	vertical-align: middle;
+	height: 32px;
+	width: 50px;
+	padding: 2px;
+	cursor: pointer;
 }
 
 .adc-color-text {
-    vertical-align: middle;
-    margin: 0 6px;
+	vertical-align: middle;
+	margin: 0 6px;
 }
 
 .adc-color-clear {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 .adc-color-wrapper {
-    display: inline-block;
-    position: relative;
-    vertical-align: middle;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
 }
 
 .adc-color-wrapper.adc-color-empty::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ffffff;
-    background-image: 
-        linear-gradient(45deg, #ccc 25%, #ffffff 25%),
-        linear-gradient(-45deg, #ccc 25%, #ffffff 25%),
-        linear-gradient(45deg, #ffffff 75%, #ccc 75%),
-        linear-gradient(-45deg, #ffffff 75%, #ccc 75%);
-    background-size: 8px 8px;
-    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
-    pointer-events: none;
-    border-radius: 3px;
-    border: 1px solid #ddd;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ffffff;
+	background-image:
+		linear-gradient(45deg, #ccc 25%, #ffffff 25%),
+		linear-gradient(-45deg, #ccc 25%, #ffffff 25%),
+		linear-gradient(45deg, #ffffff 75%, #ccc 75%),
+		linear-gradient(-45deg, #ffffff 75%, #ccc 75%);
+	background-size: 8px 8px;
+	background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+	pointer-events: none;
+	border-radius: 3px;
+	border: 1px solid #ddd;
 }
 
 /* ============================================================================
 
 /* ============================================================================
-   17. SUBMISSIONS MOBILE CARD LAYOUT
-   ============================================================================ */
+	17. SUBMISSIONS MOBILE CARD LAYOUT
+	============================================================================ */
 
 /* Type badges */
 .adc-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
 }
 
 .adc-badge-strain {
-    background: #d4edda;
-    color: #155724;
+	background: #d4edda;
+	color: #155724;
 }
 
 .adc-badge-edible {
-    background: #cce5ff;
-    color: #004085;
+	background: #cce5ff;
+	color: #004085;
 }
 
 /* Status badge colors — scoped to submissions context to avoid overriding base status indicators */
@@ -1164,164 +1190,164 @@
 #adc-submissions-form .adc-status-rejected { color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 3px; }
 
 @media screen and (max-width: 782px) {
-    /* Hide desktop table elements */
-    #adc-submissions-table thead {
-        display: none !important;
-    }
-    
-    #adc-submissions-table {
-        display: block !important;
-        border: none !important;
-        background: transparent !important;
-    }
-    
-    #adc-submissions-table tbody {
-        display: block !important;
-    }
-    
-    /* Each row becomes a card */
-    #adc-submissions-table tbody tr {
-        display: block !important;
-        background: #fff !important;
-        border: 1px solid #ddd !important;
-        border-radius: 8px !important;
-        margin-bottom: 20px !important;
-        padding: 0 !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        overflow: hidden !important;
-    }
-    
-    /* Hide all cells by default */
-    #adc-submissions-table tbody tr td,
-    #adc-submissions-table tbody tr th {
-        display: none !important;
-    }
-    
-    /* Show and style specific cells */
-    #adc-submissions-table tbody tr td[data-label="Type"],
-    #adc-submissions-table tbody tr td[data-label="Name"],
-    #adc-submissions-table tbody tr td[data-label="Submitter"],
-    #adc-submissions-table tbody tr td[data-label="Date"],
-    #adc-submissions-table tbody tr td[data-label="Status"],
-    #adc-submissions-table tbody tr td[data-label="Actions"] {
-        display: block !important;
-        padding: 12px 16px !important;
-        border: none !important;
-        border-bottom: 1px solid #eee !important;
-    }
-    
-    /* Card header - Name with badge */
-    #adc-submissions-table tbody tr td[data-label="Name"] {
-        background: #f8f9fa !important;
-        font-size: 16px !important;
-        font-weight: 600 !important;
-        padding: 16px !important;
-        border-bottom: 2px solid #2271b1 !important;
-        order: 1 !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Name"] small {
-        display: block !important;
-        font-weight: normal !important;
-        font-size: 13px !important;
-        color: #666 !important;
-        margin-top: 6px !important;
-    }
-    
-    /* Type badge - inline in header area */
-    #adc-submissions-table tbody tr td[data-label="Type"] {
-        position: absolute !important;
-        top: 14px !important;
-        right: 16px !important;
-        padding: 0 !important;
-        border: none !important;
-        background: transparent !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Type"] .adc-mobile-label {
-        display: none !important;
-    }
-    
-    /* Make card position relative for badge */
-    #adc-submissions-table tbody tr {
-        position: relative !important;
-    }
-    
-    /* Data rows with labels */
-    #adc-submissions-table tbody tr td[data-label="Submitter"],
-    #adc-submissions-table tbody tr td[data-label="Date"],
-    #adc-submissions-table tbody tr td[data-label="Status"] {
-        font-size: 14px !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Submitter"]::before,
-    #adc-submissions-table tbody tr td[data-label="Date"]::before {
-        content: attr(data-label) ": " !important;
-        font-weight: 600 !important;
-        color: #333 !important;
-        display: inline !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Submitter"] .adc-mobile-label,
-    #adc-submissions-table tbody tr td[data-label="Date"] .adc-mobile-label {
-        display: none !important;
-    }
-    
-    /* Status row */
-    #adc-submissions-table tbody tr td[data-label="Status"] {
-        padding: 10px 16px !important;
-    }
-    
-    /* Actions - full width buttons */
-    #adc-submissions-table tbody tr td[data-label="Actions"] {
-        background: #f8f9fa !important;
-        padding: 16px !important;
-        border-bottom: none !important;
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Actions"] .button {
-        flex: 1 1 calc(50% - 10px) !important;
-        min-width: 100px !important;
-        padding: 14px 12px !important;
-        font-size: 13px !important;
-        text-align: center !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-    }
-    
-    #adc-submissions-table tbody tr td[data-label="Actions"] .button-primary {
-        background: #00a32a !important;
-        border-color: #00a32a !important;
-        color: #fff !important;
-    }
-    
-    /* Full width for View button */
-    #adc-submissions-table tbody tr td[data-label="Actions"] .button:first-child {
-        flex: 1 1 100% !important;
-    }
-    
-    /* Red delete button */
-    #adc-submissions-table tbody tr td[data-label="Actions"] .button:last-child {
-        background: #dc3545 !important;
-        border-color: #dc3545 !important;
-        color: #fff !important;
-    }
+	/* Hide desktop table elements */
+	#adc-submissions-table thead {
+		display: none !important;
+	}
+
+	#adc-submissions-table {
+		display: block !important;
+		border: none !important;
+		background: transparent !important;
+	}
+
+	#adc-submissions-table tbody {
+		display: block !important;
+	}
+
+	/* Each row becomes a card */
+	#adc-submissions-table tbody tr {
+		display: block !important;
+		background: #fff !important;
+		border: 1px solid #ddd !important;
+		border-radius: 8px !important;
+		margin-bottom: 20px !important;
+		padding: 0 !important;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+		overflow: hidden !important;
+	}
+
+	/* Hide all cells by default */
+	#adc-submissions-table tbody tr td,
+	#adc-submissions-table tbody tr th {
+		display: none !important;
+	}
+
+	/* Show and style specific cells */
+	#adc-submissions-table tbody tr td[data-label="Type"],
+	#adc-submissions-table tbody tr td[data-label="Name"],
+	#adc-submissions-table tbody tr td[data-label="Submitter"],
+	#adc-submissions-table tbody tr td[data-label="Date"],
+	#adc-submissions-table tbody tr td[data-label="Status"],
+	#adc-submissions-table tbody tr td[data-label="Actions"] {
+		display: block !important;
+		padding: 12px 16px !important;
+		border: none !important;
+		border-bottom: 1px solid #eee !important;
+	}
+
+	/* Card header - Name with badge */
+	#adc-submissions-table tbody tr td[data-label="Name"] {
+		background: #f8f9fa !important;
+		font-size: 16px !important;
+		font-weight: 600 !important;
+		padding: 16px !important;
+		border-bottom: 2px solid #2271b1 !important;
+		order: 1 !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Name"] small {
+		display: block !important;
+		font-weight: normal !important;
+		font-size: 13px !important;
+		color: #666 !important;
+		margin-top: 6px !important;
+	}
+
+	/* Type badge - inline in header area */
+	#adc-submissions-table tbody tr td[data-label="Type"] {
+		position: absolute !important;
+		top: 14px !important;
+		right: 16px !important;
+		padding: 0 !important;
+		border: none !important;
+		background: transparent !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Type"] .adc-mobile-label {
+		display: none !important;
+	}
+
+	/* Make card position relative for badge */
+	#adc-submissions-table tbody tr {
+		position: relative !important;
+	}
+
+	/* Data rows with labels */
+	#adc-submissions-table tbody tr td[data-label="Submitter"],
+	#adc-submissions-table tbody tr td[data-label="Date"],
+	#adc-submissions-table tbody tr td[data-label="Status"] {
+		font-size: 14px !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Submitter"]::before,
+	#adc-submissions-table tbody tr td[data-label="Date"]::before {
+		content: attr(data-label) ": " !important;
+		font-weight: 600 !important;
+		color: #333 !important;
+		display: inline !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Submitter"] .adc-mobile-label,
+	#adc-submissions-table tbody tr td[data-label="Date"] .adc-mobile-label {
+		display: none !important;
+	}
+
+	/* Status row */
+	#adc-submissions-table tbody tr td[data-label="Status"] {
+		padding: 10px 16px !important;
+	}
+
+	/* Actions - full width buttons */
+	#adc-submissions-table tbody tr td[data-label="Actions"] {
+		background: #f8f9fa !important;
+		padding: 16px !important;
+		border-bottom: none !important;
+		display: flex !important;
+		flex-wrap: wrap !important;
+		gap: 10px !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Actions"] .button {
+		flex: 1 1 calc(50% - 10px) !important;
+		min-width: 100px !important;
+		padding: 14px 12px !important;
+		font-size: 13px !important;
+		text-align: center !important;
+		border-radius: 6px !important;
+		font-weight: 600 !important;
+	}
+
+	#adc-submissions-table tbody tr td[data-label="Actions"] .button-primary {
+		background: #00a32a !important;
+		border-color: #00a32a !important;
+		color: #fff !important;
+	}
+
+	/* Full width for View button */
+	#adc-submissions-table tbody tr td[data-label="Actions"] .button:first-child {
+		flex: 1 1 100% !important;
+	}
+
+	/* Red delete button */
+	#adc-submissions-table tbody tr td[data-label="Actions"] .button:last-child {
+		background: #dc3545 !important;
+		border-color: #dc3545 !important;
+		color: #fff !important;
+	}
 }
 
 /* ============================================================================
-   18. UTILITY CLASSES
-   ============================================================================ */
+	18. UTILITY CLASSES
+	============================================================================ */
 
 /* Card widths */
 .adc-card-narrow {
-    max-width: 600px;
+	max-width: 600px;
 }
 
 .adc-card-wide {
-    max-width: 900px;
+	max-width: 900px;
 }
 
 /* Margins */
@@ -1339,210 +1365,210 @@
 
 /* Total display for edible form */
 .adc-total-display {
-    color: #00a32a;
-    font-size: 1.2em;
+	color: #00a32a;
+	font-size: 1.2em;
 }
 
 /* Per-piece breakdown box */
 .adc-breakdown-box {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 15px;
 }
 
 .adc-breakdown-row {
-    margin: 5px 0;
+	margin: 5px 0;
 }
 
 .adc-breakdown-total {
-    border-top: 1px solid #ddd;
-    margin: 10px 0 5px;
-    padding-top: 10px;
+	border-top: 1px solid #ddd;
+	margin: 10px 0 5px;
+	padding-top: 10px;
 }
 
 /* Inline forms */
 .adc-inline-form {
-    display: inline;
+	display: inline;
 }
 
 /* ============================================================================
-   19. MOBILE SUBMISSION CARDS
-   ============================================================================ */
+	19. MOBILE SUBMISSION CARDS
+	============================================================================ */
 
 /* Hide mobile cards on desktop */
 .adc-mobile-cards {
-    display: none;
+	display: none;
 }
 
 /* On mobile: hide table, show cards */
 @media screen and (max-width: 782px) {
-    #adc-submissions-table {
-        display: none !important;
-    }
-    
-    .adc-mobile-cards {
-        display: block;
-    }
-    
-    .adc-submission-card {
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    .adc-submission-pending {
-        border-left: 5px solid #f0ad4e;
-    }
-    
-    .adc-submission-approved {
-        border-left: 5px solid #00a32a;
-    }
-    
-    .adc-submission-rejected {
-        border-left: 5px solid #dc3545;
-    }
-    
-    .adc-submission-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        background: #f8f9fa;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .adc-submission-name {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1d2327;
-    }
-    
-    .adc-submission-details {
-        padding: 16px;
-    }
-    .adc-submission-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        padding: 16px;
-        background: #f8f9fa;
-    }
-    
-    .adc-submission-actions .button {
-        padding: 14px 12px !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        text-align: center !important;
-        border-radius: 8px !important;
-        text-decoration: none !important;
-        display: block !important;
-    }
-    
-    .adc-submission-actions .button:first-child {
-        grid-column: 1 / -1;
-        background: #2271b1;
-        color: #fff;
-        border-color: #2271b1;
-    }
-    
-    .adc-submission-actions .button-primary {
-        background: #00a32a !important;
-        border-color: #00a32a !important;
-        color: #fff !important;
-    }
-    
-    .adc-submission-actions .adc-btn-delete {
-        background: #dc3545 !important;
-        border-color: #dc3545 !important;
-        color: #fff !important;
-    }
+	#adc-submissions-table {
+		display: none !important;
+	}
+
+	.adc-mobile-cards {
+		display: block;
+	}
+
+	.adc-submission-card {
+		background: #fff;
+		border: 1px solid #ddd;
+		border-radius: 12px;
+		margin-bottom: 20px;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	}
+
+	.adc-submission-pending {
+		border-left: 5px solid #f0ad4e;
+	}
+
+	.adc-submission-approved {
+		border-left: 5px solid #00a32a;
+	}
+
+	.adc-submission-rejected {
+		border-left: 5px solid #dc3545;
+	}
+
+	.adc-submission-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px;
+		background: #f8f9fa;
+		border-bottom: 1px solid #eee;
+	}
+
+	.adc-submission-name {
+		font-size: 18px;
+		font-weight: 700;
+		color: #1d2327;
+	}
+
+	.adc-submission-details {
+		padding: 16px;
+	}
+	.adc-submission-actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		padding: 16px;
+		background: #f8f9fa;
+	}
+
+	.adc-submission-actions .button {
+		padding: 14px 12px !important;
+		font-size: 14px !important;
+		font-weight: 600 !important;
+		text-align: center !important;
+		border-radius: 8px !important;
+		text-decoration: none !important;
+		display: block !important;
+	}
+
+	.adc-submission-actions .button:first-child {
+		grid-column: 1 / -1;
+		background: #2271b1;
+		color: #fff;
+		border-color: #2271b1;
+	}
+
+	.adc-submission-actions .button-primary {
+		background: #00a32a !important;
+		border-color: #00a32a !important;
+		color: #fff !important;
+	}
+
+	.adc-submission-actions .adc-btn-delete {
+		background: #dc3545 !important;
+		border-color: #dc3545 !important;
+		color: #fff !important;
+	}
 }
 
 /* ============================================================================
-   17. DETAILS MODAL - CARD-BASED LAYOUT
-   ============================================================================ */
+	17. DETAILS MODAL - CARD-BASED LAYOUT
+	============================================================================ */
 
 /* Section container */
 .adc-detail-section {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .adc-detail-section:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 /* Section header (gray background) */
 .adc-detail-section-header {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1d2327;
-    padding: 8px 0;
-    margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+	padding: 8px 0;
+	margin-bottom: 0;
 }
 
 /* Section body (bordered card) */
 .adc-detail-section-body {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 4px;
-    padding: 12px 16px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 12px 16px;
 }
 
 /* Individual rows */
 .adc-detail-row {
-    text-align: left;
-    padding: 6px 0;
-    line-height: 1.5;
-    color: #3c434a;
-    font-size: 13px;
+	text-align: left;
+	padding: 6px 0;
+	line-height: 1.5;
+	color: #3c434a;
+	font-size: 13px;
 }
 
 .adc-detail-row:first-child {
-    padding-top: 0;
+	padding-top: 0;
 }
 
 .adc-detail-row:last-child {
-    padding-bottom: 0;
+	padding-bottom: 0;
 }
 
 /* Labels */
 .adc-detail-label {
-    font-weight: 600;
-    color: #1d2327;
+	font-weight: 600;
+	color: #1d2327;
 }
 
 /* User agent (long text) */
 .adc-detail-useragent {
-    word-break: break-word;
-    display: inline;
+	word-break: break-word;
+	display: inline;
 }
 
 /* Modal header with icon */
 .adc-details-modal-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .adc-details-modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .adc-details-modal-header .dashicons {
-    color: #2271b1;
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
+	color: #2271b1;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
 }
 
-    .adc-submission-actions .adc-btn-warning {
-        background: #f0ad4e !important;
-        border-color: #eea236 !important;
-        color: #fff !important;
-    }
+	.adc-submission-actions .adc-btn-warning {
+		background: #f0ad4e !important;
+		border-color: #eea236 !important;
+		color: #fff !important;
+	}

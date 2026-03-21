@@ -5,12 +5,18 @@
  * Handles taxonomy management, import/export tabs, export handler, categories, and product types.
  *
  * @since 2.13.0
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Admin_Tools class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Admin_Tools {
 
 	private static $instance = null;
@@ -150,7 +156,7 @@ class ADC_Admin_Tools {
 		check_ajax_referer( 'adc_export' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified above via check_ajax_referer.
-		$type   = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'all';
+		$type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'all';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified above via check_ajax_referer.
 		$format = isset( $_GET['format'] ) ? sanitize_text_field( wp_unslash( $_GET['format'] ) ) : 'json';
 

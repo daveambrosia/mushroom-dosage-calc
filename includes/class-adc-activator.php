@@ -2,12 +2,19 @@
 /**
  * Plugin activation handler - Version 2.1
  * With improved error handling and diagnostics
+ *
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Activator class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Activator {
 
 	private static $activation_errors   = array();

@@ -4,212 +4,212 @@
 
 /* Container */
 #adc-dialog-container {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100000;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100000;
 }
 
 #adc-dialog-container.show {
-    display: block;
+	display: block;
 }
 
 /* Overlay */
 .adc-dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    animation: adcFadeIn 0.2s ease;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	animation: adcFadeIn 0.2s ease;
 }
 
 /* Dialog box */
 .adc-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    min-width: 320px;
-    max-width: 90vw;
-    max-height: 90vh;
-    overflow: hidden;
-    animation: adcSlideIn 0.25s ease;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	min-width: 320px;
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow: hidden;
+	animation: adcSlideIn 0.25s ease;
 }
 
 @keyframes adcFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 @keyframes adcSlideIn {
-    from { 
-        opacity: 0;
-        transform: translate(-50%, -48%);
-    }
-    to { 
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
 }
 
 /* Header */
 .adc-dialog-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-    background: #f9fafb;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 16px 20px;
+	border-bottom: 1px solid #e5e7eb;
+	background: #f9fafb;
 }
 
 .adc-dialog-icon {
-    font-size: 24px;
-    line-height: 1;
+	font-size: 24px;
+	line-height: 1;
 }
 
 .adc-dialog-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: #1f2937;
 }
 
 /* Type-specific header colors */
 .adc-dialog-success .adc-dialog-header {
-    background: #ecfdf5;
-    border-color: #a7f3d0;
+	background: #ecfdf5;
+	border-color: #a7f3d0;
 }
 .adc-dialog-success .adc-dialog-title { color: #065f46; }
 
 .adc-dialog-error .adc-dialog-header,
 .adc-dialog-warning .adc-dialog-header {
-    background: #fef2f2;
-    border-color: #fecaca;
+	background: #fef2f2;
+	border-color: #fecaca;
 }
 .adc-dialog-error .adc-dialog-title,
 .adc-dialog-warning .adc-dialog-title { color: #991b1b; }
 
 .adc-dialog-confirm .adc-dialog-header {
-    background: #eff6ff;
-    border-color: #bfdbfe;
+	background: #eff6ff;
+	border-color: #bfdbfe;
 }
 .adc-dialog-confirm .adc-dialog-title { color: #1e40af; }
 
 /* Body */
 .adc-dialog-body {
-    padding: 20px;
+	padding: 20px;
 }
 
 .adc-dialog-message {
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.6;
-    color: #374151;
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.6;
+	color: #374151;
 }
 
 /* Input for prompt */
 .adc-dialog-input {
-    width: 100%;
-    margin-top: 12px;
-    padding: 10px 12px;
-    font-size: 15px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    box-sizing: border-box;
-    transition: border-color 0.15s, box-shadow 0.15s;
+	width: 100%;
+	margin-top: 12px;
+	padding: 10px 12px;
+	font-size: 15px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	box-sizing: border-box;
+	transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .adc-dialog-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+	outline: none;
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 /* Footer */
 .adc-dialog-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 16px 20px;
-    border-top: 1px solid #e5e7eb;
-    background: #f9fafb;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 16px 20px;
+	border-top: 1px solid #e5e7eb;
+	background: #f9fafb;
 }
 
 /* Buttons */
 .adc-dialog-btn {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
+	padding: 10px 20px;
+	font-size: 14px;
+	font-weight: 500;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.15s;
 }
 
 .adc-dialog-btn-secondary {
-    background: #fff;
-    color: #374151;
-    border: 1px solid #d1d5db;
+	background: #fff;
+	color: #374151;
+	border: 1px solid #d1d5db;
 }
 
 .adc-dialog-btn-secondary:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+	background: #f3f4f6;
+	border-color: #9ca3af;
 }
 
 .adc-dialog-btn-primary {
-    background: #3b82f6;
-    color: #fff;
+	background: #3b82f6;
+	color: #fff;
 }
 
 .adc-dialog-btn-primary:hover {
-    background: #2563eb;
+	background: #2563eb;
 }
 
 .adc-dialog-btn-danger {
-    background: #dc2626 !important;
-    color: #fff !important;
+	background: #dc2626 !important;
+	color: #fff !important;
 }
 
 .adc-dialog-btn-danger:hover {
-    background: #b91c1c !important;
+	background: #b91c1c !important;
 }
 
 /* Success dialog primary button */
 .adc-dialog-success .adc-dialog-btn-primary {
-    background: #059669;
+	background: #059669;
 }
 .adc-dialog-success .adc-dialog-btn-primary:hover {
-    background: #047857;
+	background: #047857;
 }
 
 /* Focus styles */
 .adc-dialog-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
 /* Mobile responsive */
 @media (max-width: 480px) {
-    .adc-dialog {
-        min-width: calc(100vw - 32px);
-        margin: 0 16px;
-    }
-    
-    .adc-dialog-footer {
-        flex-direction: column-reverse;
-    }
-    
-    .adc-dialog-btn {
-        width: 100%;
-        padding: 12px 20px;
-    }
+	.adc-dialog {
+		min-width: calc(100vw - 32px);
+		margin: 0 16px;
+	}
+
+	.adc-dialog-footer {
+		flex-direction: column-reverse;
+	}
+
+	.adc-dialog-btn {
+		width: 100%;
+		padding: 12px 20px;
+	}
 }

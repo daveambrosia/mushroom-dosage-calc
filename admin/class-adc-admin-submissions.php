@@ -5,12 +5,18 @@
  * Handles submission list, bulk actions, blacklist management.
  *
  * @since 2.13.0
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_Admin_Submissions class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_Admin_Submissions {
 
 	private static $instance = null;
@@ -308,11 +314,11 @@ class ADC_Admin_Submissions {
 						<?php else : ?>
 							<?php
 							foreach ( $submissions as $sub ) :
-								$data        = json_decode( wp_unslash( $sub['data'] ), true );
-								$name        = $data['name'] ?? 'Unknown';
-								$statusClass = 'pending' === $sub['status'] ? 'pending' : ( 'approved' === $sub['status'] ? 'approved' : 'rejected' );
+								$data         = json_decode( wp_unslash( $sub['data'] ), true );
+								$name         = $data['name'] ?? 'Unknown';
+								$status_class = 'pending' === $sub['status'] ? 'pending' : ( 'approved' === $sub['status'] ? 'approved' : 'rejected' );
 								?>
-								<div class="adc-submission-card adc-submission-<?php echo esc_attr( $statusClass ); ?>">
+								<div class="adc-submission-card adc-submission-<?php echo esc_attr( $status_class ); ?>">
 									<div class="adc-submission-header">
 										<div class="adc-submission-name"><?php echo esc_html( $name ); ?></div>
 										<span class="adc-badge adc-badge-<?php echo esc_attr( $sub['type'] ); ?>"><?php echo esc_html( ucfirst( $sub['type'] ) ); ?></span>
@@ -361,7 +367,7 @@ class ADC_Admin_Submissions {
 										
 										<div class="adc-detail-row">
 											<span class="adc-detail-label">Status:</span>
-											<span class="adc-status-<?php echo esc_attr( $statusClass ); ?>">● <?php echo esc_html( ucfirst( $sub['status'] ) ); ?></span>
+											<span class="adc-status-<?php echo esc_attr( $status_class ); ?>">● <?php echo esc_html( ucfirst( $sub['status'] ) ); ?></span>
 										</div>
 									</div>
 									

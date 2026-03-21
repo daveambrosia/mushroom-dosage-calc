@@ -1,12 +1,19 @@
 <?php
 /**
  * REST API endpoints - Version 2.0 - Performance Optimized
+ *
+ * @package Ambrosia_Dosage_Calculator
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * ADC_REST_API class.
+ *
+ * @package Ambrosia_Dosage_Calculator
+ */
 class ADC_REST_API {
 
 	/** Cache expiry for reference data */
@@ -410,8 +417,8 @@ class ADC_REST_API {
 			'active_only' => ! $include_inactive,
 			'category'    => $category,
 			'search'      => $search,
-			'min_potency' => $min_potency !== null ? absint( $min_potency ) : null,
-			'max_potency' => $max_potency !== null ? absint( $max_potency ) : null,
+			'min_potency' => null !== $min_potency ? absint( $min_potency ) : null,
+			'max_potency' => null !== $max_potency ? absint( $max_potency ) : null,
 		);
 
 		$strains = ADC_Strains::get_all( $args );
@@ -477,8 +484,8 @@ class ADC_REST_API {
 			'active_only'  => ! $include_inactive,
 			'product_type' => $product_type,
 			'search'       => $search,
-			'min_potency'  => $min_potency !== null ? absint( $min_potency ) : null,
-			'max_potency'  => $max_potency !== null ? absint( $max_potency ) : null,
+			'min_potency'  => null !== $min_potency ? absint( $min_potency ) : null,
+			'max_potency'  => null !== $max_potency ? absint( $max_potency ) : null,
 		);
 
 		$edibles = ADC_Edibles::get_all( $args );
@@ -571,7 +578,7 @@ class ADC_REST_API {
 		$cache_key = 'adc_categories_' . ( $type ?: 'all' );
 		$cached    = get_transient( $cache_key );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return rest_ensure_response( $cached );
 		}
 
@@ -616,7 +623,7 @@ class ADC_REST_API {
 		$cache_key = 'adc_compounds';
 		$cached    = get_transient( $cache_key );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return rest_ensure_response( $cached );
 		}
 
@@ -910,7 +917,7 @@ class ADC_REST_API {
 		$format  = $request->get_param( 'format' );
 		$strains = ADC_Strains::get_all( array( 'active_only' => false ) );
 
-		if ( $strains === false || $strains === null ) {
+		if ( false === $strains || null === $strains ) {
 			return new WP_Error( 'export_error', 'Failed to retrieve strains from database', array( 'status' => 500 ) );
 		}
 
@@ -952,7 +959,7 @@ class ADC_REST_API {
 		$format  = $request->get_param( 'format' );
 		$edibles = ADC_Edibles::get_all( array( 'active_only' => false ) );
 
-		if ( $edibles === false || $edibles === null ) {
+		if ( false === $edibles || null === $edibles ) {
 			return new WP_Error( 'export_error', 'Failed to retrieve edibles from database', array( 'status' => 500 ) );
 		}
 
@@ -1084,7 +1091,7 @@ class ADC_REST_API {
 		// Build CSV in memory
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- php://temp stream for CSV generation.
 		$output = fopen( 'php://temp', 'r+' );
-		if ( $output === false ) {
+		if ( false === $output ) {
 			return new WP_Error( 'export_error', 'Could not create CSV output stream', array( 'status' => 500 ) );
 		}
 
@@ -1116,7 +1123,7 @@ class ADC_REST_API {
 	private static function send_file_response( $data, $filename, $content_type ) {
 		$json = wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 
-		if ( $json === false ) {
+		if ( false === $json ) {
 			return new WP_Error( 'export_error', 'JSON encoding failed: ' . json_last_error_msg(), array( 'status' => 500 ) );
 		}
 

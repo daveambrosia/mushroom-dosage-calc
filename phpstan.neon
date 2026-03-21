@@ -1,0 +1,26 @@
+parameters:
+    level: 5
+    paths:
+        - .
+    excludePaths:
+        analyseAndScan:
+            - vendor (?)
+            - node_modules (?)
+            - .specify
+            - .claude
+            - .pi
+            - .circleci
+            - tests
+            - bin
+    scanDirectories:
+        - .
+    bootstrapFiles:
+        - ambrosia-dosage-calculator.php
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        -
+            message: '#Parameter \#1 \$parent_slug of function add_submenu_page expects string, null given#'
+            path: admin/class-adc-admin.php
+        -
+            message: '#Action callback returns .* but should not return anything#'
+            path: ambrosia-dosage-calculator.php

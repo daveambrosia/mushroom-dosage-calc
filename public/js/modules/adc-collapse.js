@@ -148,6 +148,9 @@
     }
 
     function updateTabStops() {
+        // Use tabIndex=0 (natural DOM order) for reachable inputs,
+        // tabIndex=-1 for inputs hidden inside collapsed sections.
+        // WCAG 2.4.3: positive tabindex values are prohibited.
         const adjustmentsSection = document.querySelector('[data-section="adjustments"]');
         if (!adjustmentsSection) return;
         const isCollapsed = adjustmentsSection.classList.contains('adc-collapsed');
@@ -159,20 +162,20 @@
         const toleranceInput = document.getElementById('adc-tolerance');
         const sensitivityInput = document.getElementById('adc-sensitivity-input');
         
-        if (weightInput) weightInput.tabIndex = 1;
+        if (weightInput) weightInput.tabIndex = 0;
         
         if (isCollapsed) {
             if (toleranceInput) toleranceInput.tabIndex = -1;
             if (sensitivityInput) sensitivityInput.tabIndex = -1;
-            if (strainSelect) strainSelect.tabIndex = 2;
-            if (converterInput) converterInput.tabIndex = 3;
-            if (gramsInput) gramsInput.tabIndex = 4;
+            if (strainSelect) strainSelect.tabIndex = 0;
+            if (converterInput) converterInput.tabIndex = 0;
+            if (gramsInput) gramsInput.tabIndex = 0;
         } else {
-            if (toleranceInput) toleranceInput.tabIndex = 2;
-            if (sensitivityInput) sensitivityInput.tabIndex = 3;
-            if (strainSelect) strainSelect.tabIndex = 4;
-            if (converterInput) converterInput.tabIndex = 5;
-            if (gramsInput) gramsInput.tabIndex = 6;
+            if (toleranceInput) toleranceInput.tabIndex = 0;
+            if (sensitivityInput) sensitivityInput.tabIndex = 0;
+            if (strainSelect) strainSelect.tabIndex = 0;
+            if (converterInput) converterInput.tabIndex = 0;
+            if (gramsInput) gramsInput.tabIndex = 0;
         }
     }
 

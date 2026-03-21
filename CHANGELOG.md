@@ -1,5 +1,78 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.23.0 — 2026-03-21
+
+### Security
+- Self-hosted Pickr color picker library (was loading from cdn.jsdelivr.net without SRI)
+- Added server-side honeypot validation to `/adc/v1/submit` endpoint
+- Hardened CSS value sanitizer to block `@import` and IE `behavior:` injection vectors
+- Added `wp_unslash()` to `$_SERVER['HTTP_USER_AGENT']` in submission handler
+
+### Accessibility
+- Fixed WCAG 2.4.3 violation: replaced positive tabindex values (1, 2, 3...) with 0/-1 in `updateTabStops()`
+
+### Bug Fixes
+- Fixed optional chaining syntax (`? .` with space) in `adc-init.js` that caused terser to fail silently
+- Wired up `defaultStrain` / `defaultEdible` admin settings: now applied on init when no saved preference exists
+- Added JSON.parse error boundary with object structure validation in `checkForSharedDose()`
+- Improved share button error handling: notifies user on invalid share data instead of silently falling back
+- Replaced `esc_sql()` ORDER BY pattern with column whitelist in `ADC_Submissions::get_all()`
+
+### Performance
+- Rebuilt all stale minified assets (calculator.js, calculator.min.js, adc-dialogs.min.js, adc-dialogs.min.css)
+- Set `adc_settings` option to autoload=true (saves one DB query per calculator page load)
+
+### Build
+- Added PHP syntax lint check to `build-zip.sh` and `build-min.sh` (prevents shipping broken PHP)
+- Updated terser to support optional chaining (`?.`) syntax
+
+---
+
+## 2.22.0 — 2026-03-21
+
+### Security
+- Fixed all output escaping across admin templates (218 violations resolved)
+- Added `wp_unslash()` before all input sanitization functions
+- Added `isset()` checks before all superglobal access
+- Converted `wp_redirect()` to `wp_safe_redirect()` for all admin redirects
+- Added nonce verification annotations for read-only display filters
+- Added strict comparison (`true`) to all `in_array()` calls
+
+### Performance
+- Added composite database indexes: `idx_ip_created` on submissions, `idx_active_category` on strains, `idx_active_product_type` on edibles
+- Removed 4 duplicate database indexes on strains and edibles short_code columns
+- Assets already optimized: JS 49% compression, CSS 34% compression
+
+### Code Quality
+- Fixed all PHPStan level 5 errors (0 remaining)
+- Auto-fixed 12,884 PHPCS violations via PHPCBF (whitespace, alignment, formatting)
+- Fixed all Yoda condition violations (WordPress coding standards)
+- Fixed `str_pad()` type safety in ADC_DB::generate_short_code()
+- Fixed Content-Length header type casting in REST API export endpoints
+- Fixed `esc_attr()` float-to-string casting in template builder
+- Created `phpcs.xml.dist` with project-specific ruleset configuration
+- Created `phpstan.neon` with project-specific analysis configuration
+- Updated test files for modern PHPUnit (set_up/tear_down with void return types)
+
+### Added
+- Frontend security headers: X-Content-Type-Options, X-Frame-Options, Referrer-Policy
+- New PHPUnit tests: potency filter, search filter, API format output, empty name validation, get_by_code lookup, update nonexistent strain error handling
+- PHPCompatibilityWP installed for broader compatibility checking
+
+### Infrastructure
+- Installed PHPCompatibilityWP 2.1 for PHP version compatibility scanning
+
+---
+
+## 2.21.0 — 2026-03-20
+
+### Added
+- Template Builder: visual theme editor for calculator styles
+- QR code generator for strains and edibles
+- Google Sheets integration for data import/sync
+
+---
+
 ## 2.12.24 — 2026-03-14
 
 ### Fixed
@@ -14,47 +87,33 @@
 ## 2.12.21 — 2026-03-14
 
 ### Changed
-- Recommended Dosages: replaced section-level collapse with per-card collapse. Each dose level (Microdose, Perceivable, Intense, Profound, Breakthrough) now has its own ▾/▴ toggle. Collapsed levels stay collapsed across re-renders (weight/sensitivity/tolerance changes). State persists in localStorage when "Remember my settings" is enabled.
+- Recommended Dosages: replaced section-level collapse with per-card collapse. Each dose level (Microdose, Perceivable, Intense, Profound, Breakthrough) now has its own toggle. Collapsed levels stay collapsed across re-renders. State persists in localStorage when "Remember my settings" is enabled.
 
 ## 2.12.20 — 2026-03-14
 
 ### Added
-- Strain and edible product boxes are now collapsible. When collapsed, only the dropdown select is shown (with a ▴ toggle to expand). Collapse state persists with "Remember my settings".
+- Strain and edible product boxes are now collapsible. When collapsed, only the dropdown select is shown. Collapse state persists with "Remember my settings".
 
 ## 2.12.19 — 2026-03-14
 
 ### Added
-- Collapsible sections: each calculator box (except body weight and strain/edible) now has a ▾/▴ toggle in the top-right corner to collapse/expand the section. Collapsed state persists in localStorage when "Remember my settings" is enabled.
-
----
+- Collapsible sections: each calculator box now has a toggle in the top-right corner. Collapsed state persists in localStorage when "Remember my settings" is enabled.
 
 ## 2.12.18 — 2026-03-14
 
 ### Fixed
-- **`GET /compounds` returned empty array** — SQL query in `get_compounds()` referenced non-existent column names (`name`, `slug`, `abbreviation`, `is_active_compound`). Corrected to use actual schema columns (`display_name`, `compound_key`, `unit`, `is_active`). All 6 compounds now return correctly.
-
----
+- `GET /compounds` returned empty array: SQL query referenced non-existent column names. Corrected to use actual schema columns. All 6 compounds now return correctly.
 
 ## 2.12.17 — 2026-03-13
 
 ### Security
-- Fixed admin REST API permission check from `edit_posts` to `manage_options` — editors can no longer create/delete strains or approve submissions
-- Fixed blacklist table schema: `is_active` column was missing from the activator's `CREATE TABLE` statement, causing `is_blacklisted()` to silently fail on all lookups. Added column and DB migration for existing installs
-- Added REST API argument validation (`args` schemas with `sanitize_callback` and `validate_callback`) to all public endpoints
-- Fixed rate-limiting IP detection to use proxy header fallback (`HTTP_X_FORWARDED_FOR`, `HTTP_X_REAL_IP`) and sanitize all IP/user-agent values
+- Fixed admin REST API permission check from `edit_posts` to `manage_options`
+- Fixed blacklist table schema: `is_active` column was missing from activator
+- Added REST API argument validation to all public endpoints
+- Fixed rate-limiting IP detection and sanitization
 
 ### Added
-- `uninstall.php` — properly removes all 7 DB tables, options, and transients when plugin is deleted
-- Export endpoints: `GET /admin/strains/export` and `GET /admin/edibles/export` (CSV and JSON)
-- Search and potency filter params on public endpoints: `?search=`, `?min_potency=`, `?max_potency=`
-- HTTP caching: `Cache-Control: public, max-age=300` and `ETag` headers on all public GET endpoints
-
-### Fixed
-- `load_plugin_textdomain()` now called on `init` — translation support was silently broken
-- `product_types` table schema now includes `unit_name` column; migration added for existing installs
-- QRCode.js CDN script now only loads on the QR Generator admin page (was loading on all admin pages)
-- Google Sheets admin class no longer loads on frontend page requests
-- Removed all `.bak` files from plugin directory
-
-### Changed
-- `class-adc-admin.php` (2,050 lines) split into focused admin classes: `class-adc-admin-strains.php`, `class-adc-admin-edibles.php`, `class-adc-admin-settings.php`, `class-adc-admin-submissions.php`, `class-adc-admin-tools.php`
+- `uninstall.php` for proper cleanup on plugin deletion
+- Export endpoints: CSV and JSON for strains and edibles
+- Search and potency filter params on public endpoints
+- HTTP caching: Cache-Control and ETag headers on public GET endpoints
