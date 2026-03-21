@@ -54,6 +54,12 @@ class ADC_Activator {
 		// Clear cached health check so admin sees fresh state
 		delete_transient( 'adc_db_health' );
 
+		// Clear built-in template cache so the parser re-runs on next page load.
+		// Uses a LIKE query because the key is version-keyed: adc_builtin_tpls_{md5(version)}.
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '%adc_builtin_tpls%'" );
+
 		// Store any errors for admin notice
 		if ( ! empty( self::$activation_errors ) ) {
 			update_option( 'adc_activation_errors', self::$activation_errors );
