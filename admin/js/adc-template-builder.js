@@ -257,6 +257,17 @@
             }
         });
 
+        // Restore "Clear" if user clicks out without typing a valid hex
+        inputEl.addEventListener('blur', function() {
+            var val = inputEl.value.trim();
+            if (val === '' || val.toLowerCase() === 'clear') {
+                inputEl.value = 'Clear';
+                pickr.setColor(null, true);
+                pcrButton.classList.add('clear');
+                pcrButton.style.setProperty('--pcr-color', 'rgba(0,0,0,0.15)');
+            }
+        });
+
         // Sync: if user types hex directly in input
         inputEl.addEventListener('change', function() {
             var val = inputEl.value.trim();
