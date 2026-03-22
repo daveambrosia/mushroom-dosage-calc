@@ -601,11 +601,13 @@
 
 	/* Adjustments box border when combined multiplier is not 100% */
 	#adc-calculator [data-section="adjustments"].adc-adj-over {
-		border: 3px solid var(--adc-color-high, #e74c3c);
+		border: 3px solid var(--adc-color-high, #e74c3c) !important;
+		box-shadow: 0 0 10px rgba(231, 76, 60, 0.4) !important;
 	}
 
 	#adc-calculator [data-section="adjustments"].adc-adj-under {
-		border: 3px solid var(--adc-color-microdose, #3498db);
+		border: 3px solid var(--adc-color-microdose, #3498db) !important;
+		box-shadow: 0 0 10px rgba(52, 152, 219, 0.4) !important;
 	}
 
 	#adc-calculator .adc-sensitivity-controls {
