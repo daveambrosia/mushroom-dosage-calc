@@ -1893,10 +1893,14 @@ function cacheElements() {
                 headerRow.appendChild(btn);
             }
 
-            // Restore saved state (adjustments default to collapsed)
+            // Restore saved state (adjustments default to collapsed).
+            // The HTML ships with adc-collapsed on adjustments to prevent FOUC,
+            // so we must explicitly expand when saved state says expanded.
             const saved = getSavedCollapseState();
             if (saved[sectionName] === true || (saved[sectionName] === undefined && sectionName === 'adjustments')) {
                 collapseSection(section, btn, false);
+            } else if (saved[sectionName] === false && section.classList.contains('adc-collapsed')) {
+                expandSection(section, btn);
             }
 
             btn.addEventListener('click', () => toggleSection(section, btn));

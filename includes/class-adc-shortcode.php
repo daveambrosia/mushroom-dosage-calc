@@ -209,7 +209,7 @@ class ADC_Shortcode {
 				</div>
 				
 				<!-- Adjustments (combines Tolerance + Sensitivity) -->
-				<div class="adc-input-group adc-box" data-collapsible data-section="adjustments">
+				<div class="adc-input-group adc-box adc-collapsed" data-collapsible data-section="adjustments">
 					<div class="adc-label-row"><label>Adjustments</label></div>
 					
 					<!-- Combined adjustment percentage -->
