@@ -129,7 +129,7 @@
 				}
 			).fail(
 				function (xhr) {
-					const msg = xhr.responseJSON ? .message || 'Request failed.';
+					const msg = xhr.responseJSON?.message || 'Request failed.';
 					showStatus( '#adc-strains-preview-status', 'error', msg );
 				}
 			).always(
@@ -173,7 +173,7 @@
 				}
 			).fail(
 				function (xhr) {
-					const msg = xhr.responseJSON ? .message || 'Request failed.';
+					const msg = xhr.responseJSON?.message || 'Request failed.';
 					showStatus( '#adc-edibles-preview-status', 'error', msg );
 				}
 			).always(
@@ -227,14 +227,14 @@
 						if (d.errors && d.errors.length) {
 							msg += ' Errors: ' + d.errors.map( escapeHtml ).join( ', ' );
 						}
-						showStatus( '#adc-strains-import-status', d.errors ? .length ? 'warning' : 'success', msg );
+						showStatus( '#adc-strains-import-status', d.errors?.length ? 'warning' : 'success', msg );
 					} else {
 						showStatus( '#adc-strains-import-status', 'error', resp.message || 'Import failed.' );
 					}
 				}
 			).fail(
 				function (xhr) {
-					showStatus( '#adc-strains-import-status', 'error', xhr.responseJSON ? .message || 'Request failed.' );
+					showStatus( '#adc-strains-import-status', 'error', xhr.responseJSON?.message || 'Request failed.' );
 				}
 			).always(
 				function () {
@@ -285,14 +285,14 @@
 						if (d.errors && d.errors.length) {
 							msg += ' Errors: ' + d.errors.map( escapeHtml ).join( ', ' );
 						}
-						showStatus( '#adc-edibles-import-status', d.errors ? .length ? 'warning' : 'success', msg );
+						showStatus( '#adc-edibles-import-status', d.errors?.length ? 'warning' : 'success', msg );
 					} else {
 						showStatus( '#adc-edibles-import-status', 'error', resp.message || 'Import failed.' );
 					}
 				}
 			).fail(
 				function (xhr) {
-					showStatus( '#adc-edibles-import-status', 'error', xhr.responseJSON ? .message || 'Request failed.' );
+					showStatus( '#adc-edibles-import-status', 'error', xhr.responseJSON?.message || 'Request failed.' );
 				}
 			).always(
 				function () {
