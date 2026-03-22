@@ -3,7 +3,7 @@
  * Plugin Name: Ambrosia Dosage Calculator
  * Plugin URI: https://ambrosia.church/calculator
  * Description: Psilocybin dosage calculator with strain & edible management, QR codes, and customizable templates.
- * Version: 2.24.5
+ * Version: 2.24.6
  * Author: Church of Ambrosia
  * Author URI: https://ambrosia.church
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'ADC_VERSION', '2.24.5' );
+define( 'ADC_VERSION', '2.24.6' );
 define( 'ADC_DB_VERSION', '2.0.0' );
 define( 'ADC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -140,6 +140,27 @@ class Ambrosia_Dosage_Calculator {
 
 		// Add CSP headers to frontend
 		add_action( 'send_headers', array( $this, 'add_frontend_security_headers' ) );
+
+		// Fix theme font preload missing crossorigin attribute (BUG-003).
+		// Fonts loaded via @font-face use CORS anonymous mode; preload hints
+		// must include crossorigin to match. Without it the browser fires a
+		// credentials-mode-mismatch warning every 60 seconds.
+		add_filter(
+			'wp_resource_hints',
+			function ( $urls, $relation_type ) {
+				if ( 'preload' !== $relation_type ) {
+					return $urls;
+				}
+				foreach ( $urls as &$url ) {
+					if ( is_array( $url ) && isset( $url['as'] ) && 'font' === $url['as'] && ! isset( $url['crossorigin'] ) ) {
+						$url['crossorigin'] = '';
+					}
+				}
+				return $urls;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
@@ -253,6 +274,9 @@ class Ambrosia_Dosage_Calculator {
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			wp_die( 'Unauthorized', 'Unauthorized', array( 'response' => 403 ) );
 		}
+		// Disable the admin bar entirely for the preview iframe (BUG-007 fix).
+		// This prevents the HTML from rendering, not just CSS-hiding it.
+		show_admin_bar( false );
 		$this->render_preview_page();
 		exit;
 	}

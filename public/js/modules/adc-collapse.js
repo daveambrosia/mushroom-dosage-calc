@@ -27,13 +27,24 @@
         return el ? el.textContent.trim() : 'section';
     }
 
+    function getToleranceLabel(days) {
+        var labels = {
+            28: '28+ days (No tolerance)',
+            21: '21 days (3 weeks)',
+            14: '14 days (2 weeks)',
+            7:  '7 days (1 week)',
+            1:  '1 day (yesterday)'
+        };
+        return labels[days] || days + ' days';
+    }
+
     function getCollapseSummary(section) {
         const name = section.dataset.section;
         if (name === 'adjustments') {
-            const tolSel = document.getElementById('adc-tolerance');
-            const sensInp = document.getElementById('adc-sensitivity-input');
-            const tolText = tolSel ? tolSel.options[tolSel.selectedIndex]?.textContent || '' : '';
-            const sensValue = sensInp ? parseInt(sensInp.value) : 100;
+            // Read from state directly to avoid DOM/state mismatch (BUG-005 fix)
+            const days = state.daysSinceLastDose != null ? state.daysSinceLastDose : 28;
+            const tolText = getToleranceLabel(days);
+            const sensValue = state.sensitivity != null ? state.sensitivity : 100;
             let sensLabel = '';
             if (sensValue === 100) {
                 sensLabel = '100% (Normal)';
@@ -47,12 +58,12 @@
             return tolText && sensLabel ? '<span class="adc-adj-line"><strong>Days Since Last Dose:</strong> <span style="white-space:nowrap">' + tolText + '</span></span><hr class="adc-adj-divider"><span class="adc-adj-line"><strong>Personal Sensitivity:</strong> <span style="white-space:nowrap">' + sensLabel + '</span></span>' : '';
         }
         if (name === 'tolerance') {
-            const sel = document.getElementById('adc-tolerance');
-            return sel ? sel.options[sel.selectedIndex]?.textContent || '' : '';
+            const days = state.daysSinceLastDose != null ? state.daysSinceLastDose : 28;
+            return getToleranceLabel(days);
         }
         if (name === 'sensitivity') {
-            const inp = document.getElementById('adc-sensitivity-input');
-            return inp ? inp.value + '%' : '';
+            const val = state.sensitivity != null ? state.sensitivity : 100;
+            return val + '%';
         }
         if (name === 'mushroom-results') {
             const sel = document.getElementById('adc-strain-select');
@@ -93,6 +104,9 @@
         btn.setAttribute('aria-expanded', 'false');
         btn.setAttribute('aria-label', 'Expand ' + getCollapseHeaderLabel(section));
 
+        // Hide collapsed children from assistive tech (BUG-006 fix)
+        setCollapsedAria(section, true);
+
         // No summary for select-only mode — there's no header row to append to
         if (section.dataset.collapseMode !== 'select-only') {
             const headerRow = getCollapseHeaderRow(section);
@@ -120,10 +134,31 @@
         btn.setAttribute('aria-expanded', 'true');
         btn.setAttribute('aria-label', 'Collapse ' + getCollapseHeaderLabel(section));
 
+        // Restore assistive tech visibility (BUG-006 fix)
+        setCollapsedAria(section, false);
+
         if (section.dataset.collapseMode !== 'select-only') {
             const headerRow = getCollapseHeaderRow(section);
             if (headerRow) removeSummary(headerRow);
         }
+    }
+
+    /**
+     * Set aria-hidden on children that are visually hidden when collapsed.
+     * Prevents button titles/text from leaking into the accessibility tree.
+     */
+    function setCollapsedAria(section, hidden) {
+        const headerRow = getCollapseHeaderRow(section);
+        Array.from(section.children).forEach(child => {
+            // Skip the header row, collapse button, and collapse summary
+            if (child === headerRow) return;
+            if (child.classList && (child.classList.contains('adc-collapse-btn') || child.classList.contains('adc-collapse-summary'))) return;
+            if (hidden) {
+                child.setAttribute('aria-hidden', 'true');
+            } else {
+                child.removeAttribute('aria-hidden');
+            }
+        });
     }
 
     function removeSummary(headerRow) {
@@ -144,6 +179,28 @@
         saveCollapseState();
         if (section.dataset.section === 'adjustments') {
             updateTabStops();
+        }
+    }
+
+    /**
+     * Refresh the collapsed summary for the adjustments section.
+     * Called when tolerance or sensitivity changes so the summary stays current
+     * even when the panel is collapsed (BUG-005 fix).
+     */
+    function refreshAdjustmentsSummary() {
+        const section = document.querySelector('[data-section="adjustments"]');
+        if (!section || !section.classList.contains('adc-collapsed')) return;
+        const btn = section.querySelector('.adc-collapse-btn');
+        if (!btn) return;
+        const headerRow = getCollapseHeaderRow(section);
+        if (!headerRow) return;
+        removeSummary(headerRow);
+        const summary = getCollapseSummary(section);
+        if (summary) {
+            const span = document.createElement('span');
+            span.className = 'adc-collapse-summary';
+            span.innerHTML = summary;
+            headerRow.insertAdjacentElement('afterend', span);
         }
     }
 

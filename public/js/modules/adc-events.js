@@ -146,6 +146,7 @@
         state.daysSinceLastDose = parseInt(e.target.value);
         updateToleranceDisplay();
         updateAll();
+        refreshAdjustmentsSummary();
         savePreferences();
     }
 
@@ -155,6 +156,7 @@
         updateAll();
         // F-007: Update aria-valuetext for accessibility
         updateSensitivityAria(state.sensitivity);
+        refreshAdjustmentsSummary();
         savePreferences();
     }
 
@@ -175,6 +177,7 @@
         
         updateAll();
         updateSensitivityAria(v);
+        refreshAdjustmentsSummary();
         savePreferences();
     }
 

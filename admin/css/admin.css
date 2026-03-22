@@ -943,6 +943,21 @@
 	16. MOBILE RESPONSIVE ADMIN TABLES
 	============================================================================ */
 
+/* Tablet: horizontal scroll for wide admin tables (BUG-002 fix) */
+@media screen and (max-width: 782px) and (min-width: 601px) {
+	.adc-admin .wp-list-table {
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* Hide less-critical columns on tablets */
+	.adc-admin .wp-list-table td[data-label="Psilocin"],
+	.adc-admin .wp-list-table th:nth-child(5) {
+		display: none;
+	}
+}
+
 @media screen and (max-width: 600px) {
 	/* Reset table display */
 	.adc-admin .wp-list-table,
@@ -1078,15 +1093,12 @@
 	margin-top: 0;
 }
 
-/* Sticky save bar — always visible at bottom of viewport */
+/* Save bar — static at bottom of form to avoid overlapping content (BUG-001 fix) */
 #adc-submit-bar {
-	position: sticky;
-	bottom: 0;
-	z-index: 100;
 	background: #f0f0f1;
 	border-top: 1px solid #c3c4c7;
 	padding: 10px 24px;
-	box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+	margin-top: 20px;
 }
 #adc-submit-bar .submit {
 	margin: 0;
