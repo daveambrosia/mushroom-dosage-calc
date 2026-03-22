@@ -518,10 +518,10 @@ function cacheElements() {
     }
 
     function updateResultsGridWarning() {
-        const grid = document.querySelector('.adc-results-grid');
-        if (!grid) return;
         const adjusted = state.daysSinceLastDose < 28 || state.sensitivity !== 100;
-        grid.classList.toggle('adc-tolerance-active', adjusted);
+        document.querySelectorAll('.adc-results-grid').forEach(grid => {
+            grid.classList.toggle('adc-tolerance-active', adjusted);
+        });
     }
 
     function updateSensitivityDisplay() {
