@@ -213,7 +213,10 @@ class ADC_Shortcode {
 					<div class="adc-label-row"><label>Adjustments</label></div>
 					
 					<!-- Combined adjustment percentage -->
-					<div class="adc-tolerance-display low" id="adc-tolerance-display">100%</div>
+					<div class="adc-tolerance-row">
+						<div class="adc-tolerance-display low" id="adc-tolerance-display">100%</div>
+						<button type="button" class="adc-btn adc-reset-btn" data-action="reset-adjustments" title="Reset both to defaults">Reset</button>
+					</div>
 					
 					<!-- Days Since Last Dose -->
 					<div class="adc-adjustment-subsection">

@@ -711,4 +711,9 @@
         if (input) { input.value = 100; }
     }
 
+    function resetAdjustments() {
+        resetTolerance();
+        resetSensitivity();
+    }
+
     // All action handlers are now dispatched via data-action delegation (no global exports needed)

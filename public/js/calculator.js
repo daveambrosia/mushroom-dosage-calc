@@ -1641,6 +1641,11 @@ function cacheElements() {
         if (input) { input.value = 100; }
     }
 
+    function resetAdjustments() {
+        resetTolerance();
+        resetSensitivity();
+    }
+
     // All action handlers are now dispatched via data-action delegation (no global exports needed)
 /**
  * Collapsible Sections — Part of calculator.js
@@ -2212,6 +2217,7 @@ function cacheElements() {
                 'reset-data': resetAllData,
                 'reset-tolerance': resetTolerance,
                 'reset-sensitivity': resetSensitivity,
+                'reset-adjustments': resetAdjustments,
                 'submit-strain': submitStrain,
                 'submit-edible': submitEdible,
                 'close-submit-modal': closeSubmitModal,

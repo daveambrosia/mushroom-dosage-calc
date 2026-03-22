@@ -269,6 +269,7 @@
                 'reset-data': resetAllData,
                 'reset-tolerance': resetTolerance,
                 'reset-sensitivity': resetSensitivity,
+                'reset-adjustments': resetAdjustments,
                 'submit-strain': submitStrain,
                 'submit-edible': submitEdible,
                 'close-submit-modal': closeSubmitModal,

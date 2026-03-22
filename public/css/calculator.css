@@ -567,9 +567,21 @@
 		8. TOLERANCE & SENSITIVITY
 		============================================================================ */
 
+	#adc-calculator .adc-tolerance-row {
+		align-items: center;
+		display: flex;
+		gap: var(--adc-space-2);
+		margin-top: var(--adc-space-4);
+	}
+
+	#adc-calculator .adc-tolerance-row .adc-tolerance-display {
+		margin-top: 0;
+	}
+
 	#adc-calculator .adc-tolerance-display {
 		border-radius: var(--adc-radius);
 		box-sizing: border-box;
+		flex: 1;
 		font-family: var(--adc-font-mono);
 		font-size: 1.25rem;
 		font-weight: 700;
