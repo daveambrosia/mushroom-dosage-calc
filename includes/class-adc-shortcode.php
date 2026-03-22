@@ -253,7 +253,7 @@ class ADC_Shortcode {
 						<button type="button" class="adc-btn adc-edit-btn" style="display:none;" data-action="edit-strain">Edit</button>
 						<button type="button" class="adc-btn adc-delete-btn" style="display:none;" data-action="delete-strain">Delete</button>
 					</div>
-					<div class="adc-potency-display" id="adc-strain-potency"></div>
+					<div class="adc-potency-display" id="adc-strain-potency" style="display:none"></div>
 					<?php echo self::compound_inputs( 'strain' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by safe compound_inputs() method. ?>
 				</div>
 				<?php endif; ?>
@@ -270,14 +270,14 @@ class ADC_Shortcode {
 						<button type="button" class="adc-btn adc-edit-btn" style="display:none;" data-action="edit-edible">Edit</button>
 						<button type="button" class="adc-btn adc-delete-btn" style="display:none;" data-action="delete-edible">Delete</button>
 					</div>
-					<div class="adc-edible-info" id="adc-edible-info"></div>
+					<div class="adc-edible-info" id="adc-edible-info" style="display:none"></div>
 					<?php echo self::compound_inputs( 'edible' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by safe compound_inputs() method. ?>
 				</div>
 				<?php endif; ?>
 			</div>
 			
 			<?php if ( $atts['show_mushrooms'] ) : ?>
-			<div class="adc-results-section adc-mushroom-results-section">
+			<div class="adc-results-section adc-mushroom-results-section adc-section-hidden">
 				<div class="adc-results-header">
 					<h2>Recommended Dosages</h2>
 					<div class="adc-results-summary" id="adc-mushroom-summary" style="display:none"></div>
@@ -287,7 +287,7 @@ class ADC_Shortcode {
 			<?php endif; ?>
 			
 			<?php if ( $atts['show_edibles'] ) : ?>
-			<div class="adc-results-section adc-edible-results-section">
+			<div class="adc-results-section adc-edible-results-section adc-section-hidden">
 				<div class="adc-results-header">
 					<h2>Recommended Dosages</h2>
 					<div class="adc-results-summary" id="adc-edible-summary" style="display:none"></div>
@@ -297,7 +297,7 @@ class ADC_Shortcode {
 			<?php endif; ?>
 			
 			<?php if ( $atts['show_quick_converter'] ) : ?>
-			<div class="adc-converter-section adc-box" id="adc-converter-section" data-collapsible data-section="converter">
+			<div class="adc-converter-section adc-box" id="adc-converter-section" data-collapsible data-section="converter" style="display:none">
 				<div class="adc-converter-header">
 					<h3>Quick Converter</h3>
 					<span class="adc-converter-strain" id="adc-converter-strain">Select a strain</span>
