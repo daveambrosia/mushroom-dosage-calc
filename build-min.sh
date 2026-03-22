@@ -13,7 +13,7 @@ echo "=== ADC Minification Build ==="
 
 # PHP lint check (BUG-001 prevention)
 echo "Running PHP syntax check..."
-LINT_ERRORS=$(find "$PLUGIN_DIR" -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; 2>&1 | grep -v "No syntax errors")
+LINT_ERRORS=$(find "$PLUGIN_DIR" -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; 2>&1 | grep -v "No syntax errors" || true)
 if [ -n "$LINT_ERRORS" ]; then
     echo "ERROR: PHP syntax errors found:"
     echo "$LINT_ERRORS"
