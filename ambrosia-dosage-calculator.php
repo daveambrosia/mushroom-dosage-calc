@@ -59,6 +59,22 @@ class Ambrosia_Dosage_Calculator {
 	}
 
 	/**
+	 * Detect REST API requests early (before REST_REQUEST is defined).
+	 *
+	 * @since 2.24.7
+	 * @return bool True if the current request targets the REST API.
+	 */
+	private static function is_rest_request() {
+		if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
+			return false;
+		}
+		$rest_prefix = rest_get_url_prefix();
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only used for prefix comparison.
+		$request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+		return ( false !== strpos( $request_uri, '/' . $rest_prefix . '/' ) );
+	}
+
+	/**
 	 * Load required plugin dependencies.
 	 *
 	 * @since 2.0.0
@@ -79,8 +95,8 @@ class Ambrosia_Dosage_Calculator {
 		// Frontend needs CSS generation only — loads on all requests
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-template-css.php';
 
-		// Google Sheets: only needed in admin, cron, or CLI (activator needs it)
-		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		// Google Sheets: needed in admin, cron, CLI, and REST (routes register globally).
+		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || self::is_rest_request() ) {
 			require_once ADC_PLUGIN_DIR . 'admin/class-adc-google-sheets.php';
 			require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-importer.php';
 			require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-admin-page.php';
@@ -117,12 +133,14 @@ class Ambrosia_Dosage_Calculator {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
-		// Google Sheets: cron schedules, importer init, admin routes & scripts
+		// Google Sheets: cron schedules, importer init, admin routes & scripts.
+		// REST routes must register outside is_admin() because REST requests
+		// are not admin context. The permission_callback enforces access.
+		add_action( 'rest_api_init', array( 'ADC_Sheets_Admin_Page', 'register_routes' ) );
 		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			// phpcs:ignore WordPress.WP.CronInterval.ChangeDetected -- interval value defined in ADC_Sheets_Importer::add_cron_schedules().
 			add_filter( 'cron_schedules', array( 'ADC_Sheets_Importer', 'add_cron_schedules' ) );
 			ADC_Sheets_Importer::init();
-			add_action( 'rest_api_init', array( 'ADC_Sheets_Admin_Page', 'register_routes' ) );
 			add_action( 'admin_enqueue_scripts', array( 'ADC_Sheets_Admin_Page', 'enqueue_scripts' ) );
 		}
 
