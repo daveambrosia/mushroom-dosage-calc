@@ -599,6 +599,15 @@
 		color: #ffffff;
 	}
 
+	/* Adjustments box border when combined multiplier is not 100% */
+	#adc-calculator [data-section="adjustments"].adc-adj-over {
+		border: 3px solid var(--adc-color-high, #e74c3c);
+	}
+
+	#adc-calculator [data-section="adjustments"].adc-adj-under {
+		border: 3px solid var(--adc-color-microdose, #3498db);
+	}
+
 	#adc-calculator .adc-sensitivity-controls {
 		align-items: center;
 		display: flex;

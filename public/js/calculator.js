@@ -502,6 +502,17 @@ function cacheElements() {
         }
         elements.toleranceDisplay.className = 'adc-tolerance-display ' + level;
 
+        // Border on adjustments box: red when over 100%, blue when under
+        const adjSection = document.querySelector('[data-section="adjustments"]');
+        if (adjSection) {
+            adjSection.classList.remove('adc-adj-over', 'adc-adj-under');
+            if (combined > 100) {
+                adjSection.classList.add('adc-adj-over');
+            } else if (combined < 100) {
+                adjSection.classList.add('adc-adj-under');
+            }
+        }
+
         // Toggle red background on results grid when any adjustment is active
         updateResultsGridWarning();
     }
