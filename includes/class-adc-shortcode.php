@@ -280,7 +280,7 @@ class ADC_Shortcode {
 			<div class="adc-results-section adc-mushroom-results-section">
 				<div class="adc-results-header">
 					<h2>Recommended Dosages</h2>
-					<div class="adc-results-summary" id="adc-mushroom-summary"></div>
+					<div class="adc-results-summary" id="adc-mushroom-summary" style="display:none"></div>
 				</div>
 				<div class="adc-results-grid" id="adc-mushroom-results" aria-live="polite"></div>
 			</div>
@@ -290,7 +290,7 @@ class ADC_Shortcode {
 			<div class="adc-results-section adc-edible-results-section">
 				<div class="adc-results-header">
 					<h2>Recommended Dosages</h2>
-					<div class="adc-results-summary" id="adc-edible-summary"></div>
+					<div class="adc-results-summary" id="adc-edible-summary" style="display:none"></div>
 				</div>
 				<div class="adc-results-grid" id="adc-edible-results" aria-live="polite"></div>
 			</div>
