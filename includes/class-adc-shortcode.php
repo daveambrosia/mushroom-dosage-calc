@@ -157,11 +157,11 @@ class ADC_Shortcode {
 			'before'
 		);
 
-		$disclaimer          = $s['disclaimer_text'] ?? 'For educational and spiritual purposes only.';
-		$calculator_title    = $s['calculator_title'] ?? '🍄 Psilocybin Dosage Calculator';
-		$calculator_subtitle = $s['calculator_subtitle'] ?? 'Psilocybin Dosage Calculator: For use with lab-tested mushrooms and edibles. Every mushroom is different; even ones growing side by side can be twice as strong as the other. Lab tests show some can be up to 80 times stronger than others. Strength depends on the strain, the grower, what they\'re grown on, how they\'re dried, and how they\'re stored.';
+		$disclaimer          = wp_unslash( $s['disclaimer_text'] ?? 'For educational and spiritual purposes only.' );
+		$calculator_title    = wp_unslash( $s['calculator_title'] ?? '🍄 Psilocybin Dosage Calculator' );
+		$calculator_subtitle = wp_unslash( $s['calculator_subtitle'] ?? 'Psilocybin Dosage Calculator: For use with lab-tested mushrooms and edibles. Every mushroom is different; even ones growing side by side can be twice as strong as the other. Lab tests show some can be up to 80 times stronger than others. Strength depends on the strain, the grower, what they\'re grown on, how they\'re dried, and how they\'re stored.' );
 		// Safety items: supports both legacy plain-text (one per line) and WYSIWYG HTML
-		$safety_raw = $s['safety_items'] ?? "DO NOT drive or operate heavy machinery\nDO NOT mix with alcohol\nRESEARCH all medications before use\nDO NOT take if you have heart problems";
+		$safety_raw = wp_unslash( $s['safety_items'] ?? "DO NOT drive or operate heavy machinery\nDO NOT mix with alcohol\nRESEARCH all medications before use\nDO NOT take if you have heart problems" );
 		// Detect whether it's HTML (WYSIWYG) or plain text (legacy line-by-line)
 		$safety_is_html = ( strpos( $safety_raw, '<' ) !== false );
 		$safety_html    = $safety_is_html ? $safety_raw : '';
@@ -334,7 +334,7 @@ class ADC_Shortcode {
 					<?php endforeach; ?>
 				</ul>
 				<?php endif; ?>
-				<p class="adc-disclaimer"><?php echo esc_html( $disclaimer ); ?></p>
+				<p class="adc-disclaimer"><?php echo wp_kses_post( $disclaimer ); ?></p>
 				<div class="adc-data-controls">
 					<label>
 						<input type="checkbox" id="adc-storage-consent">

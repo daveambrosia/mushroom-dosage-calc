@@ -1,5 +1,12 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.24.9 — 2026-03-24
+
+### Bug Fixes
+- Fixed `esc_html()` on disclaimer text replaced with `wp_kses_post()` so HTML renders correctly in the front-end calculator
+- Added `wp_unslash()` at read time for all four content settings (`calculator_title`, `calculator_subtitle`, `safety_items`, `disclaimer_text`) in both the shortcode and admin settings page, preventing stored backslash-escapes from rendering as literal characters
+- Added `calculator_title`, `calculator_subtitle`, and `safety_items` to `set_default_options()` so all content defaults are written cleanly to the database on fresh install/activation rather than living only as PHP fallback strings
+
 ## 2.23.0 — 2026-03-21
 
 ### Security

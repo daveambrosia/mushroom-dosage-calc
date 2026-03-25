@@ -410,7 +410,7 @@ endforeach;
 							<th><label for="calculator_title">Calculator Title</label></th>
 							<td>
 								<input type="text" id="calculator_title" name="calculator_title" class="large-text"
-									value="<?php echo esc_attr( $settings['calculator_title'] ?? '🍄 Psilocybin Dosage Calculator' ); ?>">
+									value="<?php echo esc_attr( wp_unslash( $settings['calculator_title'] ?? '🍄 Psilocybin Dosage Calculator' ) ); ?>">
 								<p class="description">The heading shown at the top of the calculator. Emoji welcome.</p>
 							</td>
 						</tr>
@@ -419,7 +419,7 @@ endforeach;
 							<td>
 								<?php
 								wp_editor(
-									$settings['calculator_subtitle'] ?? 'Psilocybin Dosage Calculator: For use with lab-tested mushrooms and edibles. Every mushroom is different; even ones growing side by side can be twice as strong as the other. Lab tests show some can be up to 80 times stronger than others. Strength depends on the strain, the grower, what they\'re grown on, how they\'re dried, and how they\'re stored.',
+									wp_unslash( $settings['calculator_subtitle'] ?? 'Psilocybin Dosage Calculator: For use with lab-tested mushrooms and edibles. Every mushroom is different; even ones growing side by side can be twice as strong as the other. Lab tests show some can be up to 80 times stronger than others. Strength depends on the strain, the grower, what they\'re grown on, how they\'re dried, and how they\'re stored.' ),
 									'calculator_subtitle',
 									array(
 										'textarea_name' => 'calculator_subtitle',
@@ -438,7 +438,7 @@ endforeach;
 								<p class="description">Shown in the Safety Information section of the calculator. Use bold for emphasis.</p>
 								<?php
 								$safety_default = '<ul><li><strong>DO NOT</strong> drive or operate heavy machinery</li><li><strong>DO NOT</strong> mix with alcohol</li><li>RESEARCH all medications before use</li><li><strong>DO NOT</strong> take if you have heart problems</li></ul>';
-								$safety_val     = $settings['safety_items'] ?? '';
+								$safety_val     = wp_unslash( $settings['safety_items'] ?? '' );
 								// Migrate legacy plain-text to HTML on first display
 								if ( ! empty( $safety_val ) && strpos( $safety_val, '<' ) === false ) {
 									$lines      = array_filter( array_map( 'trim', explode( "\n", $safety_val ) ) );
@@ -463,7 +463,7 @@ endforeach;
 							<td>
 								<?php
 								wp_editor(
-									$settings['disclaimer_text'] ?? 'For educational and spiritual purposes only.',
+									wp_unslash( $settings['disclaimer_text'] ?? 'For educational and spiritual purposes only.' ),
 									'disclaimer_text',
 									array(
 										'textarea_name' => 'disclaimer_text',

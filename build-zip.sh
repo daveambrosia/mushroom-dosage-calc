@@ -8,7 +8,7 @@ PLUGIN_FILE="$PLUGIN_DIR/ambrosia-dosage-calculator.php"
 OUTPUT_DIR="/var/www/html/results"
 
 # Get current version from the constant
-CURRENT_VERSION=$(grep "define('ADC_VERSION'" "$PLUGIN_FILE" | sed "s/.*'\([0-9.]*\)'.*/\1/")
+CURRENT_VERSION=$(grep "define.*ADC_VERSION" "$PLUGIN_FILE" | sed "s/.*'\([0-9.]*\)'.*/\1/")
 
 if [ -n "$1" ]; then
     NEW_VERSION="$1"
@@ -38,11 +38,11 @@ echo "PHP syntax: OK"
 sed -i "s/Version: [0-9.]*/Version: $NEW_VERSION/" "$PLUGIN_FILE"
 
 # Update version constant
-sed -i "s/define('ADC_VERSION', '[0-9.]*');/define('ADC_VERSION', '$NEW_VERSION');/" "$PLUGIN_FILE"
+sed -i "s/define( 'ADC_VERSION', '[0-9.]*' );/define( 'ADC_VERSION', '$NEW_VERSION' );/" "$PLUGIN_FILE"
 
 # Verify both updated
 HEADER_VER=$(grep "Version:" "$PLUGIN_FILE" | head -1 | sed 's/.*Version: //' | tr -d ' *')
-CONST_VER=$(grep "define('ADC_VERSION'" "$PLUGIN_FILE" | sed "s/.*'\([0-9.]*\)'.*/\1/")
+CONST_VER=$(grep "define.*ADC_VERSION" "$PLUGIN_FILE" | sed "s/.*'\([0-9.]*\)'.*/\1/")
 
 echo "Header version: $HEADER_VER"
 echo "Constant version: $CONST_VER"
@@ -52,10 +52,32 @@ if [ "$HEADER_VER" != "$CONST_VER" ]; then
     exit 1
 fi
 
-# Create zip
+# Create zip (production files only)
 ZIP_NAME="ambrosia-dosage-calculator-v$NEW_VERSION.zip"
 cd /var/www/html/wordpress/wp-content/plugins
-zip -r "$OUTPUT_DIR/$ZIP_NAME" ambrosia-dosage-calculator -x "*.git*" -x "*.bak" -x "*.backup" -x "*~"
+zip -r "$OUTPUT_DIR/$ZIP_NAME" ambrosia-dosage-calculator \
+    -x "*.git*" \
+    -x "*.bak" \
+    -x "*.backup" \
+    -x "*~" \
+    -x "ambrosia-dosage-calculator/build-min.sh" \
+    -x "ambrosia-dosage-calculator/build-zip.sh" \
+    -x "ambrosia-dosage-calculator/bin/*" \
+    -x "ambrosia-dosage-calculator/tests/*" \
+    -x "ambrosia-dosage-calculator/vendor/*" \
+    -x "ambrosia-dosage-calculator/docs/*" \
+    -x "ambrosia-dosage-calculator/phpcs.xml" \
+    -x "ambrosia-dosage-calculator/phpcs.xml.dist" \
+    -x "ambrosia-dosage-calculator/phpstan.neon" \
+    -x "ambrosia-dosage-calculator/phpunit.xml.dist" \
+    -x "ambrosia-dosage-calculator/.phpunit.result.cache" \
+    -x "ambrosia-dosage-calculator/eslint.config.mjs" \
+    -x "ambrosia-dosage-calculator/.circleci/*" \
+    -x "ambrosia-dosage-calculator/composer.json" \
+    -x "ambrosia-dosage-calculator/composer.lock" \
+    -x "ambrosia-dosage-calculator/README-DEV.md" \
+    -x "ambrosia-dosage-calculator/CHANGELOG.md" \
+    -x "ambrosia-dosage-calculator/public/js/modules/*"
 
 echo ""
 echo "✅ Built: $OUTPUT_DIR/$ZIP_NAME"
