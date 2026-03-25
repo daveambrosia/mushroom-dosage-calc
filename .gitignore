@@ -1,6 +1,10 @@
 # Composer dependencies (install via `composer install`)
 /vendor/
 composer.phar
+composer.lock
+
+# Node
+/node_modules/
 
 # PHPUnit generated files
 .phpunit.result.cache
@@ -14,3 +18,5 @@ composer.phar
 .DS_Store
 .idea/
 *.swp
+*.swo
+*~
