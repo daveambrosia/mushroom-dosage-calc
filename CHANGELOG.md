@@ -1,5 +1,10 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.25.0 — 2026-03-25
+
+### Features
+- GitHub self-updater: the plugin now checks GitHub Releases for new versions and can update itself through the standard WordPress updates screen
+
 ## 2.24.9 — 2026-03-24
 
 ### Bug Fixes
