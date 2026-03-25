@@ -91,6 +91,7 @@ class Ambrosia_Dosage_Calculator {
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-shortcode.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-qr-handler.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-http-cache.php';
+		require_once ADC_PLUGIN_DIR . 'includes/class-adc-github-updater.php';
 
 		// Frontend needs CSS generation only — loads on all requests
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-template-css.php';
@@ -155,6 +156,10 @@ class Ambrosia_Dosage_Calculator {
 
 		// Add settings link
 		add_filter( 'plugin_action_links_' . ADC_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
+
+		// GitHub updater -- check for new releases and enable WP-native updates.
+		$updater = new ADC_GitHub_Updater( ADC_PLUGIN_BASENAME, ADC_VERSION );
+		$updater->init();
 
 		// Add CSP headers to frontend
 		add_action( 'send_headers', array( $this, 'add_frontend_security_headers' ) );
