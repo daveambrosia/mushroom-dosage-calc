@@ -266,6 +266,18 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 			$data             = self::map_row( $row, $column_map, $headers );
 			$data['category'] = $data['category'] ?: $default_category;
 
+			// CSV (like the Google Sheet) stores compound values as mcg per PACKAGE (total).
+			// The DB and calculator JS expect mcg per PIECE. Divide by pieces_per_package here.
+			if ( 'edible' === $type ) {
+				$pieces          = max( 1, intval( $data['pieces_per_package'] ?? 1 ) );
+				$compound_fields = array( 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin' );
+				foreach ( $compound_fields as $field ) {
+					if ( isset( $data[ $field ] ) ) {
+						$data[ $field ] = intval( round( $data[ $field ] / $pieces ) );
+					}
+				}
+			}
+
 			// Calculate total_mg from psilocybin + psilocin if not provided (for edibles)
 			if ( 'edible' === $type && empty( $data['total_mg'] ) ) {
 				$data['total_mg'] = ( isset( $data['psilocybin'] ) ? intval( $data['psilocybin'] ) : 0 )

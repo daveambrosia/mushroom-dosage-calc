@@ -335,6 +335,18 @@ class ADC_Sheets_Importer {
 			}
 		}
 
+		// The Google Sheet stores compound values as mcg per PACKAGE (total for the whole package).
+		// The DB and calculator JS expect mcg per PIECE. Divide by pieces_per_package here.
+		if ( 'edible' === $type ) {
+			$pieces   = max( 1, intval( $data['pieces_per_package'] ?? 1 ) );
+			$compound_fields = array( 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin' );
+			foreach ( $compound_fields as $field ) {
+				if ( isset( $data[ $field ] ) ) {
+					$data[ $field ] = intval( round( $data[ $field ] / $pieces ) );
+				}
+			}
+		}
+
 		// Slugify category/product_type for DB storage
 		if ( ! empty( $data['category'] ) ) {
 			$data['category'] = sanitize_title( $data['category'] );
