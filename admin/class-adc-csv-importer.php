@@ -165,6 +165,7 @@ class ADC_CSV_Importer {
 					</thead>
 					<tbody>
 						<tr><td>Name</td><td>name, product, product name, title</td><td>Yes</td></tr>
+						<tr><td>Psilocybin (mcg/piece)</td><td>psilocybin, psilocybin_mcg, psilo</td><td>Yes</td></tr>
 						<tr><td>Total mg</td><td>total mg, total_mg, mg total</td><td>No (auto-calculated)</td></tr>
 						<tr><td>Pieces</td><td>pieces, pieces per package, count, units</td><td>Yes</td></tr>
 						<tr><td>Brand</td><td>brand, manufacturer, maker</td><td>No</td></tr>

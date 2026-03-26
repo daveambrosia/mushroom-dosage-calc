@@ -1,9 +1,16 @@
 # Changelog — Ambrosia Dosage Calculator
 
-## 2.25.1 — 2026-03-25
+## 2.25.2 — 2026-03-25
 
 ### Bug Fixes
-- Fixed edible dose display showing fractions of the total package instead of number of pieces. Compound values are stored in the database as mcg per package; `format_for_api()` now divides by `pieces_per_package` before sending to the calculator frontend, so a 50,000 mcg chocolate bar with 10 pieces correctly calculates a dose in pieces rather than as a fraction of the whole bar.
+- Fixed admin edibles form: compound fields were labeled "mcg per package" but the database stores and the calculator expects mcg per piece. Updated all labels, headers, and descriptions to "mcg per piece" and fixed the Package Total display (now shows mcg/piece × pieces instead of raw field value). This was causing newly entered edibles with multi-piece packages to show fractional doses instead of correct piece counts.
+- Fixed admin edibles list view: renamed "Psilocybin" column to "mcg/piece" and "mcg/pkg" column to "Pkg Total" (now correctly computed as mcg/piece × pieces).
+- Fixed CSV importer documentation to clarify compound values are mcg per piece.
+
+## 2.25.1 — 2026-03-25
+
+### Reverted
+- Reverted erroneous division in `format_for_api()` that assumed DB values were per-package. The DB stores per-piece values; the real bug was in the admin form labels.
 
 ## 2.25.0 — 2026-03-25
 

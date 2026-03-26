@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'ADC_VERSION', '2.25.1' );
+define( 'ADC_VERSION', '2.25.2' );
 define( 'ADC_DB_VERSION', '2.0.0' );
 define( 'ADC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
