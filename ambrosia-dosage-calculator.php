@@ -3,7 +3,7 @@
  * Plugin Name: Ambrosia Dosage Calculator
  * Plugin URI: https://ambrosia.church/calculator
  * Description: Psilocybin dosage calculator with strain & edible management, QR codes, and customizable templates.
- * Version: 2.25.1
+ * Version: 2.25.2
  * Author: Church of Ambrosia
  * Author URI: https://ambrosia.church
  * License: GPL v2 or later
