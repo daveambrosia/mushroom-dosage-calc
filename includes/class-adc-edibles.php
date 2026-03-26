@@ -475,11 +475,15 @@ class ADC_Edibles {
 	/**
 	 * Format edible for API response
 	 *
+	 * Compound values are stored in the DB as mcg PER PACKAGE. The calculator JS
+	 * expects mcg PER PIECE, so we divide by pieces_per_package here.
+	 *
 	 * @param array $edible Edible row from database.
 	 * @return array Formatted edible data for API.
 	 */
 	public static function format_for_api( $edible ) {
-		// Note: compound values are stored as mcg PER PIECE
+		$pieces = max( 1, intval( $edible['pieces_per_package'] ) );
+
 		return array(
 			'id'               => intval( $edible['id'] ),
 			'shortCode'        => $edible['short_code'],
@@ -487,14 +491,14 @@ class ADC_Edibles {
 			'brand'            => $edible['brand'],
 			'productType'      => $edible['product_type'],
 			'batchNumber'      => $edible['batch_number'],
-			'piecesPerPackage' => intval( $edible['pieces_per_package'] ),
-			// Compound values in mcg per piece
-			'psilocybin'       => intval( $edible['psilocybin'] ),
-			'psilocin'         => intval( $edible['psilocin'] ),
-			'norpsilocin'      => intval( $edible['norpsilocin'] ),
-			'baeocystin'       => intval( $edible['baeocystin'] ),
-			'norbaeocystin'    => intval( $edible['norbaeocystin'] ),
-			'aeruginascin'     => intval( $edible['aeruginascin'] ),
+			'piecesPerPackage' => $pieces,
+			// Compound values in mcg per piece (DB stores mcg per package; divide here)
+			'psilocybin'       => intval( round( intval( $edible['psilocybin'] ) / $pieces ) ),
+			'psilocin'         => intval( round( intval( $edible['psilocin'] ) / $pieces ) ),
+			'norpsilocin'      => intval( round( intval( $edible['norpsilocin'] ) / $pieces ) ),
+			'baeocystin'       => intval( round( intval( $edible['baeocystin'] ) / $pieces ) ),
+			'norbaeocystin'    => intval( round( intval( $edible['norbaeocystin'] ) / $pieces ) ),
+			'aeruginascin'     => intval( round( intval( $edible['aeruginascin'] ) / $pieces ) ),
 			'imageUrl'         => $edible['image_id'] ? wp_get_attachment_url( $edible['image_id'] ) : null,
 		);
 	}

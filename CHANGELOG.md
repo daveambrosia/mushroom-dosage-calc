@@ -1,5 +1,10 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.25.1 — 2026-03-25
+
+### Bug Fixes
+- Fixed edible dose display showing fractions of the total package instead of number of pieces. Compound values are stored in the database as mcg per package; `format_for_api()` now divides by `pieces_per_package` before sending to the calculator frontend, so a 50,000 mcg chocolate bar with 10 pieces correctly calculates a dose in pieces rather than as a fraction of the whole bar.
+
 ## 2.25.0 — 2026-03-25
 
 ### Features
