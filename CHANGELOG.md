@@ -1,5 +1,10 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.25.3 — 2026-03-25
+
+### Bug Fixes
+- Fixed GitHub updater not registering the plugin in WordPress's update system when already up to date. Without a `no_update` entry, WordPress treated the plugin as unchecked and "Check for updates" showed nothing. Now correctly populates `$transient->no_update` when the installed version matches or exceeds the GitHub release.
+
 ## 2.25.2 — 2026-03-25
 
 ### Bug Fixes

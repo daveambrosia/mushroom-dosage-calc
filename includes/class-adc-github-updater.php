@@ -221,6 +221,25 @@ class ADC_GitHub_Updater {
 
 				$transient->response[ $this->plugin_basename ] = $update_obj;
 			}
+		} else {
+			// Tell WordPress the plugin is current. Without this entry in no_update,
+			// WP treats the plugin as unchecked and the update screen shows nothing.
+			$no_update_obj                = new \stdClass();
+			$no_update_obj->id            = $this->plugin_basename;
+			$no_update_obj->slug          = dirname( $this->plugin_basename );
+			$no_update_obj->plugin        = $this->plugin_basename;
+			$no_update_obj->new_version   = $this->current_version;
+			$no_update_obj->url           = sprintf(
+				'https://github.com/%s/%s',
+				$this->github_user,
+				$this->github_repo
+			);
+			$no_update_obj->package       = '';
+			$no_update_obj->tested        = get_bloginfo( 'version' );
+			$no_update_obj->requires_php  = '8.0';
+			$no_update_obj->compatibility = new \stdClass();
+
+			$transient->no_update[ $this->plugin_basename ] = $no_update_obj;
 		}
 
 		return $transient;
