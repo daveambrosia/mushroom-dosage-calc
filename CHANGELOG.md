@@ -1,5 +1,11 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.25.4 — 2026-04-28
+
+### Bug Fixes
+- Fixed cron auto-sync rate limiter blocking edible imports. The strains import called `record_sync_time()` which triggered the 5-second cooldown, causing the immediately-following edibles import to fail with "Rate limited" on every cron run. Batch cron syncs now skip per-type rate limiting so both strains and edibles import in a single run. Manual imports still rate-limited as before.
+- Removed duplicate `record_sync_time()` call inside `import_type()` (already called once in `run_scheduled_sync()` after both types complete).
+
 ## 2.25.3 — 2026-03-25
 
 ### Bug Fixes

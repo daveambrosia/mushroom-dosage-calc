@@ -21,6 +21,9 @@ class ADC_Sheets_Importer {
 	/** WP-Cron hook name */
 	const CRON_HOOK = 'adc_google_sheets_sync';
 
+	/** @var bool True while run_scheduled_sync() is executing a batch; skips per-type rate limiting. */
+	private static $batch_running = false;
+
 	/** Option keys */
 	const OPT_SETTINGS = 'adc_gsheets_settings';
 	const OPT_LAST_LOG = 'adc_gsheets_last_log';
@@ -155,6 +158,7 @@ class ADC_Sheets_Importer {
 	 * Run the scheduled sync (called by WP-Cron).
 	 */
 	public static function run_scheduled_sync() {
+		self::$batch_running = true;
 		$settings = self::get_settings();
 		$log      = array(
 			'time'    => current_time( 'mysql' ),
@@ -181,6 +185,7 @@ class ADC_Sheets_Importer {
 		}
 
 		ADC_Google_Sheets::record_sync_time();
+		self::$batch_running = false;
 		update_option( self::OPT_LAST_LOG, $log );
 
 		// Notify admin if enabled
@@ -211,11 +216,13 @@ class ADC_Sheets_Importer {
 			'success'     => false,
 		);
 
-		// Rate limit check
-		$rate_remaining = ADC_Google_Sheets::is_rate_limited();
-		if ( false !== $rate_remaining ) {
-			$result['errors'][] = 'Rate limited. Please wait ' . $rate_remaining . ' seconds.';
-			return $result;
+		// Rate limit check (skipped during batch cron sync to avoid strains blocking edibles)
+		if ( ! self::$batch_running ) {
+			$rate_remaining = ADC_Google_Sheets::is_rate_limited();
+			if ( false !== $rate_remaining ) {
+				$result['errors'][] = 'Rate limited. Please wait ' . $rate_remaining . ' seconds.';
+				return $result;
+			}
 		}
 
 		// Fetch data
@@ -267,7 +274,6 @@ class ADC_Sheets_Importer {
 		}
 
 		$result['success'] = true;
-		ADC_Google_Sheets::record_sync_time();
 
 		return $result;
 	}
