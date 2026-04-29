@@ -1,5 +1,17 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.26.0 — 2026-04-28
+
+### Added
+- New `[adc_maker_qr]` shortcode: dedicated page where edible and powdered-mushroom makers can generate QR codes from their own product data, save them in browser localStorage, and optionally submit to the church.
+- Generate-QR button inside the existing Add Custom Strain and Add Custom Edible modals — one-shot QR + download without leaving the modal.
+- `public/js/modules/adc-maker-qr.js` shared module: legacy URL builder, localStorage list management, validation, fetch-based submit, QR canvas rendering.
+- Vitest + jsdom setup with unit tests for the URL builder, local-list helpers, validation, and submit flow.
+
+### Notes
+- No DB migrations, no new REST endpoints — submission reuses `/adc/v1/submit` with its existing honeypot and rate limiting.
+- Auto-submit-on-scan behavior of `auto_submit_unknown_qr` is unchanged; maker QRs may auto-submit on first scan if that setting is on.
+
 ## 2.25.4 — 2026-04-28
 
 ### Bug Fixes
