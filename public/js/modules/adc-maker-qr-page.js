@@ -11,7 +11,6 @@
 
 	var STRAIN_FIELDS = [
 		{ key: 'name',          label: 'Product name',  required: true,  type: 'text'   },
-		{ key: 'makerName',     label: 'Maker name',    required: true,  type: 'text'   },
 		{ key: 'brand',         label: 'Brand',         required: false, type: 'text'   },
 		{ key: 'batch',         label: 'Batch number',  required: false, type: 'text'   },
 		{ key: 'lab',           label: 'Testing lab',   required: false, type: 'text'   },
@@ -25,7 +24,6 @@
 
 	var EDIBLE_FIELDS = [
 		{ key: 'name',               label: 'Product name',         required: true,  type: 'text'   },
-		{ key: 'makerName',          label: 'Maker name',           required: true,  type: 'text'   },
 		{ key: 'brand',              label: 'Brand',                required: false, type: 'text'   },
 		{ key: 'batch',              label: 'Batch number',         required: false, type: 'text'   },
 		{ key: 'lab',                label: 'Testing lab',          required: false, type: 'text'   },
@@ -134,7 +132,7 @@
 		function summaryFor(record) {
 			var f = record.fields || {};
 			var parts = [f.name || '(no name)'];
-			if (f.makerName) { parts.push('by ' + f.makerName); }
+			if (f.brand) { parts.push(f.brand); }
 			parts.push(record.type === 'edible' ? 'edible' : 'strain');
 			return parts.join(' · ');
 		}
@@ -239,7 +237,7 @@
 				return;
 			}
 
-			var result = MakerQR.validate(type, fields, { requireMaker: true });
+			var result = MakerQR.validate(type, fields);
 			if (!result.valid) {
 				showFieldErrors(result.errors);
 				setFeedback('Please correct the highlighted fields.', 'error');
@@ -247,7 +245,7 @@
 			}
 			clearFieldErrors();
 
-			var url = MakerQR.buildLegacyUrl(type, fields, cfg.calculatorUrl || '/');
+			var url = MakerQR.buildCompactUrl(type, fields, cfg.calculatorUrl || '/');
 			showPreview(url).then(function () {
 				try {
 					currentRecordId = MakerQR.saveToLocalList({ type: type, fields: fields, url: url });
@@ -290,7 +288,6 @@
 			var record = {
 				type: type,
 				fields: fields,
-				makerName: fields.makerName,
 				makerEmail: email,
 				lab: fields.lab || '',
 				website: ''

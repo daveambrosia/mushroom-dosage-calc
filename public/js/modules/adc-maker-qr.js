@@ -23,6 +23,31 @@
 		'baeocystin', 'norbaeocystin', 'aeruginascin'
 	];
 
+	// Compact URL field abbreviations. Values use `.` to separate key from
+	// value and `-` to separate fields, so dashes/dots inside string values
+	// must be escaped past encodeURIComponent (which leaves both untouched).
+	var COMPACT_KEYS = {
+		type:               't',
+		name:               'n',
+		psilocybin:         'pb',
+		psilocin:           'pc',
+		norpsilocin:        'npc',
+		baeocystin:         'b',
+		norbaeocystin:      'nb',
+		aeruginascin:       'a',
+		total_mg:           'tm',
+		pieces_per_package: 'pp',
+		brand:              'br',
+		batch:              'bn',
+		lab:                'lb'
+	};
+
+	function encodeCompactValue(value) {
+		return encodeURIComponent(String(value))
+			.replace(/-/g, '%2D')
+			.replace(/\./g, '%2E');
+	}
+
 	/**
 	 * Build a legacy URL for a strain or edible record.
 	 *
@@ -57,6 +82,39 @@
 		}
 
 		throw new Error('Unknown maker QR type: ' + type);
+	}
+
+	/**
+	 * Build a compact URL for a strain or edible record.
+	 *
+	 * Format: `?d=t.s-n.Name-pb.10000-pc.500-br.Brand-bn.Batch-lb.Lab`
+	 * Strain compound values are mcg/g; edible compound values are mcg/piece
+	 * and the URL also carries `tm` (total mg) and `pp` (pieces) for context.
+	 */
+	function buildCompactUrl(type, fields, baseUrl) {
+		if (type !== 'strain' && type !== 'edible') {
+			throw new Error('Unknown maker QR type: ' + type);
+		}
+		var parts = [COMPACT_KEYS.type + '.' + (type === 'edible' ? 'e' : 's')];
+		if (fields.name) {
+			parts.push(COMPACT_KEYS.name + '.' + encodeCompactValue(fields.name));
+		}
+		if (type === 'edible') {
+			var totalMg = Number(fields.total_mg || 0);
+			var pieces  = Number(fields.pieces_per_package || fields.pieces || 0);
+			if (totalMg > 0) { parts.push(COMPACT_KEYS.total_mg + '.' + totalMg); }
+			if (pieces > 0)  { parts.push(COMPACT_KEYS.pieces_per_package + '.' + pieces); }
+		}
+		STRAIN_COMPOUNDS.forEach(function (key) {
+			var v = Number(fields[key] || 0);
+			if (v > 0) { parts.push(COMPACT_KEYS[key] + '.' + v); }
+		});
+		['brand', 'batch', 'lab'].forEach(function (key) {
+			if (fields[key]) {
+				parts.push(COMPACT_KEYS[key] + '.' + encodeCompactValue(fields[key]));
+			}
+		});
+		return baseUrl + '?d=' + parts.join('-');
 	}
 
 	var STORAGE_KEY = 'adc_maker_qr_v1';
@@ -146,23 +204,13 @@
 	/**
 	 * Validate maker form input.
 	 */
-	function validate(type, fields, opts) {
-		opts = opts || {};
+	function validate(type, fields) {
 		var errors = {};
 		var name = String(fields.name || '').trim();
 		if (!name) {
 			errors.name = 'Product name is required.';
 		} else if (name.length > NAME_MAX) {
 			errors.name = 'Name must be 100 characters or fewer.';
-		}
-
-		if (opts.requireMaker) {
-			var maker = String(fields.makerName || '').trim();
-			if (!maker) {
-				errors.makerName = 'Maker name is required.';
-			} else if (maker.length > NAME_MAX) {
-				errors.makerName = 'Maker name must be 100 characters or fewer.';
-			}
 		}
 
 		if (fields.brand && String(fields.brand).length > NAME_MAX) {
@@ -285,6 +333,7 @@
 
 	return {
 		buildLegacyUrl: buildLegacyUrl,
+		buildCompactUrl: buildCompactUrl,
 		STRAIN_COMPOUNDS: STRAIN_COMPOUNDS,
 		loadLocalList: loadLocalList,
 		saveToLocalList: saveToLocalList,

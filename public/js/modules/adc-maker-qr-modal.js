@@ -16,6 +16,9 @@
 	// use `adc-modal-edible-{compound}`.
 	var STRAIN_FIELDS = {
 		name:          'adc-modal-strain-name',
+		brand:         'adc-modal-strain-brand',
+		batch:         'adc-modal-strain-batch',
+		lab:           'adc-modal-strain-lab',
 		psilocybin:    'adc-modal-psilocybin',
 		psilocin:      'adc-modal-psilocin',
 		norpsilocin:   'adc-modal-norpsilocin',
@@ -30,6 +33,8 @@
 	var EDIBLE_FIELDS = {
 		name:               'adc-modal-edible-name',
 		brand:              'adc-modal-edible-brand',
+		batch:              'adc-modal-edible-batch',
+		lab:                'adc-modal-edible-lab',
 		pieces_per_package: 'adc-modal-edible-pieces',
 		psilocybin:         'adc-modal-edible-psilocybin',
 		psilocin:           'adc-modal-edible-psilocin',
@@ -38,6 +43,8 @@
 		norbaeocystin:      'adc-modal-edible-norbaeocystin',
 		aeruginascin:       'adc-modal-edible-aeruginascin'
 	};
+
+	var EDIBLE_COMPOUNDS = ['psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin'];
 
 	function readFields(idMap, type) {
 		var out = {};
@@ -51,7 +58,13 @@
 			}
 		});
 		if (type === 'edible') {
+			// Modal collects total mcg per package per compound. Compact URL
+			// stores compounds as mcg/piece, plus total_mg (mg) for context.
+			var pieces = Number(out.pieces_per_package) || 1;
 			out.total_mg = (Number(out.psilocybin) || 0) / 1000;
+			EDIBLE_COMPOUNDS.forEach(function (k) {
+				out[k] = Math.round((Number(out[k]) || 0) / pieces);
+			});
 		}
 		return out;
 	}
@@ -69,12 +82,12 @@
 
 		btn.addEventListener('click', function () {
 			var fields = readFields(idMap, type);
-			var v = MakerQR.validate(type, fields, { requireMaker: false });
+			var v = MakerQR.validate(type, fields);
 			if (!v.valid) {
 				window.alert(Object.keys(v.errors).map(function (k) { return v.errors[k]; }).join('\n'));
 				return;
 			}
-			var url = MakerQR.buildLegacyUrl(type, fields, cfg.calculatorUrl || '/');
+			var url = MakerQR.buildCompactUrl(type, fields, cfg.calculatorUrl || '/');
 			urlInput.value = url;
 			panel.hidden = false;
 			MakerQR.renderQR(canvas, url, 256).catch(function (err) {

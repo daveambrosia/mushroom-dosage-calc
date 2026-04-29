@@ -1449,6 +1449,21 @@ function cacheElements() {
         const type = params.get('type') || params.get('t');
         if (code && (type === 'strain' || type === 'm')) { state.strainId = code; state.activeTab = 'mushrooms'; }
         else if (code && (type === 'edible' || type === 'e')) { state.edibleId = code; state.activeTab = 'edibles'; }
+        // Read 'd' from raw query string so escaped %2D / %2E inside values
+        // survive the parser's split on '-' / '.'. URLSearchParams.get()
+        // would decode them back to literal separators.
+        const compact = (window.location.search.match(/[?&]d=([^&]*)/) || [])[1] || null;
+        if (compact) {
+            const parsed = parseCompactData(compact);
+            if (parsed && parsed.type === 'edible') {
+                const edible = compactToEdible(parsed);
+                if (edible) addScannedEdible(edible);
+            } else if (parsed) {
+                const strain = compactToStrain(parsed);
+                if (strain) addScannedStrain(strain);
+            }
+            return;
+        }
         const data = params.get('data');
         if (data) {
             const parsed = parseLegacyData(data);
@@ -1458,6 +1473,66 @@ function cacheElements() {
             const edible = parseEdibleLegacyParams(params);
             if (edible) addScannedEdible(edible);
         }
+    }
+
+    const COMPACT_TO_KEY = {
+        n: 'name', t: 'type',
+        pb: 'psilocybin', pc: 'psilocin', npc: 'norpsilocin',
+        b: 'baeocystin', nb: 'norbaeocystin', a: 'aeruginascin',
+        tm: 'total_mg', pp: 'pieces',
+        br: 'brand', bn: 'batch', lb: 'lab'
+    };
+
+    function parseCompactData(d) {
+        const out = {};
+        d.split('-').forEach(part => {
+            const dot = part.indexOf('.');
+            if (dot < 0) return;
+            const k = part.slice(0, dot);
+            const raw = part.slice(dot + 1);
+            const key = COMPACT_TO_KEY[k];
+            if (!key) return;
+            try { out[key] = decodeURIComponent(raw); } catch (e) { out[key] = raw; }
+        });
+        if (out.type === 's') out.type = 'strain';
+        else if (out.type === 'e') out.type = 'edible';
+        return Object.keys(out).length ? out : null;
+    }
+
+    function compactToStrain(p) {
+        const num = (k) => parseInt(p[k] || '0', 10) || 0;
+        const result = {
+            name: p.name || 'Scanned Strain',
+            psilocybin: num('psilocybin'),
+            psilocin: num('psilocin'),
+            norpsilocin: num('norpsilocin'),
+            baeocystin: num('baeocystin'),
+            norbaeocystin: num('norbaeocystin'),
+            aeruginascin: num('aeruginascin'),
+            brand: p.brand || '',
+            batchNumber: p.batch || '',
+            lab: p.lab || ''
+        };
+        return (result.psilocybin > 0 || result.psilocin > 0) ? result : null;
+    }
+
+    function compactToEdible(p) {
+        const num = (k) => parseInt(p[k] || '0', 10) || 0;
+        const pieces = num('pieces');
+        if (!p.name || pieces <= 0) return null;
+        return {
+            name: p.name,
+            brand: p.brand || '',
+            psilocybin: num('psilocybin'),
+            psilocin: num('psilocin'),
+            norpsilocin: num('norpsilocin'),
+            baeocystin: num('baeocystin'),
+            norbaeocystin: num('norbaeocystin'),
+            aeruginascin: num('aeruginascin'),
+            piecesPerPackage: pieces,
+            batchNumber: p.batch || '',
+            lab: p.lab || ''
+        };
     }
 
     function parseLegacyData(dataString) {

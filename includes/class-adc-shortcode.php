@@ -431,6 +431,18 @@ class ADC_Shortcode {
                 <label for="adc-modal-strain-name">Strain Name</label>
                 <input type="text" id="adc-modal-strain-name" placeholder="e.g., My Golden Teacher">
             </div>
+            <div class="adc-modal-field">
+                <label for="adc-modal-strain-brand">Brand (optional)</label>
+                <input type="text" id="adc-modal-strain-brand" placeholder="e.g., Sunshine Mycology">
+            </div>
+            <div class="adc-modal-field">
+                <label for="adc-modal-strain-batch">Batch number (optional)</label>
+                <input type="text" id="adc-modal-strain-batch" placeholder="e.g., B-2026-04">
+            </div>
+            <div class="adc-modal-field">
+                <label for="adc-modal-strain-lab">Testing lab (optional)</label>
+                <input type="text" id="adc-modal-strain-lab" placeholder="e.g., Caligreen Labs">
+            </div>
             <p class="adc-modal-hint">Enter mcg per gram:</p>
             <div class="adc-modal-compounds">{$fields}</div>
             <div class="adc-modal-qr-panel" data-adc-modal-qr-panel="strain" hidden>
@@ -482,6 +494,14 @@ HTML;
             <div class="adc-modal-field">
                 <label for="adc-modal-edible-brand">Brand (optional)</label>
                 <input type="text" id="adc-modal-edible-brand" placeholder="e.g., Cosmic Confections">
+            </div>
+            <div class="adc-modal-field">
+                <label for="adc-modal-edible-batch">Batch number (optional)</label>
+                <input type="text" id="adc-modal-edible-batch" placeholder="e.g., B-2026-04">
+            </div>
+            <div class="adc-modal-field">
+                <label for="adc-modal-edible-lab">Testing lab (optional)</label>
+                <input type="text" id="adc-modal-edible-lab" placeholder="e.g., Caligreen Labs">
             </div>
             <div class="adc-modal-field">
                 <label for="adc-modal-edible-pieces">Pieces per Package</label>
