@@ -1454,6 +1454,10 @@ function cacheElements() {
             const parsed = parseLegacyData(data);
             if (parsed) addScannedStrain(parsed);
         }
+        if (!code && type === 'edible' && params.get('total_mg')) {
+            const edible = parseEdibleLegacyParams(params);
+            if (edible) addScannedEdible(edible);
+        }
     }
 
     function parseLegacyData(dataString) {
@@ -1470,6 +1474,26 @@ function cacheElements() {
         return (result.psilocybin > 0 || result.psilocin > 0) ? result : null;
     }
 
+    // 'pname' first; 'name' fallback for pre-2.26.0 codes (post-slug query var collision).
+    function parseEdibleLegacyParams(params) {
+        const name = (params.get('pname') || params.get('name') || '').trim();
+        const totalMg = parseInt(params.get('total_mg') || '0', 10) || 0;
+        const pieces = parseInt(params.get('pieces') || params.get('pieces_per_package') || '0', 10) || 0;
+        if (!name || totalMg <= 0 || pieces <= 0) return null;
+        return {
+            name: name,
+            brand: (params.get('brand') || '').trim(),
+            psilocybin: Math.round((totalMg * 1000) / pieces),
+            psilocin: 0,
+            norpsilocin: 0,
+            baeocystin: 0,
+            norbaeocystin: 0,
+            aeruginascin: 0,
+            piecesPerPackage: pieces,
+            batchNumber: (params.get('batch') || '').trim()
+        };
+    }
+
     function addScannedStrain(strainData) {
         const id = 'scan-' + Date.now();
         strainData.scannedAt = Date.now();
@@ -1478,6 +1502,19 @@ function cacheElements() {
         state.strainId = id;
         populateStrainSelect();
         window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
+    }
+
+    function addScannedEdible(edibleData) {
+        const id = 'scan-' + Date.now();
+        edibleData.scannedAt = Date.now();
+        state.scannedEdibles[id] = edibleData;
+        saveToStorage(STORAGE_KEYS.scannedEdibles, state.scannedEdibles);
+        state.edibleId = id;
+        state.activeTab = 'edibles';
+        populateEdibleSelect();
+        // Preserve '#edibles' hash so init's getTabFromUrl picks up the right tab
+        // after we strip the query params.
+        window.history.replaceState({}, document.title, window.location.origin + window.location.pathname + '#edibles');
     }
 
     // ============================================================================
