@@ -433,10 +433,20 @@ class ADC_Shortcode {
             </div>
             <p class="adc-modal-hint">Enter mcg per gram:</p>
             <div class="adc-modal-compounds">{$fields}</div>
+            <div class="adc-modal-qr-panel" data-adc-modal-qr-panel="strain" hidden>
+                <canvas data-adc-modal-qr-canvas></canvas>
+                <label>
+                    URL
+                    <input type="text" data-adc-modal-qr-url readonly>
+                </label>
+                <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-qr-download>Download PNG</button>
+                <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-qr-close>Close</button>
+            </div>
         </div>
         <div class="adc-modal-footer">
             <button type="button" class="adc-btn adc-btn-secondary" data-action="close-strain-modal">Cancel</button>
             <button type="button" class="adc-btn adc-btn-secondary" data-action="submit-strain" title="Submit this strain for review">Submit</button>
+            <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-generate-qr="strain">Generate QR</button>
             <button type="button" class="adc-btn adc-btn-primary" data-action="save-strain">Save</button>
         </div>
     </div>
@@ -479,11 +489,20 @@ HTML;
             </div>
             <p class="adc-modal-hint">Enter total mcg for the package:</p>
             <div class="adc-modal-compounds">{$fields}</div>
-
+            <div class="adc-modal-qr-panel" data-adc-modal-qr-panel="edible" hidden>
+                <canvas data-adc-modal-qr-canvas></canvas>
+                <label>
+                    URL
+                    <input type="text" data-adc-modal-qr-url readonly>
+                </label>
+                <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-qr-download>Download PNG</button>
+                <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-qr-close>Close</button>
+            </div>
         </div>
         <div class="adc-modal-footer">
             <button type="button" class="adc-btn adc-btn-secondary" data-action="close-edible-modal">Cancel</button>
             <button type="button" class="adc-btn adc-btn-secondary" data-action="submit-edible" title="Submit this edible for review">Submit</button>
+            <button type="button" class="adc-btn adc-btn-secondary" data-adc-modal-generate-qr="edible">Generate QR</button>
             <button type="button" class="adc-btn adc-btn-primary" data-action="save-edible">Save</button>
         </div>
     </div>
