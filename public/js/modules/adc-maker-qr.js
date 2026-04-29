@@ -249,6 +249,36 @@
 		});
 	}
 
+	/**
+	 * Render a URL into a <canvas> as a QR code.
+	 */
+	function renderQR(canvasEl, url, sizePx, winRef) {
+		var w = getWindow(winRef);
+		return new Promise(function (resolve, reject) {
+			if (!w || typeof w.QRCode === 'undefined' || !w.QRCode.toCanvas) {
+				reject(new Error('QRCode library not loaded.'));
+				return;
+			}
+			w.QRCode.toCanvas(canvasEl, url, { width: sizePx || 256 }, function (err) {
+				if (err) { reject(err); } else { resolve(); }
+			});
+		});
+	}
+
+	/**
+	 * Trigger a PNG download of a canvas element.
+	 */
+	function downloadCanvasPng(canvasEl, filename) {
+		var doc = (typeof document !== 'undefined') ? document : null;
+		if (!doc) { return; }
+		var link = doc.createElement('a');
+		link.download = filename || 'qr-code.png';
+		link.href = canvasEl.toDataURL('image/png');
+		doc.body.appendChild(link);
+		link.click();
+		doc.body.removeChild(link);
+	}
+
 	return {
 		buildLegacyUrl: buildLegacyUrl,
 		STRAIN_COMPOUNDS: STRAIN_COMPOUNDS,
@@ -257,6 +287,8 @@
 		deleteFromLocalList: deleteFromLocalList,
 		markAsSubmitted: markAsSubmitted,
 		validate: validate,
-		submitToChurch: submitToChurch
+		submitToChurch: submitToChurch,
+		renderQR: renderQR,
+		downloadCanvasPng: downloadCanvasPng
 	};
 });
