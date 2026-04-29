@@ -6,7 +6,9 @@
  */
 (function (factory) {
 	var api = factory();
+	// eslint-disable-next-line no-undef -- CommonJS export for Node test runner; gated by typeof check.
 	if (typeof module === 'object' && module.exports) {
+		// eslint-disable-next-line no-undef
 		module.exports = api;
 	}
 	if (typeof window !== 'undefined') {
