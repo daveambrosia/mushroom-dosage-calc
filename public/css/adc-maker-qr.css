@@ -1,0 +1,138 @@
+/* Ambrosia Dosage Calculator — Maker QR page styling */
+
+.adc-maker-qr {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 1.5rem;
+	font-family: var(--adc-font, system-ui, sans-serif);
+}
+
+.adc-maker-qr__header h2 { margin-top: 0; }
+.adc-maker-qr__intro { color: var(--adc-muted, #666); }
+
+.adc-maker-qr__type {
+	display: flex;
+	gap: 1rem;
+	border: 1px solid var(--adc-border, #ccc);
+	padding: 0.75rem 1rem;
+	margin: 1rem 0;
+	border-radius: 6px;
+}
+.adc-maker-qr__type label { display: flex; align-items: center; gap: 0.4rem; }
+
+.adc-maker-qr__fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0.75rem 1rem;
+	margin: 1rem 0;
+}
+.adc-maker-qr__field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+.adc-maker-qr__field-label { font-weight: 600; font-size: 0.9rem; }
+.adc-maker-qr__field input {
+	padding: 0.4rem 0.6rem;
+	border: 1px solid var(--adc-border, #ccc);
+	border-radius: 4px;
+	font: inherit;
+}
+.adc-maker-qr__field-error {
+	color: #b00020;
+	font-size: 0.8rem;
+	min-height: 1em;
+}
+
+.adc-maker-qr__actions {
+	display: flex;
+	gap: 0.5rem;
+	margin: 1rem 0;
+}
+.adc-maker-qr__feedback {
+	margin: 0.5rem 0;
+	padding: 0.5rem 0.75rem;
+	border-radius: 4px;
+	min-height: 1.5em;
+}
+.adc-maker-qr__feedback--success { background: #e6f5ea; color: #155724; }
+.adc-maker-qr__feedback--error   { background: #fcebec; color: #721c24; }
+.adc-maker-qr__feedback--info    { background: #eef4ff; color: #1d3557; }
+
+.adc-maker-qr__preview {
+	border-top: 1px solid var(--adc-border, #ddd);
+	padding-top: 1rem;
+	margin-top: 1.5rem;
+}
+.adc-maker-qr__preview canvas {
+	background: #fff;
+	border: 1px solid var(--adc-border, #ddd);
+	padding: 8px;
+	max-width: 100%;
+	height: auto;
+}
+.adc-maker-qr__url {
+	display: flex;
+	gap: 0.5rem;
+	align-items: end;
+	margin-top: 0.75rem;
+}
+.adc-maker-qr__url label { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+.adc-maker-qr__url input { padding: 0.3rem 0.5rem; }
+
+.adc-maker-qr__saved {
+	border-top: 1px solid var(--adc-border, #ddd);
+	padding-top: 1rem;
+	margin-top: 1.5rem;
+}
+.adc-maker-qr__list { list-style: none; padding: 0; margin: 0; }
+.adc-maker-qr__saved-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--adc-border, #eee);
+	border-radius: 4px;
+	margin-bottom: 0.4rem;
+}
+.adc-maker-qr__saved-title { flex: 1 1 220px; font-weight: 600; }
+.adc-maker-qr__badge {
+	padding: 0.1rem 0.5rem;
+	font-size: 0.8rem;
+	border-radius: 999px;
+}
+.adc-maker-qr__badge--local     { background: #f0f0f0; color: #444; }
+.adc-maker-qr__badge--submitted { background: #def5e3; color: #1f6932; }
+
+/* Inline QR panel inside Add Custom Strain/Edible modals. */
+.adc-modal-qr-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: flex-start;
+	margin-top: 0.75rem;
+	padding: 0.75rem;
+	border: 1px dashed var(--adc-border, #ccc);
+	border-radius: 6px;
+	background: #fafafa;
+}
+.adc-modal-qr-panel canvas {
+	background: #fff;
+	border: 1px solid var(--adc-border, #ddd);
+	padding: 6px;
+	max-width: 100%;
+	height: auto;
+}
+.adc-modal-qr-panel label {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	width: 100%;
+	font-size: 0.85rem;
+}
+.adc-modal-qr-panel input[type="text"] {
+	padding: 0.3rem 0.5rem;
+	font-family: monospace;
+	font-size: 0.8rem;
+}
