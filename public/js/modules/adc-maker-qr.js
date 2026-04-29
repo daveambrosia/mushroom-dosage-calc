@@ -133,12 +133,130 @@
 		writeStore(store, winRef);
 	}
 
+	var STRAIN_MAX = 50000;     // mcg per gram
+	var EDIBLE_MAX = 500000;    // mcg per piece
+	var PIECES_MAX = 500;
+	var NAME_MAX   = 100;
+	var BATCH_MAX  = 50;
+
+	/**
+	 * Validate maker form input.
+	 */
+	function validate(type, fields, opts) {
+		opts = opts || {};
+		var errors = {};
+		var name = String(fields.name || '').trim();
+		if (!name) {
+			errors.name = 'Product name is required.';
+		} else if (name.length > NAME_MAX) {
+			errors.name = 'Name must be 100 characters or fewer.';
+		}
+
+		if (opts.requireMaker) {
+			var maker = String(fields.makerName || '').trim();
+			if (!maker) {
+				errors.makerName = 'Maker name is required.';
+			} else if (maker.length > NAME_MAX) {
+				errors.makerName = 'Maker name must be 100 characters or fewer.';
+			}
+		}
+
+		if (fields.brand && String(fields.brand).length > NAME_MAX) {
+			errors.brand = 'Brand must be 100 characters or fewer.';
+		}
+		if (fields.batch && String(fields.batch).length > BATCH_MAX) {
+			errors.batch = 'Batch must be 50 characters or fewer.';
+		}
+		if (fields.lab && String(fields.lab).length > NAME_MAX) {
+			errors.lab = 'Lab must be 100 characters or fewer.';
+		}
+
+		var psilocybin = Number(fields.psilocybin || 0);
+		if (!(psilocybin > 0)) {
+			errors.psilocybin = 'Psilocybin must be greater than 0.';
+		}
+
+		if (type === 'strain') {
+			STRAIN_COMPOUNDS.forEach(function (key) {
+				var v = Number(fields[key] || 0);
+				if (v < 0 || v > STRAIN_MAX) {
+					errors[key] = key + ' must be 0–' + STRAIN_MAX + ' mcg/g.';
+				}
+			});
+		} else if (type === 'edible') {
+			STRAIN_COMPOUNDS.forEach(function (key) {
+				var v = Number(fields[key] || 0);
+				if (v < 0 || v > EDIBLE_MAX) {
+					errors[key] = key + ' must be 0–' + EDIBLE_MAX + ' mcg/piece.';
+				}
+			});
+			var pieces = Number(fields.pieces_per_package || fields.pieces || 0);
+			if (!(pieces >= 1 && pieces <= PIECES_MAX)) {
+				errors.pieces_per_package = 'Pieces per package must be 1–' + PIECES_MAX + '.';
+			}
+			var totalMg = Number(fields.total_mg || 0);
+			if (!(totalMg > 0)) {
+				errors.total_mg = 'Total mg must be greater than 0.';
+			}
+		} else {
+			errors.type = 'Unknown type.';
+		}
+
+		return {
+			valid: Object.keys(errors).length === 0,
+			errors: errors
+		};
+	}
+
+	/**
+	 * Submit a record to the church via /adc/v1/submit.
+	 */
+	function submitToChurch(record, winRef) {
+		var w = getWindow(winRef);
+		if (!w) {
+			return Promise.resolve({ success: false, error: 'no_window' });
+		}
+		var cfg = w.adcData || {};
+		var url = (cfg.restUrl || '/wp-json/adc/v1/') + 'submit';
+		var payload = {
+			type: record.type,
+			data: record.fields || {},
+			name: record.makerName || '',
+			email: record.makerEmail || '',
+			notes: record.notes || '',
+			lab: record.lab || '',
+			website: record.website || ''
+		};
+		return w.fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-WP-Nonce': cfg.nonce || ''
+			},
+			body: JSON.stringify(payload)
+		}).then(function (res) {
+			if (res.ok) {
+				return res.json().then(function (j) {
+					return { success: true, id: j.id };
+				});
+			}
+			if (res.status === 429) { return { success: false, error: 'rate_limited' }; }
+			if (res.status === 413) { return { success: false, error: 'payload_too_large' }; }
+			if (res.status === 400) { return { success: false, error: 'spam_detected' }; }
+			return { success: false, error: 'server_error' };
+		}).catch(function () {
+			return { success: false, error: 'network_error' };
+		});
+	}
+
 	return {
 		buildLegacyUrl: buildLegacyUrl,
 		STRAIN_COMPOUNDS: STRAIN_COMPOUNDS,
 		loadLocalList: loadLocalList,
 		saveToLocalList: saveToLocalList,
 		deleteFromLocalList: deleteFromLocalList,
-		markAsSubmitted: markAsSubmitted
+		markAsSubmitted: markAsSubmitted,
+		validate: validate,
+		submitToChurch: submitToChurch
 	};
 });
