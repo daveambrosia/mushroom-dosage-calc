@@ -44,6 +44,23 @@ terser "$JS_DIR/adc-dialogs.js" --compress --mangle -o "$JS_DIR/adc-dialogs.min.
 AFTER_DLG=$(wc -c < "$JS_DIR/adc-dialogs.min.js")
 echo "adc-dialogs.js: ${BEFORE_DLG}B → ${AFTER_DLG}B ($(( (BEFORE_DLG - AFTER_DLG) * 100 / BEFORE_DLG ))% smaller)"
 
+mkdir -p "$JS_DIR/modules"
+
+BEFORE_MQR=$(wc -c < "$JS_DIR/modules/adc-maker-qr.js")
+terser "$JS_DIR/modules/adc-maker-qr.js" --compress --mangle -o "$JS_DIR/modules/adc-maker-qr.min.js"
+AFTER_MQR=$(wc -c < "$JS_DIR/modules/adc-maker-qr.min.js")
+echo "adc-maker-qr.js: ${BEFORE_MQR}B → ${AFTER_MQR}B"
+
+BEFORE_MQRP=$(wc -c < "$JS_DIR/modules/adc-maker-qr-page.js")
+terser "$JS_DIR/modules/adc-maker-qr-page.js" --compress --mangle -o "$JS_DIR/modules/adc-maker-qr-page.min.js"
+AFTER_MQRP=$(wc -c < "$JS_DIR/modules/adc-maker-qr-page.min.js")
+echo "adc-maker-qr-page.js: ${BEFORE_MQRP}B → ${AFTER_MQRP}B"
+
+BEFORE_MQRM=$(wc -c < "$JS_DIR/modules/adc-maker-qr-modal.js")
+terser "$JS_DIR/modules/adc-maker-qr-modal.js" --compress --mangle -o "$JS_DIR/modules/adc-maker-qr-modal.min.js"
+AFTER_MQRM=$(wc -c < "$JS_DIR/modules/adc-maker-qr-modal.min.js")
+echo "adc-maker-qr-modal.js: ${BEFORE_MQRM}B → ${AFTER_MQRM}B"
+
 # CSS
 echo ""
 echo "--- CSS ---"
@@ -67,7 +84,12 @@ csso "$CSS_DIR/adc-dialogs.css" -o "$CSS_DIR/adc-dialogs.min.css"
 AFTER_DCSS=$(wc -c < "$CSS_DIR/adc-dialogs.min.css")
 echo "adc-dialogs.css: ${BEFORE_DCSS}B → ${AFTER_DCSS}B"
 
-TOTAL_BEFORE=$((BEFORE_JS + BEFORE_DLG + BEFORE_CSS + BEFORE_THEMES + BEFORE_FONTS + BEFORE_DCSS))
-TOTAL_AFTER=$((AFTER_JS + AFTER_DLG + AFTER_CSS + AFTER_THEMES + AFTER_FONTS + AFTER_DCSS))
+BEFORE_MCSS=$(wc -c < "$CSS_DIR/adc-maker-qr.css")
+csso "$CSS_DIR/adc-maker-qr.css" -o "$CSS_DIR/adc-maker-qr.min.css"
+AFTER_MCSS=$(wc -c < "$CSS_DIR/adc-maker-qr.min.css")
+echo "adc-maker-qr.css: ${BEFORE_MCSS}B → ${AFTER_MCSS}B"
+
+TOTAL_BEFORE=$((BEFORE_JS + BEFORE_DLG + BEFORE_MQR + BEFORE_MQRP + BEFORE_MQRM + BEFORE_CSS + BEFORE_THEMES + BEFORE_FONTS + BEFORE_DCSS + BEFORE_MCSS))
+TOTAL_AFTER=$((AFTER_JS + AFTER_DLG + AFTER_MQR + AFTER_MQRP + AFTER_MQRM + AFTER_CSS + AFTER_THEMES + AFTER_FONTS + AFTER_DCSS + AFTER_MCSS))
 echo ""
 echo "=== Total: ${TOTAL_BEFORE}B → ${TOTAL_AFTER}B ($(( (TOTAL_BEFORE - TOTAL_AFTER) * 100 / TOTAL_BEFORE ))% smaller) ==="
