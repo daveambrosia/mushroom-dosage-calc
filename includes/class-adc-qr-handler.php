@@ -147,10 +147,13 @@ class ADC_QR_Handler {
 			return $result;
 		}
 
-		// Check for edible type
+		// Check for edible type.
+		// Edible product name is read from 'pname' first; fall back to 'name'
+		// for back-compat with any pre-2.26.0 codes still in circulation.
+		// 'name' alone collides with WP's post-slug query var and 404s.
 		if ( ! empty( $params['type'] ) && 'edible' === $params['type'] ) {
 			$result['type']               = 'edible';
-			$result['name']               = sanitize_text_field( $params['name'] ?? '' );
+			$result['name']               = sanitize_text_field( $params['pname'] ?? $params['name'] ?? '' );
 			$result['brand']              = sanitize_text_field( $params['brand'] ?? '' );
 			$result['product_type']       = sanitize_key( $params['product_type'] ?? 'other' );
 			$result['pieces_per_package'] = absint( $params['pieces'] ?? $params['pieces_per_package'] ?? 1 );

@@ -307,7 +307,7 @@ class ADC_QR_Generator {
 						adcError('Please enter total mg and pieces.');
 						return;
 					}
-					url = calcUrl + '?type=edible&name=' + encodeURIComponent(name) + '&total_mg=' + totalMg + '&pieces=' + pieces;
+					url = calcUrl + '?type=edible&pname=' + encodeURIComponent(name) + '&total_mg=' + totalMg + '&pieces=' + pieces;
 				}
 				
 				$('#adc-legacy-url').val(url);

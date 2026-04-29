@@ -44,9 +44,11 @@
 		}
 
 		if (type === 'edible') {
+			// 'pname' (not 'name') because 'name' is a reserved WordPress public
+			// query var (post slug) and would 404 the calculator page.
 			var qs = new URLSearchParams();
 			qs.set('type', 'edible');
-			qs.set('name', fields.name || '');
+			qs.set('pname', fields.name || '');
 			qs.set('total_mg', String(Number(fields.total_mg || 0)));
 			qs.set('pieces', String(Number(fields.pieces_per_package || fields.pieces || 1)));
 			if (fields.brand) { qs.set('brand', fields.brand); }

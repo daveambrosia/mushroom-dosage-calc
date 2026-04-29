@@ -38,7 +38,8 @@ describe('buildLegacyUrl', () => {
 		}, base);
 		const u = new URL(url);
 		expect(u.searchParams.get('type')).toBe('edible');
-		expect(u.searchParams.get('name')).toBe('Choco Bar');
+		expect(u.searchParams.get('pname')).toBe('Choco Bar');
+		expect(u.searchParams.get('name')).toBeNull();
 		expect(u.searchParams.get('total_mg')).toBe('2000');
 		expect(u.searchParams.get('pieces')).toBe('4');
 		expect(u.searchParams.get('brand')).toBe('Local');
