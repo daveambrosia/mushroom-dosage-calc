@@ -3,7 +3,7 @@
  * Plugin Name: Ambrosia Dosage Calculator
  * Plugin URI: https://ambrosia.church/calculator
  * Description: Psilocybin dosage calculator with strain & edible management, QR codes, and customizable templates.
- * Version: 2.25.4
+ * Version: 2.26.0
  * Author: Church of Ambrosia
  * Author URI: https://ambrosia.church
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'ADC_VERSION', '2.25.4' );
+define( 'ADC_VERSION', '2.26.0' );
 define( 'ADC_DB_VERSION', '2.0.0' );
 define( 'ADC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -90,6 +90,7 @@ class Ambrosia_Dosage_Calculator {
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-rest-api.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-shortcode.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-qr-handler.php';
+		require_once ADC_PLUGIN_DIR . 'includes/class-adc-maker-qr-shortcode.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-http-cache.php';
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-github-updater.php';
 
@@ -223,6 +224,7 @@ class Ambrosia_Dosage_Calculator {
 
 		// Register shortcode
 		ADC_Shortcode::register();
+		ADC_Maker_QR_Shortcode::register();
 
 		// Initialize admin
 		if ( is_admin() ) {
@@ -430,6 +432,10 @@ window.addEventListener('resize', function() {
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'adc_calculator' ) ) {
 			$should_load = true;
 		}
+		$has_maker_qr = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'adc_maker_qr' );
+		if ( $has_maker_qr ) {
+			$should_load = true;
+		}
 		if ( get_query_var( 'adc_code' ) ) {
 			$should_load = true;
 		}
@@ -501,6 +507,71 @@ window.addEventListener('resize', function() {
 				'restUrl' => rest_url( 'adc/v1/' ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 				'version' => ADC_VERSION,
+			)
+		);
+
+		// Maker QR assets — load whenever the calculator OR maker shortcode is present.
+		wp_enqueue_script(
+			'adc-qrcode-lib',
+			ADC_PLUGIN_URL . 'public/js/vendor/qrcode.min.js',
+			array(),
+			'1.5.1',
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+		wp_enqueue_script(
+			'adc-maker-qr',
+			ADC_PLUGIN_URL . 'public/js/modules/adc-maker-qr' . $min . '.js',
+			array( 'adc-qrcode-lib' ),
+			ADC_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+
+		// Modal extension — only useful where the calculator is present.
+		wp_enqueue_script(
+			'adc-maker-qr-modal',
+			ADC_PLUGIN_URL . 'public/js/modules/adc-maker-qr-modal' . $min . '.js',
+			array( 'adc-maker-qr', 'adc-calculator' ),
+			ADC_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+
+		// Dedicated-page controller — only on pages with [adc_maker_qr].
+		if ( $has_maker_qr ) {
+			wp_enqueue_style(
+				'adc-maker-qr',
+				ADC_PLUGIN_URL . 'public/css/adc-maker-qr' . $min . '.css',
+				array(),
+				ADC_VERSION
+			);
+			wp_enqueue_script(
+				'adc-maker-qr-page',
+				ADC_PLUGIN_URL . 'public/js/modules/adc-maker-qr-page' . $min . '.js',
+				array( 'adc-maker-qr' ),
+				ADC_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
+
+		wp_localize_script(
+			'adc-maker-qr',
+			'adcMakerQr',
+			array(
+				'calculatorUrl'   => ADC_QR_Handler::get_calculator_page_url(),
+				'restUrl'         => rest_url( 'adc/v1/' ),
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'isDedicatedPage' => $has_maker_qr,
 			)
 		);
 	}
