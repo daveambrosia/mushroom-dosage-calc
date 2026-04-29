@@ -106,7 +106,7 @@
 
 		function readFields() {
 			var data = {};
-			fieldsEl.querySelectorAll('[data-field]').forEach(function (input) {
+			fieldsEl.querySelectorAll('input[data-field]').forEach(function (input) {
 				var key = input.dataset.field;
 				if (input.type === 'number') {
 					data[key] = input.value === '' ? 0 : Number(input.value);
