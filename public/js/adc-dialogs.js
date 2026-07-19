@@ -16,20 +16,19 @@
 
 		modalContainer           = document.createElement( 'div' );
 		modalContainer.id        = 'adc-dialog-container';
-		modalContainer.innerHTML = `
-			< div class          = "adc-dialog-overlay" id = "adc-dialog-overlay" > < / div >
-			< div class          = "adc-dialog" id = "adc-dialog" role = "dialog" aria - modal = "true" aria - labelledby = "adc-dialog-title" >
-				< div class      = "adc-dialog-header" >
-					< span class = "adc-dialog-icon" id = "adc-dialog-icon" > < / span >
-					< h3 class   = "adc-dialog-title" id = "adc-dialog-title" > < / h3 >
-				< / div >
-				< div class      = "adc-dialog-body" >
-					< p class    = "adc-dialog-message" id = "adc-dialog-message" > < / p >
-					< input type = "text" class = "adc-dialog-input" id = "adc-dialog-input" style = "display:none;" >
-				< / div >
-				< div class      = "adc-dialog-footer" id = "adc-dialog-footer" > < / div >
-			< / div >
-		`;
+		modalContainer.innerHTML =
+			'<div class="adc-dialog-overlay" id="adc-dialog-overlay"></div>' +
+			'<div class="adc-dialog" id="adc-dialog" role="dialog" aria-modal="true" aria-labelledby="adc-dialog-title">' +
+				'<div class="adc-dialog-header">' +
+					'<span class="adc-dialog-icon" id="adc-dialog-icon"></span>' +
+					'<h3 class="adc-dialog-title" id="adc-dialog-title"></h3>' +
+				'</div>' +
+				'<div class="adc-dialog-body">' +
+					'<p class="adc-dialog-message" id="adc-dialog-message"></p>' +
+					'<input type="text" class="adc-dialog-input" id="adc-dialog-input" style="display:none;">' +
+				'</div>' +
+				'<div class="adc-dialog-footer" id="adc-dialog-footer"></div>' +
+			'</div>';
 		document.body.appendChild( modalContainer );
 
 		// Close on overlay click (for alerts only)

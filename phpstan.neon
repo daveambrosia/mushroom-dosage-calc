@@ -6,10 +6,10 @@ parameters:
         analyseAndScan:
             - vendor (?)
             - node_modules (?)
-            - .specify
-            - .claude
-            - .pi
-            - .circleci
+            - .specify (?)
+            - .claude (?)
+            - .pi (?)
+            - .circleci (?)
             - tests
             - bin
     scanDirectories:

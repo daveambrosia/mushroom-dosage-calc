@@ -59,19 +59,33 @@ class Ambrosia_Dosage_Calculator {
 	}
 
 	/**
-	 * Detect REST API requests early (before REST_REQUEST is defined).
+	 * Load the Google Sheets classes on demand.
 	 *
-	 * @since 2.24.7
-	 * @return bool True if the current request targets the REST API.
+	 * Safe to call more than once; require_once makes repeat calls a no-op.
+	 *
+	 * @since 2.25.5
+	 * @return void
 	 */
-	private static function is_rest_request() {
-		if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
-			return false;
-		}
-		$rest_prefix = rest_get_url_prefix();
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only used for prefix comparison.
-		$request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
-		return ( false !== strpos( $request_uri, '/' . $rest_prefix . '/' ) );
+	private static function load_sheets_dependencies() {
+		require_once ADC_PLUGIN_DIR . 'admin/class-adc-google-sheets.php';
+		require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-importer.php';
+		require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-admin-page.php';
+	}
+
+	/**
+	 * Register the Google Sheets REST routes, loading the classes first.
+	 *
+	 * Hooked to rest_api_init rather than registering the class callback
+	 * directly, so the class is guaranteed to be loaded by the time WordPress
+	 * calls it. rest_api_init also fires for internal requests made through
+	 * rest_do_request(), which carry no REST URL to detect at load time.
+	 *
+	 * @since 2.25.5
+	 * @return void
+	 */
+	public function register_sheets_routes() {
+		self::load_sheets_dependencies();
+		ADC_Sheets_Admin_Page::register_routes();
 	}
 
 	/**
@@ -97,11 +111,11 @@ class Ambrosia_Dosage_Calculator {
 		// Frontend needs CSS generation only — loads on all requests
 		require_once ADC_PLUGIN_DIR . 'includes/class-adc-template-css.php';
 
-		// Google Sheets: needed in admin, cron, CLI, and REST (routes register globally).
-		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || self::is_rest_request() ) {
-			require_once ADC_PLUGIN_DIR . 'admin/class-adc-google-sheets.php';
-			require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-importer.php';
-			require_once ADC_PLUGIN_DIR . 'admin/class-adc-sheets-admin-page.php';
+		// Google Sheets: admin, cron, and CLI need these at load time so the
+		// importer can hook itself in init_hooks(). REST requests load them
+		// later via register_sheets_routes() on rest_api_init.
+		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			self::load_sheets_dependencies();
 		}
 
 		if ( is_admin() ) {
@@ -138,7 +152,7 @@ class Ambrosia_Dosage_Calculator {
 		// Google Sheets: cron schedules, importer init, admin routes & scripts.
 		// REST routes must register outside is_admin() because REST requests
 		// are not admin context. The permission_callback enforces access.
-		add_action( 'rest_api_init', array( 'ADC_Sheets_Admin_Page', 'register_routes' ) );
+		add_action( 'rest_api_init', array( $this, 'register_sheets_routes' ) );
 		if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			// phpcs:ignore WordPress.WP.CronInterval.ChangeDetected -- interval value defined in ADC_Sheets_Importer::add_cron_schedules().
 			add_filter( 'cron_schedules', array( 'ADC_Sheets_Importer', 'add_cron_schedules' ) );
