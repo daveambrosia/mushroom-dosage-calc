@@ -207,11 +207,16 @@ class ADC_GitHub_Updater {
 	 * Injects update info into the WP plugin updates transient when a
 	 * newer version is available on GitHub.
 	 *
-	 * @param \stdClass $transient The current update_plugins transient.
-	 * @return \stdClass Modified transient.
+	 * @param mixed $transient The current update_plugins transient. Not
+	 *                         type-hinted: maintenance snippets and host
+	 *                         tooling routinely set this transient to null,
+	 *                         false, or an array, and a hard \stdClass type
+	 *                         here threw an uncatchable TypeError that
+	 *                         white-screened every admin update check.
+	 * @return mixed Modified transient (or the original value untouched).
 	 */
-	public function check_for_update( \stdClass $transient ): \stdClass {
-		if ( empty( $transient->checked ) ) {
+	public function check_for_update( $transient ) {
+		if ( ! is_object( $transient ) || empty( $transient->checked ) ) {
 			return $transient;
 		}
 
@@ -347,11 +352,29 @@ class ADC_GitHub_Updater {
 		}
 
 		// Move from wherever WP extracted to the correct directory name.
+		// Rename the live directory aside first and restore it if the move
+		// fails — deleting before moving meant a failed move (permissions,
+		// disk full, partial extract) left the site with no plugin at all.
 		if ( $wp_filesystem instanceof \WP_Filesystem_Base ) {
-			if ( $wp_filesystem->exists( $plugin_dir ) ) {
-				$wp_filesystem->delete( $plugin_dir, true );
+			$backup_dir = $plugin_dir . '.adc-backup';
+			if ( $wp_filesystem->exists( $backup_dir ) ) {
+				$wp_filesystem->delete( $backup_dir, true );
 			}
-			$wp_filesystem->move( $installed_dir, $plugin_dir, true );
+			$had_existing = $wp_filesystem->exists( $plugin_dir );
+			if ( $had_existing ) {
+				$wp_filesystem->move( $plugin_dir, $backup_dir, true );
+			}
+
+			if ( $wp_filesystem->move( $installed_dir, $plugin_dir, true ) ) {
+				if ( $had_existing ) {
+					$wp_filesystem->delete( $backup_dir, true );
+				}
+			} elseif ( $had_existing ) {
+				// Restore the previous version so the site keeps a working plugin.
+				$wp_filesystem->move( $backup_dir, $plugin_dir, true );
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- failed update restore worth a trace.
+				error_log( '[ADC Updater] Update move failed; previous version restored.' );
+			}
 		}
 
 		// Re-activate the plugin after move.
