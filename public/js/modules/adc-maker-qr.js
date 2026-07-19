@@ -285,7 +285,7 @@
 		if (!w) {
 			return Promise.resolve({ success: false, error: 'no_window' });
 		}
-		var cfg = w.adcData || {};
+		var cfg = w.adcMakerQr || {};
 		var url = (cfg.restUrl || '/wp-json/adc/v1/') + 'submit';
 		var payload = {
 			type: record.type,

@@ -102,7 +102,7 @@ describe('validate', () => {
 
 describe('submitToChurch', () => {
 	beforeEach(() => {
-		window.adcData = { restUrl: 'https://example.com/wp-json/adc/v1/', nonce: 'NONCE' };
+		window.adcMakerQr = { restUrl: 'https://example.com/wp-json/adc/v1/', nonce: 'NONCE' };
 	});
 
 	it('POSTs to /submit and returns success on 200', async () => {
