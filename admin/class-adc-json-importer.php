@@ -300,6 +300,10 @@ class ADC_JSON_Importer {
 					continue;
 				}
 
+				// Unit contract: JSON is the plugin's own backup format and carries
+				// compound values as mcg per PIECE, matching the DB verbatim — no
+				// division here, unlike the CSV/Sheets importers whose input is
+				// per PACKAGE. Do not "fix" one to match the other.
 				$edible_data = array(
 					'name'               => sanitize_text_field( $edible['name'] ),
 					'short_code'         => sanitize_text_field( $short_code ),

@@ -152,7 +152,7 @@ class ADC_Google_Sheets {
 		rewind( $stream );
 
 		// Parse header row
-		$headers = fgetcsv( $stream );
+		$headers = fgetcsv( $stream, null, ',', '"', '\\' );
 		if ( false === $headers || count( $headers ) < 1 ) {
 			fclose( $stream );
 			return new WP_Error( 'too_few_rows', 'Sheet must have at least a header row and one data row.' );
@@ -162,7 +162,7 @@ class ADC_Google_Sheets {
 
 		// Parse data rows
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- standard fgetcsv() loop idiom.
-		while ( ( $values = fgetcsv( $stream ) ) !== false ) {
+		while ( ( $values = fgetcsv( $stream, null, ',', '"', '\\' ) ) !== false ) {
 			// Skip empty lines
 			if ( count( $values ) === 1 && trim( $values[0] ) === '' ) {
 				continue;

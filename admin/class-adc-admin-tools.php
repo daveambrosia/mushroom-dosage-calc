@@ -206,7 +206,9 @@ class ADC_Admin_Tools {
 			case 'edibles':
 				$raw = ADC_Edibles::get_all( array( 'active_only' => false ) );
 				$check_db_error( $raw, 'Edibles export' );
-				$data = $raw ? self::format_edibles_for_export( $raw ) : array();
+				// Unit contract: CSV carries mcg per PACKAGE (the importer divides
+				// by pieces on the way in); JSON carries mcg per PIECE verbatim.
+				$data = $raw ? self::format_edibles_for_export( $raw, 'csv' === $format ) : array();
 				break;
 			case 'settings':
 				$data            = get_option( 'adc_settings', array() );
@@ -268,11 +270,11 @@ class ADC_Admin_Tools {
 
 			if ( ! empty( $data ) && is_array( $data ) && isset( $data[0] ) && is_array( $data[0] ) ) {
 				// Header row from export field keys
-				fputcsv( $output, array_keys( $data[0] ) );
+				fputcsv( $output, array_keys( $data[0] ), ',', '"', '\\' );
 				// Data rows
 				foreach ( $data as $row ) {
 					if ( is_array( $row ) ) {
-						fputcsv( $output, $row );
+						fputcsv( $output, $row, ',', '"', '\\' );
 					}
 				}
 			}
@@ -333,12 +335,21 @@ class ADC_Admin_Tools {
 	/**
 	 * Format edibles for export (matches import format).
 	 *
-	 * @param array $edibles Array of edible rows from the database.
+	 * Unit contract: the DB stores compound values as mcg per PIECE. The CSV
+	 * interchange format (matching the Google Sheet) carries mcg per PACKAGE
+	 * and the CSV importer divides by pieces_per_package on import, so CSV
+	 * export must multiply back up or a round-trip shrinks potency by the
+	 * piece count. The JSON export/import pair is per-piece verbatim.
+	 *
+	 * @param array $edibles     Array of edible rows from the database.
+	 * @param bool  $per_package Whether to convert compound values to package
+	 *                           totals (true for CSV, false for JSON).
 	 * @return array Formatted edible data for export.
 	 */
-	private static function format_edibles_for_export( $edibles ) {
+	private static function format_edibles_for_export( $edibles, $per_package = false ) {
 		return array_map(
-			function ( $edible ) {
+			function ( $edible ) use ( $per_package ) {
+				$pieces = $per_package ? max( 1, intval( $edible['pieces_per_package'] ) ) : 1;
 				return array(
 					'name'               => $edible['name'],
 					'short_code'         => $edible['short_code'],
@@ -346,12 +357,12 @@ class ADC_Admin_Tools {
 					'product_type'       => $edible['product_type'],
 					'batch_number'       => $edible['batch_number'],
 					'pieces_per_package' => intval( $edible['pieces_per_package'] ),
-					'psilocybin'         => intval( $edible['psilocybin'] ),
-					'psilocin'           => intval( $edible['psilocin'] ),
-					'norpsilocin'        => intval( $edible['norpsilocin'] ),
-					'baeocystin'         => intval( $edible['baeocystin'] ),
-					'norbaeocystin'      => intval( $edible['norbaeocystin'] ),
-					'aeruginascin'       => intval( $edible['aeruginascin'] ),
+					'psilocybin'         => intval( $edible['psilocybin'] ) * $pieces,
+					'psilocin'           => intval( $edible['psilocin'] ) * $pieces,
+					'norpsilocin'        => intval( $edible['norpsilocin'] ) * $pieces,
+					'baeocystin'         => intval( $edible['baeocystin'] ) * $pieces,
+					'norbaeocystin'      => intval( $edible['norbaeocystin'] ) * $pieces,
+					'aeruginascin'       => intval( $edible['aeruginascin'] ) * $pieces,
 					'is_active'          => intval( $edible['is_active'] ),
 					'notes'              => $edible['notes'],
 					'sort_order'         => intval( $edible['sort_order'] ),

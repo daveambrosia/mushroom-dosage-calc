@@ -165,7 +165,7 @@ class ADC_CSV_Importer {
 					</thead>
 					<tbody>
 						<tr><td>Name</td><td>name, product, product name, title</td><td>Yes</td></tr>
-						<tr><td>Psilocybin (mcg/piece)</td><td>psilocybin, psilocybin_mcg, psilo</td><td>Yes</td></tr>
+						<tr><td>Psilocybin (mcg/package &mdash; total for the whole package; divided by Pieces on import)</td><td>psilocybin, psilocybin_mcg, psilo</td><td>Yes</td></tr>
 						<tr><td>Total mg</td><td>total mg, total_mg, mg total</td><td>No (auto-calculated)</td></tr>
 						<tr><td>Pieces</td><td>pieces, pieces per package, count, units</td><td>Yes</td></tr>
 						<tr><td>Brand</td><td>brand, manufacturer, maker</td><td>No</td></tr>
@@ -222,7 +222,7 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 		}
 
 		// Get headers
-		$headers = fgetcsv( $handle );
+		$headers = fgetcsv( $handle, null, ',', '"', '\\' );
 		if ( ! $headers ) {
 			fclose( $handle );
 			return new WP_Error( 'parse_error', 'Could not parse CSV headers.' );
@@ -254,7 +254,7 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 		$row_num  = 1;
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+		while ( ( $row = fgetcsv( $handle, null, ',', '"', '\\' ) ) !== false ) {
 			++$row_num;
 
 			// Skip empty rows

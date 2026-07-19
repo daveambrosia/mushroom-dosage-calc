@@ -1160,21 +1160,27 @@ class ADC_REST_API {
 			'sort_order',
 		);
 
+		// Unit contract: the DB stores compound values as mcg per PIECE, but the
+		// CSV interchange format (matching the Google Sheet) carries mcg per
+		// PACKAGE — the CSV importer divides by pieces_per_package on the way in.
+		// Multiply back up here so export -> re-import round-trips unchanged.
+		// (The JSON export/import pair stays per-piece throughout; only CSV converts.)
 		$rows = array();
 		foreach ( $edibles as $edible ) {
+			$pieces = max( 1, intval( $edible['pieces_per_package'] ) );
 			$rows[] = array(
 				$edible['name'],
 				$edible['short_code'],
 				$edible['brand'],
 				$edible['product_type'],
 				$edible['batch_number'],
-				intval( $edible['pieces_per_package'] ),
-				intval( $edible['psilocybin'] ),
-				intval( $edible['psilocin'] ),
-				intval( $edible['norpsilocin'] ),
-				intval( $edible['baeocystin'] ),
-				intval( $edible['norbaeocystin'] ),
-				intval( $edible['aeruginascin'] ),
+				$pieces,
+				intval( $edible['psilocybin'] ) * $pieces,
+				intval( $edible['psilocin'] ) * $pieces,
+				intval( $edible['norpsilocin'] ) * $pieces,
+				intval( $edible['baeocystin'] ) * $pieces,
+				intval( $edible['norbaeocystin'] ) * $pieces,
+				intval( $edible['aeruginascin'] ) * $pieces,
 				intval( $edible['is_active'] ),
 				$edible['notes'],
 				intval( $edible['sort_order'] ),
@@ -1202,9 +1208,9 @@ class ADC_REST_API {
 
 		// BOM for Excel UTF-8 compatibility
 		fwrite( $output, "\xEF\xBB\xBF" );
-		fputcsv( $output, $headers );
+		fputcsv( $output, $headers, ',', '"', '\\' );
 		foreach ( $rows as $row ) {
-			fputcsv( $output, $row );
+			fputcsv( $output, $row, ',', '"', '\\' );
 		}
 
 		rewind( $output );
