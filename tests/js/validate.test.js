@@ -154,3 +154,63 @@ describe('submitToChurch', () => {
 		expect(result.error).toBe('network_error');
 	});
 });
+
+describe('submitToChurch field normalization', () => {
+	beforeEach(() => {
+		window.adcMakerQr = { restUrl: 'https://example.com/wp-json/adc/v1/', nonce: 'NONCE' };
+	});
+
+	it('renames batch to batch_number in the submitted data', async () => {
+		window.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ id: 1 }) }));
+		await MakerQR.submitToChurch({
+			type: 'edible',
+			fields: { name: 'Gummy', psilocybin: 4000, pieces_per_package: 10, batch: 'B-77' }
+		}, window);
+		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
+		expect(body.data.batch_number).toBe('B-77');
+		expect(body.data.batch).toBeUndefined();
+	});
+
+	it('folds strain brand and lab into notes (no DB columns for them)', async () => {
+		window.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ id: 2 }) }));
+		await MakerQR.submitToChurch({
+			type: 'strain',
+			fields: { name: 'GT', psilocybin: 6000, brand: 'Sacred Farms', lab: 'TestLab' }
+		}, window);
+		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
+		expect(body.data.brand).toBeUndefined();
+		expect(body.data.lab).toBeUndefined();
+		expect(body.data.notes).toContain('Brand: Sacred Farms');
+		expect(body.data.notes).toContain('Lab: TestLab');
+	});
+
+	it('keeps edible brand as a real field (edibles table has a brand column)', async () => {
+		window.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ id: 3 }) }));
+		await MakerQR.submitToChurch({
+			type: 'edible',
+			fields: { name: 'Gummy', psilocybin: 4000, pieces_per_package: 10, brand: 'Sacred Farms' }
+		}, window);
+		const body = JSON.parse(window.fetch.mock.calls[0][1].body);
+		expect(body.data.brand).toBe('Sacred Farms');
+	});
+});
+
+describe('encodeCompactValue grammar self-defense', () => {
+	it('strips separator characters from values even without validate()', () => {
+		const url = MakerQR.buildCompactUrl('strain', { name: 'Gold_Teacher~X', psilocybin: 6000 }, 'https://x.test/calc/');
+		const d = new URL(url).searchParams.get('d');
+		const parts = Object.fromEntries(d.split('~').map(p => [p.slice(0, p.indexOf('_')), p.slice(p.indexOf('_') + 1)]));
+		expect(decodeURIComponent(parts.n)).toBe('GoldTeacherX');
+		expect(parts.pb).toBe('6000');
+	});
+
+	it('round-trips awkward names through the single URL decode the parser relies on', () => {
+		// searchParams.get('d') applies the one-and-only percent-decode; the
+		// calculator's parser must NOT decode again (it corrupted %-escapes).
+		const name = 'B.plus v2.0 100% Pure & Lot%41B';
+		const url = MakerQR.buildCompactUrl('strain', { name, psilocybin: 6000 }, 'https://x.test/calc/');
+		const d = new URL(url).searchParams.get('d');
+		const n = d.split('~').find(p => p.startsWith('n_')).slice(2);
+		expect(n).toBe(name);
+	});
+});

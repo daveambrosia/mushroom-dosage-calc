@@ -34,6 +34,9 @@ fi
 # JS
 echo ""
 echo "--- JavaScript ---"
+# Rebuild calculator.js from the source modules FIRST — minifying without
+# this step ships whatever stale concatenation happens to be on disk.
+bash "$JS_DIR/build-js.sh"
 BEFORE_JS=$(wc -c < "$JS_DIR/calculator.js")
 terser "$JS_DIR/calculator.js" --compress --mangle -o "$JS_DIR/calculator.min.js"
 AFTER_JS=$(wc -c < "$JS_DIR/calculator.min.js")

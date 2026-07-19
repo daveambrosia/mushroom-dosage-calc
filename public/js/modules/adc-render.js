@@ -79,7 +79,7 @@
         }
         const scannedIds = Object.keys(state.scannedStrains);
         if (scannedIds.length > 0) {
-            html += '<optgroup label="Scanned Strains">';
+            html += '<optgroup label="Scanned Strains (not verified by the church)">';
             scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedStrains[id].name)}</option>`; });
             html += '</optgroup>';
         }
@@ -137,7 +137,7 @@
         }
         const scannedIds = Object.keys(state.scannedEdibles);
         if (scannedIds.length > 0) {
-            html += '<optgroup label="Scanned Edibles">';
+            html += '<optgroup label="Scanned Edibles (not verified by the church)">';
             scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedEdibles[id].name)}</option>`; });
             html += '</optgroup>';
         }

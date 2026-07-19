@@ -43,11 +43,16 @@
 		lab:                'lb'
 	};
 
-	// `~` and `_` are forbidden in text fields by validate(), so values are
-	// safe to drop into the URL with only the standard URL encoding pass.
+	// `~` and `_` are forbidden in text fields by validate(). Strip them here
+	// too so buildCompactUrl is safe even for callers that skip validation:
+	// percent-encoding them would not survive the single URL-decode that
+	// URLSearchParams applies to the whole `d` value before the `~` split, so
+	// removal is the only way to keep the grammar unambiguous.
 	function encodeCompactValue(value) {
-		return encodeURIComponent(String(value));
+		return encodeURIComponent(String(value).replace(FORBIDDEN_CHARS_G, ''));
 	}
+
+	var FORBIDDEN_CHARS_G = /[~_]/g;
 
 	var FORBIDDEN_CHARS = /[~_]/;
 
@@ -287,9 +292,32 @@
 		}
 		var cfg = w.adcMakerQr || {};
 		var url = (cfg.restUrl || '/wp-json/adc/v1/') + 'submit';
+		// Normalize field names to what the strain/edible models expect on
+		// approval: the form says 'batch' but the DB column is batch_number,
+		// and strains have no brand/lab columns, so fold those into notes
+		// rather than silently losing them when an admin approves.
+		var fields = record.fields || {};
+		var data = {};
+		Object.keys(fields).forEach(function (k) { data[k] = fields[k]; });
+		if (data.batch !== undefined) {
+			data.batch_number = data.batch;
+			delete data.batch;
+		}
+		var folded = [];
+		if (record.type === 'strain' && data.brand) {
+			folded.push('Brand: ' + data.brand);
+			delete data.brand;
+		}
+		if (data.lab) {
+			folded.push('Lab: ' + data.lab);
+			delete data.lab;
+		}
+		if (folded.length) {
+			data.notes = (data.notes ? data.notes + '. ' : '') + folded.join('. ');
+		}
 		var payload = {
 			type: record.type,
-			data: record.fields || {},
+			data: data,
 			name: record.makerName || '',
 			email: record.makerEmail || '',
 			notes: record.notes || '',

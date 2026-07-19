@@ -548,7 +548,7 @@ function cacheElements() {
         }
         const scannedIds = Object.keys(state.scannedStrains);
         if (scannedIds.length > 0) {
-            html += '<optgroup label="Scanned Strains">';
+            html += '<optgroup label="Scanned Strains (not verified by the church)">';
             scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedStrains[id].name)}</option>`; });
             html += '</optgroup>';
         }
@@ -606,7 +606,7 @@ function cacheElements() {
         }
         const scannedIds = Object.keys(state.scannedEdibles);
         if (scannedIds.length > 0) {
-            html += '<optgroup label="Scanned Edibles">';
+            html += '<optgroup label="Scanned Edibles (not verified by the church)">';
             scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedEdibles[id].name)}</option>`; });
             html += '</optgroup>';
         }
@@ -1480,6 +1480,15 @@ function cacheElements() {
         br: 'brand', bn: 'batch', lb: 'lab'
     };
 
+    // Scanned QR data is unverified maker input: anyone can hand-write a ?d=
+    // URL claiming any potency. Clamp on the read side to the same ceilings
+    // the generator enforces (ADC.MakerQR validate()), so a crafted code can
+    // never push the calculator into recommending from an absurd potency.
+    // Keep in sync with STRAIN_MAX / EDIBLE_MAX / PIECES_MAX in adc-maker-qr.js.
+    const SCAN_STRAIN_MAX = 50000;   // mcg per gram
+    const SCAN_EDIBLE_MAX = 500000;  // mcg per piece
+    const SCAN_PIECES_MAX = 500;
+
     function parseCompactData(d) {
         const out = {};
         d.split('~').forEach(part => {
@@ -1489,7 +1498,10 @@ function cacheElements() {
             const raw = part.slice(sep + 1);
             const key = COMPACT_TO_KEY[k];
             if (!key) return;
-            try { out[key] = decodeURIComponent(raw); } catch (e) { out[key] = raw; }
+            // URLSearchParams.get('d') already percent-decoded the value once;
+            // decoding again here corrupted names containing literal %-escapes
+            // (e.g. "Lot%41B" scanned back as "LotAB").
+            out[key] = raw;
         });
         if (out.type === 's') out.type = 'strain';
         else if (out.type === 'e') out.type = 'edible';
@@ -1497,7 +1509,7 @@ function cacheElements() {
     }
 
     function compactToStrain(p) {
-        const num = (k) => parseInt(p[k] || '0', 10) || 0;
+        const num = (k) => Math.min(SCAN_STRAIN_MAX, Math.max(0, parseInt(p[k] || '0', 10) || 0));
         const result = {
             name: p.name || 'Scanned Strain',
             psilocybin: num('psilocybin'),
@@ -1514,8 +1526,8 @@ function cacheElements() {
     }
 
     function compactToEdible(p) {
-        const num = (k) => parseInt(p[k] || '0', 10) || 0;
-        const pieces = num('pieces');
+        const num = (k) => Math.min(SCAN_EDIBLE_MAX, Math.max(0, parseInt(p[k] || '0', 10) || 0));
+        const pieces = Math.min(SCAN_PIECES_MAX, Math.max(0, parseInt(p.pieces || '0', 10) || 0));
         if (!p.name || pieces <= 0) return null;
         return {
             name: p.name,
@@ -1540,7 +1552,7 @@ function cacheElements() {
                 const cleanKey = key.trim().toLowerCase();
                 const cleanValue = value.trim();
                 if (cleanKey === 'name') result.name = cleanValue;
-                else if (result.hasOwnProperty(cleanKey)) result[cleanKey] = parseInt(cleanValue) || 0;
+                else if (result.hasOwnProperty(cleanKey)) result[cleanKey] = Math.min(SCAN_STRAIN_MAX, Math.max(0, parseInt(cleanValue, 10) || 0));
             }
         });
         return (result.psilocybin > 0 || result.psilocin > 0) ? result : null;
@@ -1550,12 +1562,12 @@ function cacheElements() {
     function parseEdibleLegacyParams(params) {
         const name = (params.get('pname') || params.get('name') || '').trim();
         const totalMg = parseInt(params.get('total_mg') || '0', 10) || 0;
-        const pieces = parseInt(params.get('pieces') || params.get('pieces_per_package') || '0', 10) || 0;
+        const pieces = Math.min(SCAN_PIECES_MAX, parseInt(params.get('pieces') || params.get('pieces_per_package') || '0', 10) || 0);
         if (!name || totalMg <= 0 || pieces <= 0) return null;
         return {
             name: name,
             brand: (params.get('brand') || '').trim(),
-            psilocybin: Math.round((totalMg * 1000) / pieces),
+            psilocybin: Math.min(SCAN_EDIBLE_MAX, Math.round((totalMg * 1000) / pieces)),
             psilocin: 0,
             norpsilocin: 0,
             baeocystin: 0,

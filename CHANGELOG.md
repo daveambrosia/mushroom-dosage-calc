@@ -12,7 +12,7 @@
 ### Notes
 - Compact format uses `~` as field separator and `_` between key and value; both characters are forbidden in name/brand/batch/lab so values cannot collide with the separator grammar. Dashes and dots are preserved verbatim in values.
 - No DB migrations, no new REST endpoints — submission reuses `/adc/v1/submit` with its existing honeypot and rate limiting.
-- Auto-submit-on-scan behavior of `auto_submit_unknown_qr` is unchanged; maker QRs may auto-submit on first scan if that setting is on.
+- Compact `?d=` maker QRs never auto-submit on scan, regardless of the `auto_submit_unknown_qr` setting: the PHP QR handler only recognizes the legacy `data`/`strain`/`type=edible` parameters, so `?d=` scans are invisible to it. Submissions from maker QRs happen only through the explicit Submit to Church button. (An earlier version of this note claimed the opposite.)
 
 ## 2.25.4 — 2026-04-28
 
