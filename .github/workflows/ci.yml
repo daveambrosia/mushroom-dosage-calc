@@ -14,7 +14,8 @@ jobs:
         image: mariadb:11
         env:
           MARIADB_ROOT_PASSWORD: root
-          MARIADB_DATABASE: wordpress_test
+          # No MARIADB_DATABASE: install-wp-tests.sh creates the DB itself and
+          # prompts interactively (breaking CI) if it already exists.
         ports:
           - 3306:3306
         options: >-
