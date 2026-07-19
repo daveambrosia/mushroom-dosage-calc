@@ -62,6 +62,42 @@ describe('validate', () => {
 		expect(r.valid).toBe(false);
 		expect(r.errors.name).toBeTruthy();
 	});
+
+	it('rejects ~ and _ in name, brand, batch, lab', () => {
+		const tilde = MakerQR.validate('strain', { name: 'Foo~Bar', psilocybin: 5000 });
+		expect(tilde.valid).toBe(false);
+		expect(tilde.errors.name).toBeTruthy();
+
+		const under = MakerQR.validate('strain', { name: 'Foo_Bar', psilocybin: 5000 });
+		expect(under.valid).toBe(false);
+		expect(under.errors.name).toBeTruthy();
+
+		const brand = MakerQR.validate('strain', {
+			name: 'OK', psilocybin: 5000, brand: 'A_B'
+		});
+		expect(brand.valid).toBe(false);
+		expect(brand.errors.brand).toBeTruthy();
+
+		const batch = MakerQR.validate('strain', {
+			name: 'OK', psilocybin: 5000, batch: 'B~1'
+		});
+		expect(batch.valid).toBe(false);
+		expect(batch.errors.batch).toBeTruthy();
+
+		const lab = MakerQR.validate('strain', {
+			name: 'OK', psilocybin: 5000, lab: 'Lab_X'
+		});
+		expect(lab.valid).toBe(false);
+		expect(lab.errors.lab).toBeTruthy();
+	});
+
+	it('allows dashes and dots in text fields', () => {
+		const r = MakerQR.validate('strain', {
+			name: 'Foo-Bar.Co', psilocybin: 5000,
+			brand: 'A.C.M.E', batch: 'B-42', lab: 'Cal-Green.Co'
+		});
+		expect(r.valid).toBe(true);
+	});
 });
 
 describe('submitToChurch', () => {

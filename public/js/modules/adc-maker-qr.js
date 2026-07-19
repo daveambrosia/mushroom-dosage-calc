@@ -23,9 +23,10 @@
 		'baeocystin', 'norbaeocystin', 'aeruginascin'
 	];
 
-	// Compact URL field abbreviations. Values use `.` to separate key from
-	// value and `-` to separate fields, so dashes/dots inside string values
-	// must be escaped past encodeURIComponent (which leaves both untouched).
+	// Compact URL field abbreviations. Keys are joined to values with `_`
+	// and fields are separated by `~`. Both characters are forbidden in
+	// text fields (see validate + FORBIDDEN_CHARS) so they cannot appear
+	// inside a value and collide with the separator grammar.
 	var COMPACT_KEYS = {
 		type:               't',
 		name:               'n',
@@ -42,11 +43,13 @@
 		lab:                'lb'
 	};
 
+	// `~` and `_` are forbidden in text fields by validate(), so values are
+	// safe to drop into the URL with only the standard URL encoding pass.
 	function encodeCompactValue(value) {
-		return encodeURIComponent(String(value))
-			.replace(/-/g, '%2D')
-			.replace(/\./g, '%2E');
+		return encodeURIComponent(String(value));
 	}
+
+	var FORBIDDEN_CHARS = /[~_]/;
 
 	/**
 	 * Build a legacy URL for a strain or edible record.
@@ -87,7 +90,7 @@
 	/**
 	 * Build a compact URL for a strain or edible record.
 	 *
-	 * Format: `?d=t.s-n.Name-pb.10000-pc.500-br.Brand-bn.Batch-lb.Lab`
+	 * Format: `?d=t_s~n_Name~pb_10000~pc_500~br_Brand~bn_Batch~lb_Lab`
 	 * Strain compound values are mcg/g; edible compound values are mcg/piece
 	 * and the URL also carries `tm` (total mg) and `pp` (pieces) for context.
 	 */
@@ -95,26 +98,26 @@
 		if (type !== 'strain' && type !== 'edible') {
 			throw new Error('Unknown maker QR type: ' + type);
 		}
-		var parts = [COMPACT_KEYS.type + '.' + (type === 'edible' ? 'e' : 's')];
+		var parts = [COMPACT_KEYS.type + '_' + (type === 'edible' ? 'e' : 's')];
 		if (fields.name) {
-			parts.push(COMPACT_KEYS.name + '.' + encodeCompactValue(fields.name));
+			parts.push(COMPACT_KEYS.name + '_' + encodeCompactValue(fields.name));
 		}
 		if (type === 'edible') {
 			var totalMg = Number(fields.total_mg || 0);
 			var pieces  = Number(fields.pieces_per_package || fields.pieces || 0);
-			if (totalMg > 0) { parts.push(COMPACT_KEYS.total_mg + '.' + totalMg); }
-			if (pieces > 0)  { parts.push(COMPACT_KEYS.pieces_per_package + '.' + pieces); }
+			if (totalMg > 0) { parts.push(COMPACT_KEYS.total_mg + '_' + totalMg); }
+			if (pieces > 0)  { parts.push(COMPACT_KEYS.pieces_per_package + '_' + pieces); }
 		}
 		STRAIN_COMPOUNDS.forEach(function (key) {
 			var v = Number(fields[key] || 0);
-			if (v > 0) { parts.push(COMPACT_KEYS[key] + '.' + v); }
+			if (v > 0) { parts.push(COMPACT_KEYS[key] + '_' + v); }
 		});
 		['brand', 'batch', 'lab'].forEach(function (key) {
 			if (fields[key]) {
-				parts.push(COMPACT_KEYS[key] + '.' + encodeCompactValue(fields[key]));
+				parts.push(COMPACT_KEYS[key] + '_' + encodeCompactValue(fields[key]));
 			}
 		});
-		return baseUrl + '?d=' + parts.join('-');
+		return baseUrl + '?d=' + parts.join('~');
 	}
 
 	var STORAGE_KEY = 'adc_maker_qr_v1';
@@ -211,16 +214,30 @@
 			errors.name = 'Product name is required.';
 		} else if (name.length > NAME_MAX) {
 			errors.name = 'Name must be 100 characters or fewer.';
+		} else if (FORBIDDEN_CHARS.test(name)) {
+			errors.name = 'Name must not contain ~ or _.';
 		}
 
-		if (fields.brand && String(fields.brand).length > NAME_MAX) {
-			errors.brand = 'Brand must be 100 characters or fewer.';
+		if (fields.brand) {
+			if (String(fields.brand).length > NAME_MAX) {
+				errors.brand = 'Brand must be 100 characters or fewer.';
+			} else if (FORBIDDEN_CHARS.test(String(fields.brand))) {
+				errors.brand = 'Brand must not contain ~ or _.';
+			}
 		}
-		if (fields.batch && String(fields.batch).length > BATCH_MAX) {
-			errors.batch = 'Batch must be 50 characters or fewer.';
+		if (fields.batch) {
+			if (String(fields.batch).length > BATCH_MAX) {
+				errors.batch = 'Batch must be 50 characters or fewer.';
+			} else if (FORBIDDEN_CHARS.test(String(fields.batch))) {
+				errors.batch = 'Batch must not contain ~ or _.';
+			}
 		}
-		if (fields.lab && String(fields.lab).length > NAME_MAX) {
-			errors.lab = 'Lab must be 100 characters or fewer.';
+		if (fields.lab) {
+			if (String(fields.lab).length > NAME_MAX) {
+				errors.lab = 'Lab must be 100 characters or fewer.';
+			} else if (FORBIDDEN_CHARS.test(String(fields.lab))) {
+				errors.lab = 'Lab must not contain ~ or _.';
+			}
 		}
 
 		var psilocybin = Number(fields.psilocybin || 0);

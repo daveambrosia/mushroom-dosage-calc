@@ -519,10 +519,7 @@
         const type = params.get('type') || params.get('t');
         if (code && (type === 'strain' || type === 'm')) { state.strainId = code; state.activeTab = 'mushrooms'; }
         else if (code && (type === 'edible' || type === 'e')) { state.edibleId = code; state.activeTab = 'edibles'; }
-        // Read 'd' from raw query string so escaped %2D / %2E inside values
-        // survive the parser's split on '-' / '.'. URLSearchParams.get()
-        // would decode them back to literal separators.
-        const compact = (window.location.search.match(/[?&]d=([^&]*)/) || [])[1] || null;
+        const compact = params.get('d');
         if (compact) {
             const parsed = parseCompactData(compact);
             if (parsed && parsed.type === 'edible') {
@@ -555,11 +552,11 @@
 
     function parseCompactData(d) {
         const out = {};
-        d.split('-').forEach(part => {
-            const dot = part.indexOf('.');
-            if (dot < 0) return;
-            const k = part.slice(0, dot);
-            const raw = part.slice(dot + 1);
+        d.split('~').forEach(part => {
+            const sep = part.indexOf('_');
+            if (sep < 0) return;
+            const k = part.slice(0, sep);
+            const raw = part.slice(sep + 1);
             const key = COMPACT_TO_KEY[k];
             if (!key) return;
             try { out[key] = decodeURIComponent(raw); } catch (e) { out[key] = raw; }

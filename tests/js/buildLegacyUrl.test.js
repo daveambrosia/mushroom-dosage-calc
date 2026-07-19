@@ -54,7 +54,7 @@ describe('buildLegacyUrl', () => {
 describe('buildCompactUrl', () => {
 	const base = 'https://example.com/calculator/';
 
-	it('builds a strain URL with t.s, n., and compound abbreviations', () => {
+	it('builds a strain URL with t_s, n_, and compound abbreviations', () => {
 		const url = MakerQR.buildCompactUrl('strain', {
 			name: 'Test',
 			psilocybin: 10000,
@@ -64,7 +64,7 @@ describe('buildCompactUrl', () => {
 			norbaeocystin: 444,
 			aeruginascin: 555
 		}, base);
-		expect(url).toBe(base + '?d=t.s-n.Test-pb.10000-pc.1000-npc.222-b.333-nb.444-a.555');
+		expect(url).toBe(base + '?d=t_s~n_Test~pb_10000~pc_1000~npc_222~b_333~nb_444~a_555');
 	});
 
 	it('omits zero compounds and missing optional fields', () => {
@@ -72,7 +72,7 @@ describe('buildCompactUrl', () => {
 			name: 'Plain',
 			psilocybin: 5000
 		}, base);
-		expect(url).toBe(base + '?d=t.s-n.Plain-pb.5000');
+		expect(url).toBe(base + '?d=t_s~n_Plain~pb_5000');
 	});
 
 	it('includes brand, batch, lab when present', () => {
@@ -83,21 +83,20 @@ describe('buildCompactUrl', () => {
 			batch: 'B42',
 			lab: 'Caligreen'
 		}, base);
-		expect(url).toContain('-br.Acme');
-		expect(url).toContain('-bn.B42');
-		expect(url).toContain('-lb.Caligreen');
+		expect(url).toContain('~br_Acme');
+		expect(url).toContain('~bn_B42');
+		expect(url).toContain('~lb_Caligreen');
 	});
 
-	it('escapes dashes and dots in values so they cannot collide with separators', () => {
+	it('preserves dashes and dots in names (they are no longer separators)', () => {
 		const url = MakerQR.buildCompactUrl('strain', {
 			name: 'Foo-Bar.Co',
 			psilocybin: 5000
 		}, base);
-		expect(url).toContain('n.Foo%2DBar%2ECo');
-		expect(url).not.toMatch(/n\.Foo-Bar/);
+		expect(url).toContain('n_Foo-Bar.Co');
 	});
 
-	it('builds an edible URL with t.e, tm, pp, and per-piece compounds', () => {
+	it('builds an edible URL with t_e, tm, pp, and per-piece compounds', () => {
 		const url = MakerQR.buildCompactUrl('edible', {
 			name: 'ChocoBar',
 			total_mg: 20,
@@ -107,7 +106,7 @@ describe('buildCompactUrl', () => {
 			batch: 'B-42'
 		}, base);
 		expect(url).toBe(
-			base + '?d=t.e-n.ChocoBar-tm.20-pp.4-pb.5000-br.Local-bn.B%2D42'
+			base + '?d=t_e~n_ChocoBar~tm_20~pp_4~pb_5000~br_Local~bn_B-42'
 		);
 	});
 

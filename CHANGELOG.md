@@ -5,10 +5,12 @@
 ### Added
 - New `[adc_maker_qr]` shortcode: dedicated page where edible and powdered-mushroom makers can generate QR codes from their own product data, save them in browser localStorage, and optionally submit to the church.
 - Generate-QR button inside the existing Add Custom Strain and Add Custom Edible modals — one-shot QR + download without leaving the modal.
-- `public/js/modules/adc-maker-qr.js` shared module: legacy URL builder, localStorage list management, validation, fetch-based submit, QR canvas rendering.
-- Vitest + jsdom setup with unit tests for the URL builder, local-list helpers, validation, and submit flow.
+- `public/js/modules/adc-maker-qr.js` shared module: legacy + compact URL builders, localStorage list management, validation, fetch-based submit, QR canvas rendering.
+- Compact maker-QR URL format `?d=t_s~n_Name~pb_10000~...` to keep QR codes small without a URL shortener. Strain and edible records both supported, with optional `brand`, `batch`, `lab` fields. Legacy `?data=...` and `?type=edible&pname=...` URLs still parse for back-compat.
+- Vitest + jsdom setup with unit tests for the URL builders, local-list helpers, validation, and submit flow.
 
 ### Notes
+- Compact format uses `~` as field separator and `_` between key and value; both characters are forbidden in name/brand/batch/lab so values cannot collide with the separator grammar. Dashes and dots are preserved verbatim in values.
 - No DB migrations, no new REST endpoints — submission reuses `/adc/v1/submit` with its existing honeypot and rate limiting.
 - Auto-submit-on-scan behavior of `auto_submit_unknown_qr` is unchanged; maker QRs may auto-submit on first scan if that setting is on.
 
