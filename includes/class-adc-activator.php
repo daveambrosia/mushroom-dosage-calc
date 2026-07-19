@@ -433,8 +433,8 @@ class ADC_Activator {
 			'tea'               => 'cups',
 			'tincture'          => 'droppers',
 			'microdose-candies' => 'candies',
-			'drink-mix'         => 'servings',
-			'granola'           => 'servings',
+			'drink-mix'         => 'packets',
+			'granola'           => 'bars',
 			'taffy'             => 'pieces',
 			'other'             => 'pieces',
 		);
