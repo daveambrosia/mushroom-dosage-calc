@@ -90,7 +90,8 @@ describe('formatGrams (precision by magnitude)', () => {
 		expect(M.formatGrams(0.005)).toBe('< 0.01g');
 		expect(M.formatGrams(0.0523)).toBe('0.052g');
 		expect(M.formatGrams(0.15)).toBe('0.15g');
-		expect(M.formatGrams(1.234)).toBe('1.2g');
+		expect(M.formatGrams(1.12)).toBe('1.12g');
+		expect(M.formatGrams(1.234)).toBe('1.23g');
 		expect(M.formatGrams(12.6)).toBe('13g');
 	});
 });

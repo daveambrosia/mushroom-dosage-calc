@@ -80,7 +80,7 @@
         const scannedIds = Object.keys(state.scannedStrains);
         if (scannedIds.length > 0) {
             html += '<optgroup label="Scanned Strains (not verified by the church)">';
-            scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedStrains[id].name)}</option>`; });
+            scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(scannedLabel(state.scannedStrains[id]))}</option>`; });
             html += '</optgroup>';
         }
         const customIds = Object.keys(state.customStrains);
@@ -138,7 +138,7 @@
         const scannedIds = Object.keys(state.scannedEdibles);
         if (scannedIds.length > 0) {
             html += '<optgroup label="Scanned Edibles (not verified by the church)">';
-            scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(state.scannedEdibles[id].name)}</option>`; });
+            scannedIds.forEach(id => { html += `<option value="${id}">${escapeHtml(scannedLabel(state.scannedEdibles[id]))}</option>`; });
             html += '</optgroup>';
         }
         const customIds = Object.keys(state.customEdibles);
@@ -446,6 +446,18 @@
         const isScanned = state.edibleId.startsWith('scan-');
         if (editBtn) editBtn.style.display = isCustom ? '' : 'none';
         if (deleteBtn) deleteBtn.style.display = (isCustom || isScanned) ? '' : 'none';
+    }
+
+    /**
+     * Display label for a scanned (maker QR) entry: "Brand: Name (Lab)".
+     * Maker QRs carry brand and testing-lab fields; showing them in the
+     * dropdown is what distinguishes two products with the same name.
+     */
+    function scannedLabel(item) {
+        if (!item) return '';
+        return (item.brand ? item.brand + ': ' : '') +
+            (item.name || '') +
+            (item.lab ? ' (' + item.lab + ')' : '');
     }
 
     function updateAll() {

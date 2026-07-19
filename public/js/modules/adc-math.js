@@ -27,8 +27,7 @@
     function formatGrams(g) {
         if (g < 0.01) return '< 0.01g';
         if (g < 0.1) return g.toFixed(3) + 'g';
-        if (g < 1) return g.toFixed(2) + 'g';
-        if (g < 10) return g.toFixed(1) + 'g';
+        if (g < 10) return g.toFixed(2) + 'g';
         return Math.round(g) + 'g';
     }
     
