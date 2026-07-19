@@ -150,7 +150,14 @@ class ADC_Admin_Settings {
 			ADC_DB::update_settings( $settings );
 
 			if ( $settings['short_url_path'] !== $old_path ) {
-				flush_rewrite_rules();
+				// Defer the flush to the next request's `init`. Flushing here
+				// persists the OLD rules: this request's `init` already
+				// registered the rewrite with the previous path, so an
+				// immediate flush made every QR code printed with the new
+				// path 404 while the old path kept working. On the next load,
+				// `init` registers the rule from the freshly saved setting
+				// and the deferred flush persists the correct set.
+				update_option( 'adc_flush_rewrite_needed', 1 );
 			}
 
 			echo '<div class="notice notice-success"><p>Settings saved!</p></div>';

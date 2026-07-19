@@ -76,7 +76,13 @@ class ADC_Activator {
 		// Store activation time for diagnostics
 		update_option( 'adc_activated_at', current_time( 'mysql' ) );
 
-		flush_rewrite_rules();
+		// Do NOT flush_rewrite_rules() here: activation runs after this
+		// request's `init`, so the plugin's rewrite rules were never
+		// registered and a flush would persist a ruleset WITHOUT them —
+		// every /c/... QR short URL then 404s until something else flushes.
+		// Instead flag it; the main plugin flushes on the next `init`, after
+		// register_rewrite_rules() has run.
+		update_option( 'adc_flush_rewrite_needed', 1 );
 	}
 
 	/**

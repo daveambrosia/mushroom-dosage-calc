@@ -37,6 +37,14 @@ class ADC_Shortcode {
 	 * @return string Calculator HTML output.
 	 */
 	public static function render( $atts ) {
+		// Render-time enqueue: covers shortcode placements that
+		// has_shortcode(post_content) cannot see (widgets, blocks, FSE
+		// templates, page builders). Without this, the markup rendered but
+		// wp_add_inline_script() below silently no-opped on the unregistered
+		// handle and the calculator was completely inert. Idempotent when the
+		// wp_enqueue_scripts pass already enqueued everything.
+		adc()->enqueue_calculator_assets();
+
 		// Load all settings once (avoids 12+ individual get_option calls)
 		$s = ADC_DB::get_settings();
 

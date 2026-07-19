@@ -7,6 +7,8 @@
  * Author: Church of Ambrosia
  * Author URI: https://ambrosia.church
  * License: GPL v2 or later
+ * Requires at least: 6.0
+ * Requires PHP: 8.0
  * Text Domain: ambrosia-dosage-calc
  *
  * @package Ambrosia_Dosage_Calculator
@@ -180,8 +182,10 @@ class Ambrosia_Dosage_Calculator {
 		$updater = new ADC_GitHub_Updater( ADC_PLUGIN_BASENAME, ADC_VERSION );
 		$updater->init();
 
-		// Add CSP headers to frontend
-		add_action( 'send_headers', array( $this, 'add_frontend_security_headers' ) );
+		// Security headers for calculator pages. template_redirect, not
+		// send_headers: send_headers fires before the main query runs, so
+		// $post and query vars are not yet available for the scoping check.
+		add_action( 'template_redirect', array( $this, 'add_frontend_security_headers' ), 5 );
 
 		// Fix theme font preload missing crossorigin attribute (BUG-003).
 		// Fonts loaded via @font-face use CORS anonymous mode; preload hints
@@ -287,9 +291,16 @@ class Ambrosia_Dosage_Calculator {
 	 */
 	public function register_preview_rewrite() {
 		add_rewrite_rule( '^adc-preview/?$', 'index.php?adc_preview=1', 'top' );
-		// Note: flush_rewrite_rules() is called in ADC_Activator::activate() on plugin
-		// activation. Do NOT flush here — it runs on every init (every page load) which
-		// is O(n) on wp_options and causes ~10ms overhead per request.
+
+		// Deferred flush: activation cannot flush usefully (its request's
+		// `init` already passed before the plugin's rules existed), so
+		// ADC_Activator sets a flag and the first `init` after activation
+		// flushes here, with both rules registered above. One-shot, so the
+		// per-request flush cost is paid exactly once.
+		if ( get_option( 'adc_flush_rewrite_needed' ) ) {
+			delete_option( 'adc_flush_rewrite_needed' );
+			flush_rewrite_rules();
+		}
 	}
 
 	/**
@@ -437,10 +448,12 @@ window.addEventListener('resize', function() {
 	 * @return void
 	 */
 	public function enqueue_public_assets() {
-		// Use minified assets in production (when WP_DEBUG is false)
-		$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
-
-		// Only load when shortcode is present or QR redirect
+		// Fast path: enqueue during wp_enqueue_scripts when the shortcode is
+		// detectable in post_content or a QR/preview query var is present.
+		// This check MISSES shortcodes in widgets, reusable blocks, FSE
+		// templates, and page builders — those are covered by the shortcode
+		// render methods calling enqueue_calculator_assets() directly at
+		// render time (enqueuing mid-content still prints in the footer).
 		global $post;
 		$should_load = false;
 
@@ -464,6 +477,24 @@ window.addEventListener('resize', function() {
 		if ( ! $should_load ) {
 			return;
 		}
+
+		$this->enqueue_calculator_assets( $has_maker_qr );
+	}
+
+	/**
+	 * Enqueue all calculator frontend assets.
+	 *
+	 * Callable from shortcode render methods so the assets load even when the
+	 * shortcode lives somewhere has_shortcode(post_content) cannot see.
+	 * Idempotent: WordPress ignores repeat enqueues of the same handle.
+	 *
+	 * @since 2.26.1
+	 * @param bool $has_maker_qr Whether the dedicated maker QR page assets are needed.
+	 * @return void
+	 */
+	public function enqueue_calculator_assets( $has_maker_qr = false ) {
+		// Use minified assets in production (when WP_DEBUG is false)
+		$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
 
 		// Self-hosted fonts: only load for templates that use Space Mono / Work Sans
 		// Replaced Google Fonts CDN for GDPR compliance and faster loading (v2.12.50)
@@ -683,9 +714,23 @@ window.addEventListener('resize', function() {
 	 * @return void
 	 */
 	public function add_frontend_security_headers() {
-		// Only add headers on pages that use the calculator shortcode.
+		// Scope to requests that actually involve the calculator. send_headers
+		// fires on every front-end request, and these headers used to be set
+		// site-wide (despite the old comment claiming otherwise), silently
+		// breaking any page the site intentionally embeds cross-origin.
 		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
 			return;
+		}
+		if ( ! get_query_var( 'adc_code' ) && ! get_query_var( 'adc_preview' ) ) {
+			global $post;
+			$has_calc = is_a( $post, 'WP_Post' ) && (
+				has_shortcode( $post->post_content, 'dosage_calculator' ) ||
+				has_shortcode( $post->post_content, 'adc_calculator' ) ||
+				has_shortcode( $post->post_content, 'adc_maker_qr' )
+			);
+			if ( ! $has_calc ) {
+				return;
+			}
 		}
 
 		// X-Content-Type-Options: prevent MIME-type sniffing.

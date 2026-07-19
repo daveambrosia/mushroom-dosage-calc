@@ -30,6 +30,10 @@ class ADC_Maker_QR_Shortcode {
 	 */
 	public static function render( $atts = array() ) {
 		$atts = shortcode_atts( array(), $atts, 'adc_maker_qr' );
+		// Render-time enqueue: covers shortcode placements that
+		// has_shortcode(post_content) cannot see (widgets, blocks, FSE
+		// templates). Idempotent when the wp_enqueue_scripts pass already ran.
+		adc()->enqueue_calculator_assets( true );
 		ob_start();
 		?>
 		<div class="adc-maker-qr" data-adc-maker-qr>
