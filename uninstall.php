@@ -56,7 +56,12 @@ function adc_uninstall_site( $wpdb ) {
 if ( is_multisite() ) {
 	// Uninstall runs once for the network; walk every site so per-blog
 	// wp_N_adc_* tables and options are not left behind.
-	$adc_site_ids = get_sites( array( 'fields' => 'ids', 'number' => 0 ) );
+	$adc_site_ids = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
 	foreach ( $adc_site_ids as $adc_site_id ) {
 		switch_to_blog( $adc_site_id );
 		adc_uninstall_site( $wpdb );

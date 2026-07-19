@@ -77,7 +77,7 @@ class Test_ADC_Edibles extends WP_UnitTestCase {
 	}
 
 	/**
-	 * total_mg is derived from the per-piece compound sum, not caller input.
+	 * The total_mg is derived from the per-piece compound sum, not caller input.
 	 *
 	 * @return void
 	 */
@@ -97,7 +97,7 @@ class Test_ADC_Edibles extends WP_UnitTestCase {
 	}
 
 	/**
-	 * pieces_per_package can never reach the DB as zero (divide-by-zero guard).
+	 * The pieces_per_package can never reach the DB as zero (divide-by-zero guard).
 	 *
 	 * @return void
 	 */
@@ -115,7 +115,7 @@ class Test_ADC_Edibles extends WP_UnitTestCase {
 	}
 
 	/**
-	 * format_for_api returns per-piece values unmodified — the exact site of
+	 * The format_for_api output returns per-piece values unmodified — the exact site of
 	 * the 2.25.1 regression (an erroneous division was added, then reverted).
 	 *
 	 * @return void
@@ -135,7 +135,7 @@ class Test_ADC_Edibles extends WP_UnitTestCase {
 	}
 
 	/**
-	 * short_code format rule: only letters, numbers, dashes.
+	 * The short_code format rule: only letters, numbers, dashes.
 	 *
 	 * @return void
 	 */
