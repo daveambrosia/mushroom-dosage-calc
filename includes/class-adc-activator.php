@@ -396,11 +396,6 @@ class ADC_Activator {
 	}
 
 	/**
-	 * Insert default rows into categories, product_types, compounds, and strains tables.
-	 *
-	 * @return void
-	 */
-	/**
 	 * Seed unit names for known product types and register missing types.
 	 *
 	 * Unit names drive the calculator's dose display ("5 gummies" instead of
@@ -474,6 +469,11 @@ class ADC_Activator {
 		}
 	}
 
+	/**
+	 * Insert default rows into categories, product_types, compounds, and strains tables.
+	 *
+	 * @return void
+	 */
 	private static function insert_default_data() {
 		global $wpdb;
 		$prefix = $wpdb->prefix . 'adc_';
