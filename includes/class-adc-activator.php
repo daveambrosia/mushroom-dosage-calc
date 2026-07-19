@@ -198,7 +198,8 @@ class ADC_Activator {
 
 		// Strains table
 		$sql_strains = "CREATE TABLE {$prefix}strains (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             short_code VARCHAR(20) NOT NULL,
             name VARCHAR(255) NOT NULL,
             batch_number VARCHAR(100),
@@ -229,7 +230,8 @@ class ADC_Activator {
 
 		// Edibles table - Without generated column for broader MySQL compatibility
 		$sql_edibles = "CREATE TABLE {$prefix}edibles (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             short_code VARCHAR(20) NOT NULL,
             name VARCHAR(255) NOT NULL,
             brand VARCHAR(255),
@@ -265,7 +267,8 @@ class ADC_Activator {
 
 		// Categories table
 		$sql_categories = "CREATE TABLE {$prefix}categories (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             name VARCHAR(100) NOT NULL,
             slug VARCHAR(100) NOT NULL,
             type VARCHAR(20) DEFAULT 'both',
@@ -283,7 +286,8 @@ class ADC_Activator {
 
 		// Product types table
 		$sql_product_types = "CREATE TABLE {$prefix}product_types (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             name VARCHAR(100) NOT NULL,
             unit_name VARCHAR(50) NOT NULL DEFAULT 'pieces',
             slug VARCHAR(100) NOT NULL,
@@ -301,7 +305,8 @@ class ADC_Activator {
 
 		// Compounds table
 		$sql_compounds = "CREATE TABLE {$prefix}compounds (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             compound_key VARCHAR(50) NOT NULL,
             display_name VARCHAR(100) NOT NULL,
             unit VARCHAR(20) DEFAULT 'mcg/g',
@@ -323,7 +328,8 @@ class ADC_Activator {
 
 		// Submissions table
 		$sql_submissions = "CREATE TABLE {$prefix}submissions (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             type VARCHAR(20) NOT NULL,
             source VARCHAR(50) DEFAULT 'user_submit',
             data LONGTEXT NOT NULL,
@@ -354,7 +360,8 @@ class ADC_Activator {
 
 		// Blacklist table
 		$sql_blacklist = "CREATE TABLE {$prefix}blacklist (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY  (id),
             type VARCHAR(20) NOT NULL,
             value VARCHAR(255) NOT NULL,
             reason TEXT,

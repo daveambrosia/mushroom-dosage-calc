@@ -139,10 +139,14 @@ class Ambrosia_Dosage_Calculator {
 	 * @return void
 	 */
 	private function init_hooks() {
-		add_action( 'plugins_loaded', array( 'ADC_DB', 'init' ), 1 );
+		// NOTE: do not add plugins_loaded callbacks here. init_hooks() runs
+		// from adc_init(), which is itself a plugins_loaded callback at
+		// priority 10 — WP_Hook silently drops callbacks added mid-run at the
+		// current or an earlier priority, so they would never fire. That is
+		// exactly how check_db_update was dead for several releases; such
+		// registrations belong at file scope (see the bottom of this file).
 		add_action( 'update_option_adc_settings', array( 'ADC_DB', 'invalidate_cache' ) );
 
-		add_action( 'plugins_loaded', array( $this, 'check_db_update' ) );
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'rest_api_init', array( 'ADC_HTTP_Cache', 'init' ), 5 );
@@ -710,6 +714,27 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-adc-activator.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-adc-db.php';
 register_activation_hook( __FILE__, array( 'ADC_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'ADC_Activator', 'deactivate' ) );
+
+// These MUST be registered at file scope, not inside init_hooks():
+// init_hooks() runs from adc_init() during plugins_loaded priority 10, and
+// WP_Hook silently drops callbacks added mid-run at the current or an earlier
+// priority. Registered that way, check_db_update never fired and the automatic
+// DB migration on plugin update was dead — a site updating to a version with a
+// schema change got no dbDelta and no admin notice until deactivate/reactivate.
+// ADC_DB is required above, so priority 1 is safe here; check_db_update runs
+// at 20, after adc_init (10) has constructed the plugin and loaded its deps.
+add_action( 'plugins_loaded', array( 'ADC_DB', 'init' ), 1 );
+
+/**
+ * Run the DB version check/migration after the plugin is fully initialized.
+ *
+ * @since 2.26.1
+ * @return void
+ */
+function adc_check_db_update() {
+	adc()->check_db_update();
+}
+add_action( 'plugins_loaded', 'adc_check_db_update', 20 );
 
 /**
  * Get the plugin instance helper.
