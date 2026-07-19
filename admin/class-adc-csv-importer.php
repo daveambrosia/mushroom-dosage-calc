@@ -403,7 +403,7 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 	 * @param array $column_map Header-to-index mapping.
 	 * @param array $headers    Original CSV header row.
 	 */
-	private static function map_row( $row, $column_map, $headers ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	private static function map_row( $row, $column_map, $headers ) {
 		$data = array();
 
 		$fields = array(
@@ -429,11 +429,20 @@ Penis Envy,12000,3000,600,PE-2024-001,high-potency</pre>
 
 				// Convert numeric fields
 				if ( in_array( $field, array( 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin', 'pieces_per_package', 'total_mg' ), true ) ) {
-					// Handle percentage format (e.g., "0.8%" -> 8000 mcg/g)
-					if ( strpos( $value, '%' ) !== false ) {
-						$value = floatval( str_replace( '%', '', $value ) ) * 10000;
+					// Handle percentage format (e.g., "0.8%" -> 8000 mcg/g).
+					// A column headed e.g. "psilocybin %" holds percentages
+					// even when individual cells omit the % sign.
+					$percent_header = isset( $headers[ $column_map[ $field ] ] ) && false !== strpos( $headers[ $column_map[ $field ] ], '%' );
+					if ( $percent_header || strpos( $value, '%' ) !== false ) {
+						$value = floatval( str_replace( array( '%', ',' ), '', $value ) ) * 10000;
+					} else {
+						// Strip thousands separators and any other stray
+						// formatting before parsing: intval("6,200") is 6,
+						// which once turned a 6200 mcg/g strain into 6 and
+						// produced a 1000x dose error downstream.
+						$value = preg_replace( '/[^0-9.]/', '', $value );
 					}
-					$data[ $field ] = intval( $value );
+					$data[ $field ] = max( 0, intval( round( floatval( $value ) ) ) );
 				} else {
 					$data[ $field ] = sanitize_text_field( $value );
 				}

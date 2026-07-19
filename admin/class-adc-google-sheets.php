@@ -221,7 +221,7 @@ class ADC_Google_Sheets {
 
 	/**
 	 * Check if a rate limit should block this sync.
-	 * Prevents syncing more than once per 5 minutes.
+	 * Prevents syncing more than once per 5 seconds (see $cooldown below).
 	 *
 	 * @return bool|int False if not limited, or seconds remaining if limited.
 	 */

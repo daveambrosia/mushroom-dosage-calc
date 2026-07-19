@@ -21,7 +21,11 @@ class ADC_Sheets_Importer {
 	/** WP-Cron hook name */
 	const CRON_HOOK = 'adc_google_sheets_sync';
 
-	/** @var bool True while run_scheduled_sync() is executing a batch; skips per-type rate limiting. */
+	/**
+	 * True while run_scheduled_sync() is executing a batch; skips per-type rate limiting.
+	 *
+	 * @var bool
+	 */
 	private static $batch_running = false;
 
 	/** Option keys */
@@ -159,8 +163,8 @@ class ADC_Sheets_Importer {
 	 */
 	public static function run_scheduled_sync() {
 		self::$batch_running = true;
-		$settings = self::get_settings();
-		$log      = array(
+		$settings            = self::get_settings();
+		$log                 = array(
 			'time'    => current_time( 'mysql' ),
 			'type'    => 'auto',
 			'results' => array(),
@@ -273,6 +277,14 @@ class ADC_Sheets_Importer {
 			ADC_Edibles::clear_cache();
 		}
 
+		// Record the sync time so manual imports are rate-limited too. Skipped
+		// during batch cron sync, where run_scheduled_sync() records once after
+		// both types complete (the 2.25.4 fix for strains blocking edibles);
+		// without this call here, the manual-import rate limit was dead code.
+		if ( ! self::$batch_running ) {
+			ADC_Google_Sheets::record_sync_time();
+		}
+
 		$result['success'] = true;
 
 		return $result;
@@ -337,14 +349,31 @@ class ADC_Sheets_Importer {
 		}
 		foreach ( $numeric_fields as $field ) {
 			if ( isset( $data[ $field ] ) ) {
-				$data[ $field ] = max( 0, intval( preg_replace( '/[^0-9.]/', '', $data[ $field ] ) ) );
+				$raw = trim( (string) $data[ $field ] );
+				// A column headed e.g. "psilocybin %" holds percentages even
+				// when individual cells omit the % sign.
+				$percent_header = isset( $column_map[ $field ] ) && false !== strpos( $column_map[ $field ], '%' );
+				if ( $percent_header || strpos( $raw, '%' ) !== false ) {
+					// Percent notation (e.g. "0.62%") means percent by weight:
+					// 0.62% = 6200 mcg/g. The header list advertises
+					// "psilocybin %" columns, but this conversion was missing —
+					// intval(preg_replace(...)) turned "0.62%" into 0 and every
+					// affected strain silently imported at zero potency.
+					$val = floatval( str_replace( array( '%', ',' ), '', $raw ) ) * 10000;
+				} else {
+					// Strip thousands separators before parsing, and round
+					// through floatval so sub-integer values are not truncated
+					// to zero.
+					$val = floatval( preg_replace( '/[^0-9.]/', '', $raw ) );
+				}
+				$data[ $field ] = max( 0, intval( round( $val ) ) );
 			}
 		}
 
 		// The Google Sheet stores compound values as mcg per PACKAGE (total for the whole package).
 		// The DB and calculator JS expect mcg per PIECE. Divide by pieces_per_package here.
 		if ( 'edible' === $type ) {
-			$pieces   = max( 1, intval( $data['pieces_per_package'] ?? 1 ) );
+			$pieces          = max( 1, intval( $data['pieces_per_package'] ?? 1 ) );
 			$compound_fields = array( 'psilocybin', 'psilocin', 'norpsilocin', 'baeocystin', 'norbaeocystin', 'aeruginascin' );
 			foreach ( $compound_fields as $field ) {
 				if ( isset( $data[ $field ] ) ) {
