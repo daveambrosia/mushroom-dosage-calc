@@ -73,6 +73,10 @@ class ADC_Activator {
 			delete_option( 'adc_activation_warnings' );
 		}
 
+		// Seed/repair product-type unit names and register any product types
+		// referenced by edibles but missing from the types table.
+		self::sync_product_type_units();
+
 		// Store activation time for diagnostics
 		update_option( 'adc_activated_at', current_time( 'mysql' ) );
 
@@ -396,6 +400,80 @@ class ADC_Activator {
 	 *
 	 * @return void
 	 */
+	/**
+	 * Seed unit names for known product types and register missing types.
+	 *
+	 * Unit names drive the calculator's dose display ("5 gummies" instead of
+	 * "5 pieces"). Idempotent: only rows still carrying the schema default
+	 * ('pieces') are updated, so unit names an admin customized in the
+	 * Product Types page are never overwritten. Product types referenced by
+	 * edibles but absent from the types table (imported from the sheet before
+	 * types auto-registration existed) are inserted so they appear in both
+	 * the unit map and the admin UI.
+	 *
+	 * @since 2.26.1 (DB 2.1.0)
+	 * @return void
+	 */
+	private static function sync_product_type_units() {
+		global $wpdb;
+		$prefix = $wpdb->prefix . 'adc_';
+
+		$types_table   = $prefix . 'product_types';
+		$edibles_table = $prefix . 'edibles';
+		if ( ! $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $types_table ) ) ) {
+			return;
+		}
+
+		$unit_defaults = array(
+			'chocolate'         => 'pieces',
+			'gummy'             => 'gummies',
+			'gummies'           => 'gummies',
+			'capsule'           => 'capsules',
+			'capsules'          => 'capsules',
+			'tea'               => 'cups',
+			'tincture'          => 'droppers',
+			'microdose-candies' => 'candies',
+			'drink-mix'         => 'servings',
+			'granola'           => 'servings',
+			'taffy'             => 'pieces',
+			'other'             => 'pieces',
+		);
+
+		foreach ( $unit_defaults as $slug => $unit ) {
+			if ( 'pieces' === $unit ) {
+				continue; // Schema default already says pieces.
+			}
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE `{$types_table}` SET unit_name = %s WHERE slug = %s AND ( unit_name = '' OR unit_name = 'pieces' )",
+					$unit,
+					$slug
+				)
+			);
+		}
+
+		// Register product types that edibles reference but the table lacks,
+		// so they show up in the admin UI and the REST unit map.
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $edibles_table ) ) ) {
+			$missing = $wpdb->get_col(
+				"SELECT DISTINCT e.product_type FROM `{$edibles_table}` e
+				 LEFT JOIN `{$types_table}` t ON t.slug = e.product_type
+				 WHERE t.id IS NULL AND e.product_type != ''"
+			);
+			foreach ( $missing as $slug ) {
+				$wpdb->insert(
+					$types_table,
+					array(
+						'name'       => ucwords( str_replace( '-', ' ', $slug ) ),
+						'slug'       => $slug,
+						'unit_name'  => $unit_defaults[ $slug ] ?? 'pieces',
+						'sort_order' => 50,
+					)
+				);
+			}
+		}
+	}
+
 	private static function insert_default_data() {
 		global $wpdb;
 		$prefix = $wpdb->prefix . 'adc_';
@@ -490,31 +568,37 @@ class ADC_Activator {
 					array(
 						'name'       => 'Chocolate',
 						'slug'       => 'chocolate',
+						'unit_name'  => 'pieces',
 						'sort_order' => 1,
 					),
 					array(
 						'name'       => 'Gummy',
 						'slug'       => 'gummy',
+						'unit_name'  => 'gummies',
 						'sort_order' => 2,
 					),
 					array(
 						'name'       => 'Capsule',
 						'slug'       => 'capsule',
+						'unit_name'  => 'capsules',
 						'sort_order' => 3,
 					),
 					array(
 						'name'       => 'Tea',
 						'slug'       => 'tea',
+						'unit_name'  => 'cups',
 						'sort_order' => 4,
 					),
 					array(
 						'name'       => 'Tincture',
 						'slug'       => 'tincture',
+						'unit_name'  => 'droppers',
 						'sort_order' => 5,
 					),
 					array(
 						'name'       => 'Other',
 						'slug'       => 'other',
+						'unit_name'  => 'pieces',
 						'sort_order' => 99,
 					),
 				);

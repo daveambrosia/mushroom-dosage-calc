@@ -341,13 +341,21 @@
         return Math.round(g) + 'g';
     }
     
+    /**
+     * Singular form of a plural unit name: gummies -> gummy, capsules ->
+     * capsule, pieces -> piece. Naive s-stripping produced "gummie".
+     */
+    function singularizeUnit(unit) {
+        if (unit.endsWith('ies')) return unit.slice(0, -3) + 'y';
+        return unit.endsWith('s') ? unit.slice(0, -1) : unit;
+    }
+
     function getUnitName(singular) {
         const edible = getCurrentEdible();
         if (!edible || !edible.productType) return singular ? 'piece' : 'pieces';
         const unit = (state.unitMap || {})[edible.productType];
         if (!unit) return singular ? 'piece' : 'pieces';
-        if (singular) return unit.endsWith('s') ? unit.slice(0, -1) : unit;
-        return unit;
+        return singular ? singularizeUnit(unit) : unit;
     }
 
     function formatPieces(p) {
@@ -358,7 +366,7 @@
         const frac = rounded - whole;
         const fracStr = fractions[frac] || '';
         let result = whole === 0 ? fracStr : (fracStr === '' ? whole.toString() : whole + fracStr);
-        return result + ' ' + (rounded === 1 ? getUnitName(true) : getUnitName(false));
+        return result + ' ' + (rounded <= 1 ? getUnitName(true) : getUnitName(false));
     }
 
     function getToleranceMultiplier(days) {

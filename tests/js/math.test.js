@@ -14,7 +14,7 @@ const src = [
 	fs.readFileSync(path.join(MODULES, 'adc-math.js'), 'utf8'),
 	`return { getToleranceMultiplier, formatPieces, formatGrams,
 		getTotalPsilocybin, calculateMushroomDose, calculateEdibleDose,
-		EXPERIENCE_LEVELS, escapeHtml, clamp };`
+		EXPERIENCE_LEVELS, escapeHtml, clamp, singularizeUnit };`
 ].join('\n');
 // eslint-disable-next-line no-new-func
 const M = new Function(src)();
@@ -71,17 +71,30 @@ describe('dose math', () => {
 describe('formatPieces (eighth-based rounding)', () => {
 	it('formats halves and eighths', () => {
 		expect(M.formatPieces(1.5)).toBe('1½ pieces');
-		expect(M.formatPieces(0.125)).toBe('⅛ pieces');
+		expect(M.formatPieces(0.125)).toBe('⅛ piece');
 		expect(M.formatPieces(2)).toBe('2 pieces');
 		expect(M.formatPieces(1)).toBe('1 piece');
 	});
 	it('rounds to the nearest eighth', () => {
-		expect(M.formatPieces(0.24)).toBe('¼ pieces');
+		expect(M.formatPieces(0.24)).toBe('¼ piece');
 		expect(M.formatPieces(1.06)).toBe('1 piece');
 		expect(M.formatPieces(1.07)).toBe('1⅛ pieces');
 	});
 	it('reports below one eighth explicitly', () => {
 		expect(M.formatPieces(0.05)).toBe('< ⅛ piece');
+	});
+	it('quantities of one or less are singular', () => {
+		expect(M.formatPieces(0.5)).toBe('½ piece');
+		expect(M.formatPieces(1)).toBe('1 piece');
+		expect(M.formatPieces(1.125)).toBe('1⅛ pieces');
+	});
+	it('singularizes unit names correctly', () => {
+		expect(M.singularizeUnit('gummies')).toBe('gummy');
+		expect(M.singularizeUnit('candies')).toBe('candy');
+		expect(M.singularizeUnit('capsules')).toBe('capsule');
+		expect(M.singularizeUnit('pieces')).toBe('piece');
+		expect(M.singularizeUnit('cups')).toBe('cup');
+		expect(M.singularizeUnit('tea')).toBe('tea');
 	});
 });
 
