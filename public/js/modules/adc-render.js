@@ -458,4 +458,19 @@
         updateEdibleControls();
         if (state.activeTab === 'mushrooms') { updateMushroomResults(); updateConverter(); }
         else { updateEdibleResults(); }
+        announceUpdate();
+    }
+
+    /**
+     * Concise screen-reader announcement after recalculation. The results
+     * grids deliberately have no aria-live region: replacing all six cards
+     * re-read the entire grid on every input change, flooding TTS users.
+     */
+    function announceUpdate() {
+        const statusEl = document.getElementById('adc-sr-status');
+        if (!statusEl) return;
+        const product = state.activeTab === 'mushrooms' ? getCurrentStrain() : getCurrentEdible();
+        if (!product) { statusEl.textContent = ''; return; }
+        const lbs = Math.round(state.weightLbs);
+        statusEl.textContent = 'Doses updated for ' + product.name + ' at ' + lbs + ' pounds.';
     }

@@ -24,14 +24,14 @@ npm install -g terser
 
 ### Building Assets
 ```bash
-# Build JavaScript (concatenates modules + minifies)
-bash public/js/build-js.sh
+# Build everything: concatenates public/js/modules/ into calculator.js
+# (public/js/build-js.sh, explicit dependency order), then minifies all
+# JS and CSS. Always run this after editing any module or stylesheet —
+# production serves only the .min files.
+bash build-min.sh
 
-# Build CSS (minifies)
-bash public/css/build.sh
-
-# Build both
-bash public/js/build-js.sh && bash public/css/build.sh
+# Release packaging (version stamping, staging, asset verification, zip):
+bash build-zip.sh [version]
 ```
 
 ## Architecture
@@ -87,11 +87,13 @@ wp_adc_blacklist         # Blocked IPs/emails
 
 ### Code Standards
 ```bash
-# Check PHP code style (WordPress standards)
-phpcs --standard=WordPress .
+# Check PHP code style — bare invocation, so the project's phpcs.xml.dist
+# applies. NEVER pass --standard=WordPress: that bypasses the project
+# config and its deliberate rule exclusions.
+./vendor/bin/phpcs
 
 # Auto-fix PHP code style
-phpcbf --standard=WordPress .
+./vendor/bin/phpcbf
 
 # Run static analysis
 phpstan analyse --level=5 includes/ admin/
@@ -345,17 +347,17 @@ All frequently queried columns have indexes:
 - Or pattern delete: `wp db query "DELETE FROM wp_options WHERE option_name LIKE '_transient_adc_rest_%'"`
 
 ### PHPCS errors after update
-- Run auto-fix: `phpcbf --standard=WordPress .`
+- Run auto-fix: `./vendor/bin/phpcbf`
 - Check for syntax errors: `find . -name "*.php" -exec php -l {} \;`
 
 ## Contributing
 
 ### Before Submitting PR
-1. Run `phpcbf --standard=WordPress .`
-2. Run `phpcs --standard=WordPress .` (should be <100 errors)
-3. Run `phpunit` (all tests passing)
-4. Update version in plugin header
-5. Rebuild minified assets
+1. Run `./vendor/bin/phpcs` (zero findings expected — CI enforces this)
+2. Run `./vendor/bin/phpunit` and `npx vitest run` (all tests passing)
+3. Run `npx eslint .` (zero errors — CI enforces this)
+4. Rebuild assets: `bash build-min.sh` (CI fails on build drift)
+5. Versions are stamped by `build-zip.sh` at release time — do not hand-edit
 
 ### Commit Messages
 - Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`
@@ -374,7 +376,7 @@ GPL v2 or later
 
 ---
 
-**Last Updated:** March 21, 2026  
-**Plugin Version:** 2.20.0  
+**Last Updated:** July 19, 2026  
+**Plugin Version:** 2.26.0  
 **WordPress Compatibility:** 6.0+  
 **PHP Compatibility:** 8.0+

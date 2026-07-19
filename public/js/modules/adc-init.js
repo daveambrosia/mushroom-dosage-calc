@@ -42,9 +42,12 @@
 		const urlSpecifiedTab = urlTab || typeParam === 'edible' || typeParam === 'strain' || typeParam === 'e' || typeParam === 'm';
 		populateStrainSelect();
 		populateEdibleSelect();
+		// Bind events BEFORE the network round-trip: the UI is fully rendered
+		// at this point, and binding after the awaits left every control dead
+		// until both fetches resolved — permanently, if an endpoint hung.
+		bindEvents();
 		// Always lazy-load from REST (data no longer inlined in page)
 		await Promise.all( [fetchStrains(), fetchEdibles()] );
-		bindEvents();
 		// Sync state.activeTab from DOM (PHP/inline script sets initial state, no flash)
 		const domHasEdibles = elements.calculator?.classList.contains( 'adc-tab-edibles' );
 		// Only use DOM state if URL params didnt specify a tab
@@ -70,7 +73,7 @@
 	}
 		elements.unitToggle?.forEach( b => { b.classList.toggle( 'active', b.dataset.unit === state.displayUnit ); b.setAttribute( 'aria-pressed', b.dataset.unit === state.displayUnit ? 'true' : 'false' ); } );
 	if (elements.storageConsent) {
-		const dontkeep                  = localStorage.getItem( STORAGE_KEYS.dontkeep );
+		const dontkeep                  = safeStorageGet( STORAGE_KEYS.dontkeep );
 		elements.storageConsent.checked = dontkeep !== 'true';
 		state.storageConsent            = dontkeep !== 'true';
 	}
@@ -90,10 +93,14 @@
 		}
 		try {
 			const response = await fetch( adcData.restUrl + 'strains' );
+			if ( ! response.ok) {
+				throw new Error( 'HTTP ' + response.status );
+			}
 			const data     = await response.json();
 			state.strains  = data.strains || [];
 		} catch (e) {
 			console.error( 'Error fetching strains:', e );
+			showLoadFailure( elements.strainSelect );
 		}
 		state._strainsLoaded = true;
 		populateStrainSelect();
@@ -105,14 +112,36 @@
 		}
 		try {
 			const response = await fetch( adcData.restUrl + 'edibles' );
+			if ( ! response.ok) {
+				throw new Error( 'HTTP ' + response.status );
+			}
 			const data     = await response.json();
 			state.edibles  = data.edibles || [];
 			state.unitMap  = data.unitMap || {};
 		} catch (e) {
 			console.error( 'Error fetching edibles:', e );
+			showLoadFailure( elements.edibleSelect );
 		}
 		state._ediblesLoaded = true;
 		populateEdibleSelect();
+	}
+
+	/**
+	 * Surface a product-list load failure in the UI. Previously an HTTP 500
+	 * was swallowed identically to success-with-no-data: the select just
+	 * showed "Select a strain..." with nothing in it and no explanation.
+	 */
+	function showLoadFailure(selectEl) {
+		if ( ! selectEl) {
+			return;
+		}
+		const opt    = document.createElement( 'option' );
+		opt.value    = '';
+		opt.disabled = true;
+		opt.selected = true;
+		opt.textContent = 'Could not load the product list. Please refresh the page.';
+		selectEl.innerHTML = '';
+		selectEl.appendChild( opt );
 	}
 
 	if (document.readyState === 'loading') {

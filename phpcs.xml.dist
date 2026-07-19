@@ -36,10 +36,46 @@
 		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching"/>
 	</rule>
 
-	<!-- Table names are trusted (ADC_DB::table() returns prefixed table names, not user input) -->
-	<rule ref="WordPress.DB.PreparedSQL">
-		<exclude name="WordPress.DB.PreparedSQL.InterpolatedNotPrepared"/>
-		<exclude name="WordPress.DB.PreparedSQL.NotPrepared"/>
+	<!--
+	Table names are trusted (ADC_DB::table() returns prefixed table names,
+	not user input), and every ORDER BY at these sites is allowlisted.
+	Scoped to the audited files rather than excluded repo-wide, so any NEW
+	file interpolating into SQL gets the full sniff — the blanket exclusion
+	was a standing blind spot for future injection bugs.
+	-->
+	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+		<exclude-pattern>*/includes/class-adc-activator\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-db\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-strains\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-edibles\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-submissions\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-rest-api\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-qr-handler\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-template-css\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-admin-*\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-csv-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-json-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-sheets-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-template-builder\.php</exclude-pattern>
+		<exclude-pattern>*/uninstall\.php</exclude-pattern>
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+		<exclude-pattern>*/includes/class-adc-activator\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-db\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-strains\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-edibles\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-submissions\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-rest-api\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-qr-handler\.php</exclude-pattern>
+		<exclude-pattern>*/includes/class-adc-template-css\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-admin-*\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-csv-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-json-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-sheets-importer\.php</exclude-pattern>
+		<exclude-pattern>*/admin/class-adc-template-builder\.php</exclude-pattern>
+		<exclude-pattern>*/uninstall\.php</exclude-pattern>
+		<exclude-pattern>*/tests/*</exclude-pattern>
 	</rule>
 
 	<!-- error_log() is intentional for debug logging -->

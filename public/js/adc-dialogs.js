@@ -41,12 +41,42 @@
 			}
 		);
 
-		// Handle escape key
+		// Handle escape key, and trap Tab inside the dialog while it is open —
+		// previously Tab walked straight out into the page behind the dialog.
 		document.addEventListener(
 			'keydown',
 			function (e) {
-				if (e.key === 'Escape' && modalContainer.classList.contains( 'show' )) {
+				if (!modalContainer.classList.contains( 'show' )) {
+					return;
+				}
+				if (e.key === 'Escape') {
 					closeDialog( false );
+					return;
+				}
+				if (e.key !== 'Tab') {
+					return;
+				}
+				var dialog    = document.getElementById( 'adc-dialog' );
+				var focusable = Array.prototype.filter.call(
+					dialog.querySelectorAll( 'button, input, [href], [tabindex]:not([tabindex="-1"])' ),
+					function (el) {
+						return ! el.disabled && el.offsetParent !== null;
+					}
+				);
+				if (focusable.length === 0) {
+					return;
+				}
+				var first = focusable[0];
+				var last  = focusable[focusable.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if ( ! e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				} else if ( ! dialog.contains( document.activeElement )) {
+					e.preventDefault();
+					first.focus();
 				}
 			}
 		);
@@ -104,6 +134,7 @@
 		);
 
 		// Show modal
+		previousFocusEl = document.activeElement;
 		modalContainer.classList.add( 'show' );
 
 		// Focus appropriate element
@@ -129,12 +160,19 @@
 		}
 	}
 
-	var resolveCallback = null;
+	var resolveCallback   = null;
+	var previousFocusEl   = null;
 
 	function closeDialog(value) {
 		if (modalContainer) {
 			modalContainer.classList.remove( 'show' );
 		}
+		// Restore focus to whatever opened the dialog; without this,
+		// keyboard and screen-reader focus was dumped on <body> on close.
+		if (previousFocusEl && previousFocusEl.focus) {
+			previousFocusEl.focus();
+		}
+		previousFocusEl = null;
 		if (resolveCallback) {
 			resolveCallback( value );
 			resolveCallback = null;

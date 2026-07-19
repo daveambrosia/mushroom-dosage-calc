@@ -161,11 +161,39 @@
     // ============================================================================
     // STORAGE
     // ============================================================================
+
+    // Browsers configured to block all cookies throw a SecurityError on ANY
+    // access to window.localStorage — even reading the property — which used
+    // to abort init() entirely and leave the calculator blank for those
+    // members. Every direct localStorage touch goes through these guards.
+    function safeStorageGet(key) {
+        try {
+            return window.localStorage.getItem(key);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function safeStorageSet(key, value) {
+        try {
+            window.localStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function safeStorageRemove(key) {
+        try {
+            window.localStorage.removeItem(key);
+        } catch (e) { /* storage unavailable */ }
+    }
+
     
     function loadFromStorage(key, defaultValue = {}) {
         if (!state.storageConsent) return defaultValue;
         try {
-            const data = localStorage.getItem(key);
+            const data = safeStorageGet(key);
             return data ? JSON.parse(data) : defaultValue;
         } catch (e) {
             console.warn('Storage load error:', key, e);
@@ -174,9 +202,9 @@
     }
 
     function saveToStorage(key, data) {
-        if (!state.storageConsent || localStorage.getItem(STORAGE_KEYS.dontkeep) === 'true') return;
+        if (!state.storageConsent || safeStorageGet(STORAGE_KEYS.dontkeep) === 'true') return;
         try {
-            localStorage.setItem(key, JSON.stringify(data));
+            safeStorageSet(key, JSON.stringify(data));
         } catch (e) {
             console.warn('Storage save error:', key, e);
         }
@@ -184,15 +212,15 @@
 
     function loadPreferences() {
         // Check consent FIRST — before any localStorage writes
-        const dontkeep = localStorage.getItem(STORAGE_KEYS.dontkeep);
+        const dontkeep = safeStorageGet(STORAGE_KEYS.dontkeep);
         state.storageConsent = dontkeep !== 'true';
 
         // Only do version migration if consent is given
         if (state.storageConsent) {
-            const storedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+            const storedVersion = safeStorageGet(STORAGE_VERSION_KEY);
             if (storedVersion !== STORAGE_VERSION) {
-                Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-                localStorage.setItem(STORAGE_VERSION_KEY, STORAGE_VERSION);
+                Object.values(STORAGE_KEYS).forEach(key => safeStorageRemove(key));
+                safeStorageSet(STORAGE_VERSION_KEY, STORAGE_VERSION);
             }
         }
         const prefs = loadFromStorage(STORAGE_KEYS.preferences, {});
@@ -249,7 +277,7 @@
             return;
         }
         try {
-            const raw = localStorage.getItem(LEVEL_COLLAPSE_KEY);
+            const raw = safeStorageGet(LEVEL_COLLAPSE_KEY);
             if (!raw) {
                 // No saved state — default: all levels collapsed
                 ['mushroom', 'edible'].forEach(type => {
@@ -274,7 +302,7 @@
         const consent = document.getElementById('adc-storage-consent');
         if (!consent || !consent.checked) return;
         try {
-            localStorage.setItem(LEVEL_COLLAPSE_KEY, JSON.stringify({
+            safeStorageSet(LEVEL_COLLAPSE_KEY, JSON.stringify({
                 mushroom: [...collapsedLevels.mushroom],
                 edible:   [...collapsedLevels.edible],
             }));
@@ -927,6 +955,21 @@ function cacheElements() {
         updateEdibleControls();
         if (state.activeTab === 'mushrooms') { updateMushroomResults(); updateConverter(); }
         else { updateEdibleResults(); }
+        announceUpdate();
+    }
+
+    /**
+     * Concise screen-reader announcement after recalculation. The results
+     * grids deliberately have no aria-live region: replacing all six cards
+     * re-read the entire grid on every input change, flooding TTS users.
+     */
+    function announceUpdate() {
+        const statusEl = document.getElementById('adc-sr-status');
+        if (!statusEl) return;
+        const product = state.activeTab === 'mushrooms' ? getCurrentStrain() : getCurrentEdible();
+        if (!product) { statusEl.textContent = ''; return; }
+        const lbs = Math.round(state.weightLbs);
+        statusEl.textContent = 'Doses updated for ' + product.name + ' at ' + lbs + ' pounds.';
     }
 /**
  * Modals & Sharing — Part of calculator.js
@@ -946,18 +989,21 @@ function cacheElements() {
      */
     function trapFocus(modal) {
         const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-        const focusableElements = modal.querySelectorAll(focusableSelector);
-        const firstFocusable = focusableElements[0];
-        const lastFocusable = focusableElements[focusableElements.length - 1];
-        
+        // Recompute on every keypress: the modals toggle field visibility and
+        // swap footer buttons, so a one-time snapshot let Tab land on hidden
+        // elements (focus appeared to vanish for keyboard users).
+        const getFocusable = () => [...modal.querySelectorAll(focusableSelector)]
+            .filter(el => !el.disabled && el.offsetParent !== null);
+
         // Store previous focus to restore later
         previousFocusElement = document.activeElement;
-        
+
         // Focus first element
-        if (firstFocusable) {
-            setTimeout(() => firstFocusable.focus(), 50);
+        const initial = getFocusable()[0];
+        if (initial) {
+            setTimeout(() => initial.focus(), 50);
         }
-        
+
         // Handle keyboard navigation
         const handleKeydown = (e) => {
             if (e.key === 'Escape') {
@@ -967,9 +1013,14 @@ function cacheElements() {
                 if (closeBtn) closeBtn.click();
                 return;
             }
-            
+
             if (e.key !== 'Tab') return;
-            
+
+            const focusable = getFocusable();
+            if (focusable.length === 0) return;
+            const firstFocusable = focusable[0];
+            const lastFocusable = focusable[focusable.length - 1];
+
             if (e.shiftKey) {
                 if (document.activeElement === firstFocusable) {
                     e.preventDefault();
@@ -982,22 +1033,35 @@ function cacheElements() {
                 }
             }
         };
-        
+
         modal.addEventListener('keydown', handleKeydown);
-        
+
         // Set ARIA attributes
         modal.setAttribute('aria-modal', 'true');
         modal.setAttribute('role', 'dialog');
-        
-        // Hide main content from screen readers
+
+        // Hide the background from assistive tech WITHOUT hiding the modal:
+        // the modal lives INSIDE #adc-calculator, so aria-hidden on the
+        // calculator itself put the open modal inside a hidden subtree and
+        // screen readers announced nothing at all (and aria-hidden on an
+        // ancestor of the focused element violates the ARIA spec). Instead,
+        // mark the calculator's other direct children inert.
         const calculator = document.getElementById('adc-calculator');
-        if (calculator) calculator.setAttribute('aria-hidden', 'true');
-        
+        const inerted = [];
+        if (calculator) {
+            [...calculator.children].forEach(child => {
+                if (child !== modal && !child.contains(modal) && !child.inert) {
+                    child.inert = true;
+                    inerted.push(child);
+                }
+            });
+        }
+
         // Return cleanup function
         return () => {
             modal.removeEventListener('keydown', handleKeydown);
             modal.removeAttribute('aria-modal');
-            if (calculator) calculator.removeAttribute('aria-hidden');
+            inerted.forEach(child => { child.inert = false; });
             // Restore focus
             if (previousFocusElement && previousFocusElement.focus) {
                 previousFocusElement.focus();
@@ -1030,6 +1094,8 @@ function cacheElements() {
     function showToast(message, duration = 2000) {
         const toast = document.createElement('div');
         toast.className = 'adc-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
         toast.textContent = message;
         (document.getElementById('adc-calculator') || document.body).appendChild(toast);
         requestAnimationFrame(() => toast.classList.add('adc-toast-show'));
@@ -1069,7 +1135,8 @@ function cacheElements() {
                 </div>
             </div>
         `;
-        // Append to calculator container so @scope CSS applies
+        // Append inside the calculator container so the ID-prefixed CSS applies
+        // (@scope itself was removed in v2.12.50 for Firefox support).
         (document.getElementById('adc-calculator') || document.body).appendChild(modal);
         
         // Set up focus trap
@@ -1314,9 +1381,9 @@ function cacheElements() {
 
     async function resetAllData() {
         if (!await adcConfirm('This will clear all your custom strains, edibles, and preferences. The page will reload. Continue?', { danger: true, title: 'Clear All Data', confirmText: 'Clear Everything' })) return;
-        Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-        localStorage.removeItem(COLLAPSE_STORAGE_KEY);
-        localStorage.removeItem(LEVEL_COLLAPSE_KEY);
+        Object.values(STORAGE_KEYS).forEach(key => safeStorageRemove(key));
+        safeStorageRemove(COLLAPSE_STORAGE_KEY);
+        safeStorageRemove(LEVEL_COLLAPSE_KEY);
         window.location.reload();
     }
 
@@ -1349,7 +1416,8 @@ function cacheElements() {
         const popup = document.createElement('div');
         popup.className = 'adc-share-popup-overlay';
         popup.innerHTML = `<div class="adc-share-popup"><div class="adc-share-popup-header"><h3>🍄 Shared Dose</h3></div><div class="adc-share-popup-body"><p class="adc-shared-intro">Someone shared their recommended dose with you:</p><div class="adc-shared-product">${escapeHtml(data.product || 'Unknown')}</div><div class="adc-shared-level">${escapeHtml(data.level)}</div><div class="adc-shared-dose">${escapeHtml(data.dose)}</div><div class="adc-shared-mcg">${escapeHtml(data.mcg)}</div>${breakdownHtml}<p class="adc-shared-note">Note: Dosage varies by body weight. Calculate your personal dose below!</p></div><div class="adc-share-popup-footer"><button type="button" class="adc-btn adc-btn-primary" id="adc-close-share-popup">Calculate My Dose</button></div></div>`;
-        // Append to calculator container so @scope CSS applies
+        // Append inside the calculator container so the ID-prefixed CSS applies
+        // (@scope itself was removed in v2.12.50 for Firefox support).
         (document.getElementById('adc-calculator') || document.body).appendChild(popup);
         window.adcSharedData = data;
         const cleanUrl = window.location.href.split('share=')[0].replace(/[&?]$/, '');
@@ -2377,14 +2445,14 @@ function cacheElements() {
             state.storageConsent = this.checked;
             if (this.checked) {
                 // User wants to remember settings - remove DONTKEEP and save ALL current data
-                localStorage.removeItem(STORAGE_KEYS.dontkeep);
+                safeStorageRemove(STORAGE_KEYS.dontkeep);
                 saveAllData();
             } else {
                 // User doesn't want storage - wipe all data and set DONTKEEP
                 Object.values(STORAGE_KEYS).forEach(key => {
-                    if (key !== STORAGE_KEYS.dontkeep) localStorage.removeItem(key);
+                    if (key !== STORAGE_KEYS.dontkeep) safeStorageRemove(key);
                 });
-                localStorage.setItem(STORAGE_KEYS.dontkeep, 'true');
+                safeStorageSet(STORAGE_KEYS.dontkeep, 'true');
             }
         });
         document.querySelectorAll('#adc-custom-strain-wrapper input').forEach(input => {
@@ -2540,9 +2608,12 @@ function cacheElements() {
 		const urlSpecifiedTab = urlTab || typeParam === 'edible' || typeParam === 'strain' || typeParam === 'e' || typeParam === 'm';
 		populateStrainSelect();
 		populateEdibleSelect();
+		// Bind events BEFORE the network round-trip: the UI is fully rendered
+		// at this point, and binding after the awaits left every control dead
+		// until both fetches resolved — permanently, if an endpoint hung.
+		bindEvents();
 		// Always lazy-load from REST (data no longer inlined in page)
 		await Promise.all( [fetchStrains(), fetchEdibles()] );
-		bindEvents();
 		// Sync state.activeTab from DOM (PHP/inline script sets initial state, no flash)
 		const domHasEdibles = elements.calculator?.classList.contains( 'adc-tab-edibles' );
 		// Only use DOM state if URL params didnt specify a tab
@@ -2568,7 +2639,7 @@ function cacheElements() {
 	}
 		elements.unitToggle?.forEach( b => { b.classList.toggle( 'active', b.dataset.unit === state.displayUnit ); b.setAttribute( 'aria-pressed', b.dataset.unit === state.displayUnit ? 'true' : 'false' ); } );
 	if (elements.storageConsent) {
-		const dontkeep                  = localStorage.getItem( STORAGE_KEYS.dontkeep );
+		const dontkeep                  = safeStorageGet( STORAGE_KEYS.dontkeep );
 		elements.storageConsent.checked = dontkeep !== 'true';
 		state.storageConsent            = dontkeep !== 'true';
 	}
@@ -2588,10 +2659,14 @@ function cacheElements() {
 		}
 		try {
 			const response = await fetch( adcData.restUrl + 'strains' );
+			if ( ! response.ok) {
+				throw new Error( 'HTTP ' + response.status );
+			}
 			const data     = await response.json();
 			state.strains  = data.strains || [];
 		} catch (e) {
 			console.error( 'Error fetching strains:', e );
+			showLoadFailure( elements.strainSelect );
 		}
 		state._strainsLoaded = true;
 		populateStrainSelect();
@@ -2603,14 +2678,36 @@ function cacheElements() {
 		}
 		try {
 			const response = await fetch( adcData.restUrl + 'edibles' );
+			if ( ! response.ok) {
+				throw new Error( 'HTTP ' + response.status );
+			}
 			const data     = await response.json();
 			state.edibles  = data.edibles || [];
 			state.unitMap  = data.unitMap || {};
 		} catch (e) {
 			console.error( 'Error fetching edibles:', e );
+			showLoadFailure( elements.edibleSelect );
 		}
 		state._ediblesLoaded = true;
 		populateEdibleSelect();
+	}
+
+	/**
+	 * Surface a product-list load failure in the UI. Previously an HTTP 500
+	 * was swallowed identically to success-with-no-data: the select just
+	 * showed "Select a strain..." with nothing in it and no explanation.
+	 */
+	function showLoadFailure(selectEl) {
+		if ( ! selectEl) {
+			return;
+		}
+		const opt    = document.createElement( 'option' );
+		opt.value    = '';
+		opt.disabled = true;
+		opt.selected = true;
+		opt.textContent = 'Could not load the product list. Please refresh the page.';
+		selectEl.innerHTML = '';
+		selectEl.appendChild( opt );
 	}
 
 	if (document.readyState === 'loading') {

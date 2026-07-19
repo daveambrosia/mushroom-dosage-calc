@@ -293,7 +293,12 @@ class ADC_Shortcode {
 					<h2>Recommended Dosages</h2>
 					<div class="adc-results-summary" id="adc-mushroom-summary" style="display:none"></div>
 				</div>
-				<div class="adc-results-grid" id="adc-mushroom-results" aria-live="polite"></div>
+				<?php // Concise announcements for screen readers / TTS. The results grids
+				// deliberately have NO aria-live: replacing all six cards re-read
+				// the entire grid (every compound row) on each input change,
+				// flooding text-to-speech users. JS updates this element instead. ?>
+				<div id="adc-sr-status" class="adc-visually-hidden" role="status" aria-live="polite"></div>
+				<div class="adc-results-grid" id="adc-mushroom-results"></div>
 			</div>
 			<?php endif; ?>
 			
@@ -303,7 +308,7 @@ class ADC_Shortcode {
 					<h2>Recommended Dosages</h2>
 					<div class="adc-results-summary" id="adc-edible-summary" style="display:none"></div>
 				</div>
-				<div class="adc-results-grid" id="adc-edible-results" aria-live="polite"></div>
+				<div class="adc-results-grid" id="adc-edible-results"></div>
 			</div>
 			<?php endif; ?>
 			

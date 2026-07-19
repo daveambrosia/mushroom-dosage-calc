@@ -308,14 +308,14 @@
             state.storageConsent = this.checked;
             if (this.checked) {
                 // User wants to remember settings - remove DONTKEEP and save ALL current data
-                localStorage.removeItem(STORAGE_KEYS.dontkeep);
+                safeStorageRemove(STORAGE_KEYS.dontkeep);
                 saveAllData();
             } else {
                 // User doesn't want storage - wipe all data and set DONTKEEP
                 Object.values(STORAGE_KEYS).forEach(key => {
-                    if (key !== STORAGE_KEYS.dontkeep) localStorage.removeItem(key);
+                    if (key !== STORAGE_KEYS.dontkeep) safeStorageRemove(key);
                 });
-                localStorage.setItem(STORAGE_KEYS.dontkeep, 'true');
+                safeStorageSet(STORAGE_KEYS.dontkeep, 'true');
             }
         });
         document.querySelectorAll('#adc-custom-strain-wrapper input').forEach(input => {

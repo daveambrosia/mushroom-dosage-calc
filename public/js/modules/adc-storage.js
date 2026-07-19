@@ -8,11 +8,39 @@
     // ============================================================================
     // STORAGE
     // ============================================================================
+
+    // Browsers configured to block all cookies throw a SecurityError on ANY
+    // access to window.localStorage — even reading the property — which used
+    // to abort init() entirely and leave the calculator blank for those
+    // members. Every direct localStorage touch goes through these guards.
+    function safeStorageGet(key) {
+        try {
+            return window.localStorage.getItem(key);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function safeStorageSet(key, value) {
+        try {
+            window.localStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function safeStorageRemove(key) {
+        try {
+            window.localStorage.removeItem(key);
+        } catch (e) { /* storage unavailable */ }
+    }
+
     
     function loadFromStorage(key, defaultValue = {}) {
         if (!state.storageConsent) return defaultValue;
         try {
-            const data = localStorage.getItem(key);
+            const data = safeStorageGet(key);
             return data ? JSON.parse(data) : defaultValue;
         } catch (e) {
             console.warn('Storage load error:', key, e);
@@ -21,9 +49,9 @@
     }
 
     function saveToStorage(key, data) {
-        if (!state.storageConsent || localStorage.getItem(STORAGE_KEYS.dontkeep) === 'true') return;
+        if (!state.storageConsent || safeStorageGet(STORAGE_KEYS.dontkeep) === 'true') return;
         try {
-            localStorage.setItem(key, JSON.stringify(data));
+            safeStorageSet(key, JSON.stringify(data));
         } catch (e) {
             console.warn('Storage save error:', key, e);
         }
@@ -31,15 +59,15 @@
 
     function loadPreferences() {
         // Check consent FIRST — before any localStorage writes
-        const dontkeep = localStorage.getItem(STORAGE_KEYS.dontkeep);
+        const dontkeep = safeStorageGet(STORAGE_KEYS.dontkeep);
         state.storageConsent = dontkeep !== 'true';
 
         // Only do version migration if consent is given
         if (state.storageConsent) {
-            const storedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+            const storedVersion = safeStorageGet(STORAGE_VERSION_KEY);
             if (storedVersion !== STORAGE_VERSION) {
-                Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-                localStorage.setItem(STORAGE_VERSION_KEY, STORAGE_VERSION);
+                Object.values(STORAGE_KEYS).forEach(key => safeStorageRemove(key));
+                safeStorageSet(STORAGE_VERSION_KEY, STORAGE_VERSION);
             }
         }
         const prefs = loadFromStorage(STORAGE_KEYS.preferences, {});
@@ -96,7 +124,7 @@
             return;
         }
         try {
-            const raw = localStorage.getItem(LEVEL_COLLAPSE_KEY);
+            const raw = safeStorageGet(LEVEL_COLLAPSE_KEY);
             if (!raw) {
                 // No saved state — default: all levels collapsed
                 ['mushroom', 'edible'].forEach(type => {
@@ -121,7 +149,7 @@
         const consent = document.getElementById('adc-storage-consent');
         if (!consent || !consent.checked) return;
         try {
-            localStorage.setItem(LEVEL_COLLAPSE_KEY, JSON.stringify({
+            safeStorageSet(LEVEL_COLLAPSE_KEY, JSON.stringify({
                 mushroom: [...collapsedLevels.mushroom],
                 edible:   [...collapsedLevels.edible],
             }));

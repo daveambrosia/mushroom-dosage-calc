@@ -2999,3 +2999,18 @@
 	#adc-calculator .adc-toast {
 		border-radius: var(--adc-radius);
 	}
+
+/* Screen-reader-only text: visually hidden, still announced. Used by the
+   #adc-sr-status live region that replaced aria-live on the results grids. */
+#adc-calculator .adc-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}

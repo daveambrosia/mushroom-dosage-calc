@@ -540,7 +540,7 @@ window.addEventListener('resize', function() {
 		wp_enqueue_script(
 			'adc-calculator',
 			ADC_PLUGIN_URL . 'public/js/calculator' . $min . '.js',
-			array(),
+			array( 'adc-dialogs' ),
 			ADC_VERSION,
 			array(
 				'in_footer' => true,

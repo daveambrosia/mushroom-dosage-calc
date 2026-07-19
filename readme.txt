@@ -2,7 +2,7 @@
 Contributors: churchofambrosia
 Tags: psilocybin, dosage, calculator, mushrooms, edibles, qr-code
 Requires at least: 6.0
-Tested up to: 6.4
+Tested up to: 6.9
 Requires PHP: 8.0
 Stable tag: 2.26.0
 License: GPLv2 or later
@@ -49,6 +49,14 @@ The Ambrosia Dosage Calculator is a full-featured WordPress plugin for calculati
 
 == Changelog ==
 
+Recent releases (full history in CHANGELOG.md on GitHub):
+
+= 2.26.0 =
+* Maker QR codes: public generator page ([adc_maker_qr]), compact ?d= URL format, Generate-QR buttons in the custom strain/edible modals, JS test suite (Vitest).
+
+= 2.25.x =
+* GitHub self-updater; fixes for edible unit handling (mcg per piece vs per package), cron auto-sync rate limiting, and admin form labels.
+
 = 2.0.0 =
 * Complete rewrite with tabbed interface
 * Added edibles support with piece-based dosing
@@ -73,7 +81,7 @@ The Ambrosia Dosage Calculator is a full-featured WordPress plugin for calculati
 Doses are calculated using: `mcg_needed = mcg_per_lb × weight_lbs × tolerance_multiplier × sensitivity_multiplier`
 
 For mushrooms, grams = mcg_needed / (psilocybin + psilocin)
-For edibles, pieces = mg_needed / mg_per_piece
+For edibles, pieces = mcg_needed / mcg_per_piece
 
 = What compounds are tracked? =
 

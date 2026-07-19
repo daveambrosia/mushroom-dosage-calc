@@ -16,18 +16,21 @@
      */
     function trapFocus(modal) {
         const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-        const focusableElements = modal.querySelectorAll(focusableSelector);
-        const firstFocusable = focusableElements[0];
-        const lastFocusable = focusableElements[focusableElements.length - 1];
-        
+        // Recompute on every keypress: the modals toggle field visibility and
+        // swap footer buttons, so a one-time snapshot let Tab land on hidden
+        // elements (focus appeared to vanish for keyboard users).
+        const getFocusable = () => [...modal.querySelectorAll(focusableSelector)]
+            .filter(el => !el.disabled && el.offsetParent !== null);
+
         // Store previous focus to restore later
         previousFocusElement = document.activeElement;
-        
+
         // Focus first element
-        if (firstFocusable) {
-            setTimeout(() => firstFocusable.focus(), 50);
+        const initial = getFocusable()[0];
+        if (initial) {
+            setTimeout(() => initial.focus(), 50);
         }
-        
+
         // Handle keyboard navigation
         const handleKeydown = (e) => {
             if (e.key === 'Escape') {
@@ -37,9 +40,14 @@
                 if (closeBtn) closeBtn.click();
                 return;
             }
-            
+
             if (e.key !== 'Tab') return;
-            
+
+            const focusable = getFocusable();
+            if (focusable.length === 0) return;
+            const firstFocusable = focusable[0];
+            const lastFocusable = focusable[focusable.length - 1];
+
             if (e.shiftKey) {
                 if (document.activeElement === firstFocusable) {
                     e.preventDefault();
@@ -52,22 +60,35 @@
                 }
             }
         };
-        
+
         modal.addEventListener('keydown', handleKeydown);
-        
+
         // Set ARIA attributes
         modal.setAttribute('aria-modal', 'true');
         modal.setAttribute('role', 'dialog');
-        
-        // Hide main content from screen readers
+
+        // Hide the background from assistive tech WITHOUT hiding the modal:
+        // the modal lives INSIDE #adc-calculator, so aria-hidden on the
+        // calculator itself put the open modal inside a hidden subtree and
+        // screen readers announced nothing at all (and aria-hidden on an
+        // ancestor of the focused element violates the ARIA spec). Instead,
+        // mark the calculator's other direct children inert.
         const calculator = document.getElementById('adc-calculator');
-        if (calculator) calculator.setAttribute('aria-hidden', 'true');
-        
+        const inerted = [];
+        if (calculator) {
+            [...calculator.children].forEach(child => {
+                if (child !== modal && !child.contains(modal) && !child.inert) {
+                    child.inert = true;
+                    inerted.push(child);
+                }
+            });
+        }
+
         // Return cleanup function
         return () => {
             modal.removeEventListener('keydown', handleKeydown);
             modal.removeAttribute('aria-modal');
-            if (calculator) calculator.removeAttribute('aria-hidden');
+            inerted.forEach(child => { child.inert = false; });
             // Restore focus
             if (previousFocusElement && previousFocusElement.focus) {
                 previousFocusElement.focus();
@@ -100,6 +121,8 @@
     function showToast(message, duration = 2000) {
         const toast = document.createElement('div');
         toast.className = 'adc-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
         toast.textContent = message;
         (document.getElementById('adc-calculator') || document.body).appendChild(toast);
         requestAnimationFrame(() => toast.classList.add('adc-toast-show'));
@@ -139,7 +162,8 @@
                 </div>
             </div>
         `;
-        // Append to calculator container so @scope CSS applies
+        // Append inside the calculator container so the ID-prefixed CSS applies
+        // (@scope itself was removed in v2.12.50 for Firefox support).
         (document.getElementById('adc-calculator') || document.body).appendChild(modal);
         
         // Set up focus trap
@@ -384,9 +408,9 @@
 
     async function resetAllData() {
         if (!await adcConfirm('This will clear all your custom strains, edibles, and preferences. The page will reload. Continue?', { danger: true, title: 'Clear All Data', confirmText: 'Clear Everything' })) return;
-        Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-        localStorage.removeItem(COLLAPSE_STORAGE_KEY);
-        localStorage.removeItem(LEVEL_COLLAPSE_KEY);
+        Object.values(STORAGE_KEYS).forEach(key => safeStorageRemove(key));
+        safeStorageRemove(COLLAPSE_STORAGE_KEY);
+        safeStorageRemove(LEVEL_COLLAPSE_KEY);
         window.location.reload();
     }
 
@@ -419,7 +443,8 @@
         const popup = document.createElement('div');
         popup.className = 'adc-share-popup-overlay';
         popup.innerHTML = `<div class="adc-share-popup"><div class="adc-share-popup-header"><h3>🍄 Shared Dose</h3></div><div class="adc-share-popup-body"><p class="adc-shared-intro">Someone shared their recommended dose with you:</p><div class="adc-shared-product">${escapeHtml(data.product || 'Unknown')}</div><div class="adc-shared-level">${escapeHtml(data.level)}</div><div class="adc-shared-dose">${escapeHtml(data.dose)}</div><div class="adc-shared-mcg">${escapeHtml(data.mcg)}</div>${breakdownHtml}<p class="adc-shared-note">Note: Dosage varies by body weight. Calculate your personal dose below!</p></div><div class="adc-share-popup-footer"><button type="button" class="adc-btn adc-btn-primary" id="adc-close-share-popup">Calculate My Dose</button></div></div>`;
-        // Append to calculator container so @scope CSS applies
+        // Append inside the calculator container so the ID-prefixed CSS applies
+        // (@scope itself was removed in v2.12.50 for Firefox support).
         (document.getElementById('adc-calculator') || document.body).appendChild(popup);
         window.adcSharedData = data;
         const cleanUrl = window.location.href.split('share=')[0].replace(/[&?]$/, '');

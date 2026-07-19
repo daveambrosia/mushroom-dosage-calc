@@ -84,11 +84,8 @@ jobs:
             exit 1
           }
 
-      # ESLint is not yet at zero findings (see REMEDIATION-PLAN 6.7).
-      # Report-only until that lands, then drop continue-on-error.
-      - name: ESLint (report-only)
-        run: npx eslint public/js/calculator.js public/js/adc-dialogs.js
-        continue-on-error: true
+      - name: ESLint (zero errors enforced)
+        run: npx eslint .
 
   package:
     name: Release package builds
