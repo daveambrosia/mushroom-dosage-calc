@@ -20,3 +20,6 @@ composer.lock
 *.swp
 *.swo
 *~
+
+# AI session scaffolding — never commit (contains internal hostnames/paths)
+docs/superpowers/
