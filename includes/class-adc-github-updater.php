@@ -152,12 +152,12 @@ class ADC_GitHub_Updater {
 	 * Find the download URL for the plugin zip in a release.
 	 *
 	 * Looks for an asset named ambrosia-dosage-calculator-v{version}.zip.
-	 * Falls back to the GitHub-generated zipball URL if no matching asset
-	 * is found.
+	 * Returns an empty string (= skip the update offer) when the release has
+	 * no matching built asset or the asset URL points at a non-GitHub host.
 	 *
 	 * @param array<string,mixed> $release Decoded GitHub release object.
 	 * @param string              $version Clean version string.
-	 * @return string Download URL.
+	 * @return string Download URL, or '' to skip this release.
 	 */
 	private function get_zip_url( array $release, string $version ): string {
 		$expected_asset = 'ambrosia-dosage-calculator-v' . $version . '.zip';
@@ -168,15 +168,37 @@ class ADC_GitHub_Updater {
 					isset( $asset['name'], $asset['browser_download_url'] ) &&
 					$asset['name'] === $expected_asset
 				) {
-					return $asset['browser_download_url'];
+					$url  = (string) $asset['browser_download_url'];
+					$host = wp_parse_url( $url, PHP_URL_HOST );
+					// The release JSON is cached in a plain transient, which
+					// anything able to write an option could tamper with to
+					// point `package` at an attacker host — WordPress would
+					// then install and activate arbitrary PHP. Only GitHub's
+					// own download hosts may serve the package.
+					$allowed_hosts = array(
+						'github.com',
+						'objects.githubusercontent.com',
+						'release-assets.githubusercontent.com',
+						'codeload.github.com',
+					);
+					if ( in_array( $host, $allowed_hosts, true ) ) {
+						return $url;
+					}
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- security-relevant refusal worth a trace.
+					error_log( '[ADC Updater] Refusing update package from unexpected host: ' . (string) $host );
+					return '';
 				}
 			}
 		}
 
-		// Fallback: GitHub-generated source zip. Note this contains the
-		// repo contents in a subdirectory named {repo}-{tag}/, so post_install
-		// must handle the rename.
-		return $release['zipball_url'] ?? '';
+		// No named asset: skip the release. Never fall back to GitHub's
+		// source zipball — it bypasses build-zip.sh entirely, so it ships
+		// dev files and whatever unbuilt assets are in the repo, and a tag
+		// pushed without its built zip would silently auto-update every
+		// member site to that state.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- release-engineering mistake worth a trace.
+		error_log( '[ADC Updater] Release v' . $version . ' has no ' . $expected_asset . ' asset; skipping update offer.' );
+		return '';
 	}
 
 	/**

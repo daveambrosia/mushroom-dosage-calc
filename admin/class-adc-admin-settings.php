@@ -281,9 +281,9 @@ endforeach;
 							<td>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=edit&slug=' . $ct_slug ) ); ?>" class="button button-small"><?php esc_html_e( 'Edit', 'ambrosia-dosage-calc' ); ?></a>
 								<?php if ( ! $is_active ) : ?>
-									<button class="button button-small adc-set-active" data-slug="<?php echo $ct_slug; ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_set_active_template' ) ); ?>"><?php esc_html_e( 'Set Active', 'ambrosia-dosage-calc' ); ?></button>
+									<button class="button button-small adc-set-active" data-slug="<?php echo $ct_slug; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr() applied at assignment above. ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_set_active_template' ) ); ?>"><?php esc_html_e( 'Set Active', 'ambrosia-dosage-calc' ); ?></button>
 								<?php endif; ?>
-								<button type="button" class="button button-small adc-export-template" data-slug="<?php echo $ct_slug; ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_export_template_' . $ct_slug ) ); ?>"><?php esc_html_e( 'Export', 'ambrosia-dosage-calc' ); ?></button>
+								<button type="button" class="button button-small adc-export-template" data-slug="<?php echo $ct_slug; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr() applied at assignment above. ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'adc_export_template_' . $ct_slug ) ); ?>"><?php esc_html_e( 'Export', 'ambrosia-dosage-calc' ); ?></button>
 								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=duplicate&slug=' . $ct_slug ), 'adc_duplicate_template_' . $ct_slug ) ); ?>" class="button button-small"><?php esc_html_e( 'Duplicate', 'ambrosia-dosage-calc' ); ?></a>
 								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dosage-calculator-template-builder&action=delete&slug=' . $ct_slug ), 'adc_delete_template_' . $ct_slug ) ); ?>" class="button button-small" style="color:#a00;" onclick="return confirm('<?php echo esc_js( __( 'Delete this template? This cannot be undone.', 'ambrosia-dosage-calc' ) ); ?>');"><?php esc_html_e( 'Delete', 'ambrosia-dosage-calc' ); ?></a>
 							</td>

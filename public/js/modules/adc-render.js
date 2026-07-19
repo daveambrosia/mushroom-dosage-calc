@@ -72,8 +72,8 @@
         if (state.strains.length > 0) {
             const grouped = groupBy(state.strains, s => s.category || 'uncategorized');
             for (const [cat, strains] of Object.entries(grouped)) {
-                html += `<optgroup label="${formatCategoryLabel(cat)}">`;
-                strains.forEach(s => { html += `<option value="${s.shortCode}">${escapeHtml(s.name)}</option>`; });
+                html += `<optgroup label="${escapeHtml(formatCategoryLabel(cat))}">`;
+                strains.forEach(s => { html += `<option value="${escapeHtml(s.shortCode)}">${escapeHtml(s.name)}</option>`; });
                 html += '</optgroup>';
             }
         }
@@ -127,10 +127,10 @@
         if (state.edibles.length > 0) {
             const grouped = groupBy(state.edibles, e => e.productType || 'other');
             for (const [type, edibles] of Object.entries(grouped)) {
-                html += `<optgroup label="${formatCategoryLabel(type)}">`;
+                html += `<optgroup label="${escapeHtml(formatCategoryLabel(type))}">`;
                 edibles.forEach(e => {
                     const brandStr = e.brand ? ` (${escapeHtml(e.brand)})` : '';
-                    html += `<option value="${e.shortCode}">${escapeHtml(e.name)}${brandStr}</option>`;
+                    html += `<option value="${escapeHtml(e.shortCode)}">${escapeHtml(e.name)}${brandStr}</option>`;
                 });
                 html += '</optgroup>';
             }

@@ -118,6 +118,10 @@ class ADC_QR_Handler {
 
 		$result = array(
 			't'             => 'm',
+			// Only the edible branch overrides 'type'; without this default,
+			// every legacy strain scan read an undefined key downstream
+			// (three PHP 8 warnings per scan, null type on submissions).
+			'type'          => 'strain',
 			'name'          => '',
 			'psilocybin'    => 0,
 			'psilocin'      => 0,
@@ -159,6 +163,14 @@ class ADC_QR_Handler {
 			$result['pieces_per_package'] = absint( $params['pieces'] ?? $params['pieces_per_package'] ?? 1 );
 			$result['total_mg']           = absint( $params['total_mg'] ?? 0 );
 			$result['batch_number']       = sanitize_text_field( $params['batch'] ?? '' );
+			// Derive per-piece psilocybin from the package total. Legacy edible
+			// URLs carry only total_mg; without a compound value the queued
+			// submission could never be approved — ADC_Edibles::sanitize()
+			// recomputes total_mg as the sum of compounds (zero) and
+			// validate() then rejects it, stranding the submission forever.
+			if ( $result['total_mg'] > 0 ) {
+				$result['psilocybin'] = intval( round( ( $result['total_mg'] * 1000 ) / max( 1, $result['pieces_per_package'] ) ) );
+			}
 			return $result;
 		}
 
@@ -194,8 +206,12 @@ class ADC_QR_Handler {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- legacy QR redirect; sanitization in parse_legacy_url().
 		$parsed = self::parse_legacy_url( wp_unslash( $_GET ) );
 
-		// Auto-submit to review queue if enabled
-		if ( ADC_DB::get_setting( 'auto_submit_unknown_qr', true ) ) {
+		// Auto-submit to review queue if enabled.
+		// This anonymous GET path creates DB rows (and possibly notification
+		// emails), so it gets the same two-tier rate limiting as the REST
+		// submit endpoint — without it, looping ?strain=<random> inserted
+		// unbounded submissions and flooded the review queue.
+		if ( ADC_DB::get_setting( 'auto_submit_unknown_qr', true ) && self::scan_rate_limit_passes() ) {
 			// Check if this exact data already exists
 			$existing = null;
 
@@ -239,6 +255,35 @@ class ADC_QR_Handler {
 		}
 
 		return $parsed;
+	}
+
+	/**
+	 * Apply the REST submit endpoint's rate limits to legacy QR scans.
+	 *
+	 * Two tiers, mirroring ADC_REST_API::submit_custom(): a transient burst
+	 * limit (10 per 15 minutes per IP) and a DB ceiling (5 submissions per
+	 * hour per IP).
+	 *
+	 * @since 2.26.1
+	 * @return bool True when the scan may create a submission.
+	 */
+	private static function scan_rate_limit_passes() {
+		$ip = ADC_REST_API::get_client_ip();
+
+		if ( is_wp_error( ADC_REST_API::check_rate_limit( $ip ) ) ) {
+			return false;
+		}
+
+		global $wpdb;
+		$table  = ADC_DB::table( 'submissions' );
+		$recent = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM $table WHERE ip_address = %s AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)",
+				$ip
+			)
+		);
+
+		return $recent < 5;
 	}
 
 	/**

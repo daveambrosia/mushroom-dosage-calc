@@ -398,6 +398,41 @@ class ADC_REST_API {
 		return current_user_can( 'manage_options' ); // Admins only
 	}
 
+	/**
+	 * Build a transient cache key from an allowlist of normalized parameters.
+	 *
+	 * The key was previously md5(all request params), which let anonymous
+	 * clients mint a fresh transient (two wp_options rows for 5 minutes) per
+	 * arbitrary parameter combination — looping random `search` values
+	 * bloated wp_options without bound. Free-text search therefore skips
+	 * caching entirely, and every other parameter is normalized into a
+	 * bounded key space.
+	 *
+	 * @since 2.26.1
+	 * @param string          $prefix  Transient prefix (must start with adc_rest_ so invalidation sweeps it).
+	 * @param WP_REST_Request $request Request object.
+	 * @param array           $allowed Parameter names that may contribute to the key.
+	 * @return string|null Cache key, or null when the response must not be cached.
+	 */
+	private static function build_cache_key( $prefix, $request, $allowed ) {
+		$search = $request->get_param( 'search' );
+		if ( null !== $search && '' !== (string) $search ) {
+			return null;
+		}
+
+		$parts = array();
+		foreach ( $allowed as $param ) {
+			$value = $request->get_param( $param );
+			if ( null === $value || '' === (string) $value ) {
+				continue;
+			}
+			$parts[ $param ] = is_numeric( $value ) ? (string) absint( $value ) : sanitize_key( (string) $value );
+		}
+		ksort( $parts );
+
+		return $prefix . md5( wp_json_encode( $parts ) );
+	}
+
 	// =========== PUBLIC ENDPOINTS ===========
 
 	/**
@@ -407,12 +442,12 @@ class ADC_REST_API {
 	 * @return WP_REST_Response
 	 */
 	public static function get_strains( $request ) {
-		// Build cache key from request parameters
-		$cache_key = 'adc_rest_strains_' . md5( wp_json_encode( $request->get_params() ) );
-		$cached    = get_transient( $cache_key );
-
-		if ( false !== $cached && is_array( $cached ) ) {
-			return rest_ensure_response( $cached );
+		$cache_key = self::build_cache_key( 'adc_rest_strains_', $request, array( 'category', 'include_inactive', 'min_potency', 'max_potency' ) );
+		if ( null !== $cache_key ) {
+			$cached = get_transient( $cache_key );
+			if ( false !== $cached && is_array( $cached ) ) {
+				return rest_ensure_response( $cached );
+			}
 		}
 
 		$category         = $request->get_param( 'category' );
@@ -450,7 +485,9 @@ class ADC_REST_API {
 		);
 
 		// Cache for 5 minutes
-		set_transient( $cache_key, $response_data, 5 * MINUTE_IN_SECONDS );
+		if ( null !== $cache_key ) {
+			set_transient( $cache_key, $response_data, 5 * MINUTE_IN_SECONDS );
+		}
 
 		return rest_ensure_response( $response_data );
 	}
@@ -480,12 +517,12 @@ class ADC_REST_API {
 	 * @return WP_REST_Response
 	 */
 	public static function get_edibles( $request ) {
-		// Build cache key from request parameters
-		$cache_key = 'adc_rest_edibles_' . md5( wp_json_encode( $request->get_params() ) );
-		$cached    = get_transient( $cache_key );
-
-		if ( false !== $cached && is_array( $cached ) ) {
-			return rest_ensure_response( $cached );
+		$cache_key = self::build_cache_key( 'adc_rest_edibles_', $request, array( 'product_type', 'include_inactive', 'min_potency', 'max_potency' ) );
+		if ( null !== $cache_key ) {
+			$cached = get_transient( $cache_key );
+			if ( false !== $cached && is_array( $cached ) ) {
+				return rest_ensure_response( $cached );
+			}
 		}
 
 		$product_type     = $request->get_param( 'product_type' );
@@ -531,7 +568,9 @@ class ADC_REST_API {
 		);
 
 		// Cache for 5 minutes
-		set_transient( $cache_key, $response_data, 5 * MINUTE_IN_SECONDS );
+		if ( null !== $cache_key ) {
+			set_transient( $cache_key, $response_data, 5 * MINUTE_IN_SECONDS );
+		}
 
 		return rest_ensure_response( $response_data );
 	}
@@ -1256,8 +1295,11 @@ class ADC_REST_API {
 
 	/**
 	 * Get client IP — uses REMOTE_ADDR only (no proxy header trust).
+	 *
+	 * Public so ADC_QR_Handler can apply the same rate limiting to the
+	 * legacy QR GET path as this class applies to REST submissions.
 	 */
-	private static function get_client_ip() {
+	public static function get_client_ip() {
 		return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
 	}
 
@@ -1268,7 +1310,7 @@ class ADC_REST_API {
 	 * @param string $ip Client IP address.
 	 * @return true|WP_Error True if allowed, WP_Error if rate limited.
 	 */
-	private static function check_rate_limit( $ip ) {
+	public static function check_rate_limit( $ip ) {
 		$transient_key = 'adc_rate_limit_' . md5( $ip );
 		$attempts      = get_transient( $transient_key );
 

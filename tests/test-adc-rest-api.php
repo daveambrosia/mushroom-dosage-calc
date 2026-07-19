@@ -146,10 +146,29 @@ class Test_ADC_REST_API extends WP_UnitTestCase {
 		// Data should be identical
 		$this->assertEquals( $data1, $data2 );
 
-		// Check transient exists
-		$cache_key = 'adc_rest_strains_' . md5( wp_json_encode( $request1->get_params() ) );
-		$cached    = get_transient( $cache_key );
-		$this->assertNotFalse( $cached );
+		// A transient with the allowlisted-key prefix must exist. The key is
+		// built from normalized allowlisted params (see build_cache_key), so
+		// assert by prefix rather than reimplementing the key derivation.
+		global $wpdb;
+		$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc_rest_strains_%'" );
+		$this->assertGreaterThan( 0, $count, 'Parameterless GET must be cached' );
+	}
+
+	/**
+	 * Free-text search requests must NOT mint transients: the key space is
+	 * attacker-controlled and unbounded (wp_options bloat vector).
+	 */
+	public function test_strains_search_is_not_cached() {
+		global $wpdb;
+		$before = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc_rest_strains_%'" );
+
+		$request = new WP_REST_Request( 'GET', '/adc/v1/strains' );
+		$request->set_param( 'search', 'random-probe-' . wp_rand() );
+		$response = $this->server->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+
+		$after = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc_rest_strains_%'" );
+		$this->assertSame( $before, $after, 'search requests must not create cache transients' );
 	}
 
 	/**

@@ -397,6 +397,15 @@ class ADC_Strains {
 			return new WP_Error( 'validation_error', 'Short code is required' );
 		}
 
+		// Enforce the generated-code format. short_code is interpolated into
+		// HTML attributes and QR URLs on the public calculator, and it can
+		// arrive via the public submit endpoint inside approved submissions —
+		// sanitize_text_field() alone preserves quotes and equals signs, which
+		// is a stored-XSS vector.
+		if ( ! preg_match( '/^[A-Za-z0-9-]{1,50}$/', $data['short_code'] ) ) {
+			return new WP_Error( 'validation_error', 'Short code may only contain letters, numbers, and dashes (max 50 characters)' );
+		}
+
 		// Check unique short code
 		$sql  = "SELECT id FROM $table WHERE short_code = %s";
 		$args = array( $data['short_code'] );

@@ -510,8 +510,8 @@ class ADC_Template_Builder {
 
 		// Match all CSS rule blocks that contain at least one [data-template="x"] selector.
 		// Handles both single-selector blocks and multi-selector shared blocks, e.g.:
-		//   #adc-calculator[data-template="minimal"] { --adc-bg: #fff; ... }
-		//   #adc-calculator[data-template="a"], #adc-calculator[data-template="b"] { ... }
+		// #adc-calculator[data-template="minimal"] { --adc-bg: #fff; ... }
+		// #adc-calculator[data-template="a"], #adc-calculator[data-template="b"] { ... }
 		if ( preg_match_all( '/((?:[^\{]*\[data-template="[^"]+"\][^\{]*,?\s*)+)\{([^}]+)\}/s', $css, $matches, PREG_SET_ORDER ) ) {
 			foreach ( $matches as $m ) {
 				$selector_block = $m[1];

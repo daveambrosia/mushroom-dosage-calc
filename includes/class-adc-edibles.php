@@ -390,6 +390,12 @@ class ADC_Edibles {
 			return new WP_Error( 'validation_error', 'Short code is required' );
 		}
 
+		// Same format rule as ADC_Strains::validate() — short_code reaches
+		// public HTML attributes and can arrive via approved submissions.
+		if ( ! preg_match( '/^[A-Za-z0-9-]{1,50}$/', $data['short_code'] ) ) {
+			return new WP_Error( 'validation_error', 'Short code may only contain letters, numbers, and dashes (max 50 characters)' );
+		}
+
 		if ( empty( $data['product_type'] ) ) {
 			return new WP_Error( 'validation_error', 'Product type is required' );
 		}
