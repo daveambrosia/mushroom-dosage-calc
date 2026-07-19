@@ -1,0 +1,55 @@
+name: Release
+
+# Cutting a release: push a tag like v2.26.1. This workflow builds the zip
+# with build-zip.sh (which runs the full build + version stamping) and
+# attaches it to a GitHub release under the EXACT asset name the plugin's
+# self-updater requires (ambrosia-dosage-calculator-v<version>.zip).
+# The updater deliberately refuses GitHub's source zipball, so a release
+# without this asset updates nobody.
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build release zip for the tagged version
+        run: |
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          VERSION="${GITHUB_REF_NAME#v}"
+          # The tag must match what the tagged tree says it is — checked
+          # BEFORE build-zip.sh, which stamps the version and would make a
+          # later comparison always pass. A tag pushed from a branch whose
+          # ADC_VERSION disagrees would otherwise ship a mislabeled build.
+          CONST=$(grep "define.*ADC_VERSION" ambrosia-dosage-calculator.php | sed "s/.*'\([0-9.]*\)'.*/\1/")
+          if [ "$CONST" != "$VERSION" ]; then
+            echo "::error::Tag v$VERSION does not match ADC_VERSION $CONST in the tagged tree. Bump the version (build-zip.sh does this) and commit before tagging."
+            exit 1
+          fi
+          bash build-zip.sh "$VERSION"
+
+      - name: Create GitHub release with the zip asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" \
+            "build/ambrosia-dosage-calculator-v$VERSION.zip" \
+            --title "v$VERSION" \
+            --generate-notes
