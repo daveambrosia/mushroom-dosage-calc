@@ -191,7 +191,8 @@ class Test_ADC_REST_API extends WP_UnitTestCase {
 			$this->assertSame( 200, $this->server->dispatch( $request )->get_status() );
 		}
 
-		$this->assertSame( $before, (int) $wpdb->get_var( $like ), 'filtered requests must not create cache transients' );
+		$after = (int) $wpdb->get_var( $like );
+		$this->assertSame( $before, $after, 'filtered requests must not create cache transients' );
 	}
 
 	/**

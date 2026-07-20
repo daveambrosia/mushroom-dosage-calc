@@ -16,47 +16,47 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-/**
- * Remove this plugin's data for the current site.
- *
- * Guarded against a fatal redeclare if another plugin happens to define the
- * same global during a bulk uninstall.
- *
- * @param wpdb $wpdb WordPress database object.
- * @return void
- */
-if ( ! function_exists( 'adc_uninstall_site' ) ) :
-function adc_uninstall_site( $wpdb ) {
-	// 1. Unschedule the auto-sync cron. Normally cleared on deactivation,
-	// but a forced/CLI removal (or a deactivation where the importer class
-	// failed to load) leaves a permanent orphan entry firing a hook with no
-	// handler.
-	wp_unschedule_hook( 'adc_google_sheets_sync' );
+if ( ! function_exists( 'adc_uninstall_site' ) ) {
+	/**
+	 * Remove this plugin's data for the current site.
+	 *
+	 * Guarded against a fatal redeclare if another plugin happens to define
+	 * the same global during a bulk uninstall.
+	 *
+	 * @param wpdb $wpdb WordPress database object.
+	 * @return void
+	 */
+	function adc_uninstall_site( $wpdb ) {
+		// 1. Unschedule the auto-sync cron. Normally cleared on deactivation,
+		// but a forced/CLI removal (or a deactivation where the importer class
+		// failed to load) leaves a permanent orphan entry firing a hook with
+		// no handler.
+		wp_unschedule_hook( 'adc_google_sheets_sync' );
 
-	// 2. Drop all adc_* custom tables.
-	$tables = array(
-		$wpdb->prefix . 'adc_strains',
-		$wpdb->prefix . 'adc_edibles',
-		$wpdb->prefix . 'adc_categories',
-		$wpdb->prefix . 'adc_product_types',
-		$wpdb->prefix . 'adc_compounds',
-		$wpdb->prefix . 'adc_submissions',
-		$wpdb->prefix . 'adc_blacklist',
-	);
+		// 2. Drop all adc_* custom tables.
+		$tables = array(
+			$wpdb->prefix . 'adc_strains',
+			$wpdb->prefix . 'adc_edibles',
+			$wpdb->prefix . 'adc_categories',
+			$wpdb->prefix . 'adc_product_types',
+			$wpdb->prefix . 'adc_compounds',
+			$wpdb->prefix . 'adc_submissions',
+			$wpdb->prefix . 'adc_blacklist',
+		);
 
-	foreach ( $tables as $table ) {
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
+		foreach ( $tables as $table ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
+		}
+
+		// 3. Delete all adc_* options.
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'adc\_%'" );
+
+		// 4. Clear all adc_* transients (including timeout entries).
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc\_%'" );
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc\_%'" );
 	}
-
-	// 3. Delete all adc_* options.
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'adc\_%'" );
-
-	// 4. Clear all adc_* transients (including timeout entries).
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc\_%'" );
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc\_%'" );
 }
-endif;
 
 if ( is_multisite() ) {
 	// Uninstall runs once for the network; walk every site so per-blog

@@ -399,8 +399,8 @@ class ADC_Admin_Tools {
 				// value is interpolated into the calculator's result markup, so
 				// this keeps HTML-significant characters out at the only path
 				// that writes unit_name. Empty after stripping falls back.
-				$unit_name  = isset( $_POST['pt_unit_name'] ) ? preg_replace( '/[^A-Za-z \-]/', '', sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) ) ) : 'pieces';
-				$unit_name  = '' !== trim( $unit_name ) ? $unit_name : 'pieces';
+				$unit_name = isset( $_POST['pt_unit_name'] ) ? preg_replace( '/[^A-Za-z \-]/', '', sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) ) ) : 'pieces';
+				$unit_name = '' !== trim( $unit_name ) ? $unit_name : 'pieces';
 
 				$wpdb->insert(
 					$table,
