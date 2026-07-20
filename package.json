@@ -1,6 +1,6 @@
 {
   "name": "ambrosia-dosage-calculator",
-  "version": "2.26.0",
+  "version": "2.26.1",
   "private": true,
   "description": "Ambrosia Dosage Calculator WordPress plugin \u2014 JS tooling.",
   "scripts": {

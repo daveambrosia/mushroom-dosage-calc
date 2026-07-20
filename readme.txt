@@ -4,7 +4,7 @@ Tags: psilocybin, dosage, calculator, mushrooms, edibles, qr-code
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 2.26.0
+Stable tag: 2.26.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,9 @@ The Ambrosia Dosage Calculator is a full-featured WordPress plugin for calculati
 == Changelog ==
 
 Recent releases (full history in CHANGELOG.md on GitHub):
+
+= 2.26.1 =
+* Shortcode cleanup: maker QR page is now [dosage_calculator_qr_maker] (old [adc_maker_qr] still works); removed the redundant [adc_calculator] alias. Maker QR shortcode now documented in the admin.
 
 = 2.26.0 =
 * Maker QR codes: public generator page ([adc_maker_qr]), compact ?d= URL format, Generate-QR buttons in the custom strain/edible modals.
