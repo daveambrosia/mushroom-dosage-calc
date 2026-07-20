@@ -207,11 +207,7 @@ class ADC_QR_Handler {
 		$parsed = self::parse_legacy_url( wp_unslash( $_GET ) );
 
 		// Auto-submit to review queue if enabled.
-		// This anonymous GET path creates DB rows (and possibly notification
-		// emails), so it gets the same two-tier rate limiting as the REST
-		// submit endpoint — without it, looping ?strain=<random> inserted
-		// unbounded submissions and flooded the review queue.
-		if ( ADC_DB::get_setting( 'auto_submit_unknown_qr', true ) && self::scan_rate_limit_passes() ) {
+		if ( ADC_DB::get_setting( 'auto_submit_unknown_qr', true ) ) {
 			// Check if this exact data already exists
 			$existing = null;
 
@@ -239,8 +235,13 @@ class ADC_QR_Handler {
 				}
 			}
 
-			// Only submit if not already in database
-			if ( ! $existing && ! empty( $parsed['name'] ) && ( $parsed['psilocybin'] > 0 || $parsed['psilocin'] > 0 || ( 'edible' === $parsed['type'] && $parsed['total_mg'] > 0 ) ) ) {
+			// Only submit if not already in database — and rate-limit only at
+			// the point a row would actually be written. Consulting the limiter
+			// on every scan (including scans of KNOWN products) burned the
+			// budget on legitimate traffic; and it must use its own counter,
+			// not the REST submit endpoint's, or members scanning codes behind
+			// the church's shared IP would 429 each other's submissions.
+			if ( ! $existing && ! empty( $parsed['name'] ) && ( $parsed['psilocybin'] > 0 || $parsed['psilocin'] > 0 || ( 'edible' === $parsed['type'] && $parsed['total_mg'] > 0 ) ) && self::scan_rate_limit_passes() ) {
 				ADC_Submissions::create(
 					array(
 						'type'       => $parsed['type'],
@@ -258,19 +259,25 @@ class ADC_QR_Handler {
 	}
 
 	/**
-	 * Apply the REST submit endpoint's rate limits to legacy QR scans.
+	 * Rate-limit auto-submissions created by legacy QR scans.
 	 *
-	 * Two tiers, mirroring ADC_REST_API::submit_custom(): a transient burst
-	 * limit (10 per 15 minutes per IP) and a DB ceiling (5 submissions per
-	 * hour per IP).
+	 * Uses a DEDICATED burst transient (not the REST submit endpoint's), so a
+	 * flurry of scans behind one shared IP — a venue's NAT — cannot exhaust
+	 * members' /adc/v1/submit budget. The per-hour DB ceiling counts all
+	 * submissions from the IP, which is the intended shared backstop. Only
+	 * called when a submission is actually about to be written, so the burst
+	 * counter never advances on scans of already-known products.
 	 *
 	 * @since 2.26.1
 	 * @return bool True when the scan may create a submission.
 	 */
 	private static function scan_rate_limit_passes() {
-		$ip = ADC_REST_API::get_client_ip();
+		$ip            = ADC_REST_API::get_client_ip();
+		$transient_key = 'adc_qr_scan_rl_' . md5( $ip );
+		$attempts      = (int) get_transient( $transient_key );
 
-		if ( is_wp_error( ADC_REST_API::check_rate_limit( $ip ) ) ) {
+		// Burst limit: 10 auto-submissions per 15 minutes per IP.
+		if ( $attempts >= 10 ) {
 			return false;
 		}
 
@@ -282,8 +289,12 @@ class ADC_QR_Handler {
 				$ip
 			)
 		);
+		if ( $recent >= 5 ) {
+			return false;
+		}
 
-		return $recent < 5;
+		set_transient( $transient_key, $attempts + 1, 15 * MINUTE_IN_SECONDS );
+		return true;
 	}
 
 	/**

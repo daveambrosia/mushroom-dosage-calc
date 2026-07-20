@@ -553,12 +553,12 @@ function adcShowDetailsModal(sub) {
 	if (data.piecesPerPackage || data.pieces_per_package) {
 		html += "<div class='adc-detail-row'><span class='adc-detail-label'>Pieces/Package:</span> " + escapeHtml( data.piecesPerPackage || data.pieces_per_package ) + "</div>";
 	}
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocybin:</span> " + (data.psilocybin ? data.psilocybin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocin:</span> " + (data.psilocin ? data.psilocin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Baeocystin:</span> " + (data.baeocystin ? data.baeocystin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Norbaeocystin:</span> " + (data.norbaeocystin ? data.norbaeocystin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Norpsilocin:</span> " + (data.norpsilocin ? data.norpsilocin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
-	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Aeruginascin:</span> " + (data.aeruginascin ? data.aeruginascin.toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocybin:</span> " + (data.psilocybin ? Number(data.psilocybin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Psilocin:</span> " + (data.psilocin ? Number(data.psilocin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Baeocystin:</span> " + (data.baeocystin ? Number(data.baeocystin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Norbaeocystin:</span> " + (data.norbaeocystin ? Number(data.norbaeocystin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Norpsilocin:</span> " + (data.norpsilocin ? Number(data.norpsilocin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
+	html += "<div class='adc-detail-row'><span class='adc-detail-label'>Aeruginascin:</span> " + (data.aeruginascin ? Number(data.aeruginascin).toLocaleString() + " mcg" : "0 mcg") + "</div>";
 	html += "</div></div>";
 
 	// Section 2: Submitter Info

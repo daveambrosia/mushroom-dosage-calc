@@ -399,38 +399,33 @@ class ADC_REST_API {
 	}
 
 	/**
-	 * Build a transient cache key from an allowlist of normalized parameters.
+	 * Return the cache key for a public listing request, or null to skip caching.
 	 *
-	 * The key was previously md5(all request params), which let anonymous
-	 * clients mint a fresh transient (two wp_options rows for 5 minutes) per
-	 * arbitrary parameter combination — looping random `search` values
-	 * bloated wp_options without bound. Free-text search therefore skips
-	 * caching entirely, and every other parameter is normalized into a
-	 * bounded key space.
+	 * Only the bare, parameterless listing is cached — which is the sole shape
+	 * the calculator ever requests (it lazy-loads the full set and filters
+	 * client-side). Any query parameter (search, category, product_type,
+	 * potency bounds, include_inactive) skips the cache entirely, so the
+	 * transient keyspace is exactly one entry per endpoint and cannot be
+	 * inflated by an anonymous client looping arbitrary parameter values.
+	 * An earlier version md5'd the params, which let random `category` or
+	 * `min_potency` values each mint a fresh wp_options row.
 	 *
 	 * @since 2.26.1
 	 * @param string          $prefix  Transient prefix (must start with adc_rest_ so invalidation sweeps it).
 	 * @param WP_REST_Request $request Request object.
-	 * @param array           $allowed Parameter names that may contribute to the key.
+	 * @param array           $allowed Parameter names that, if present, disable caching.
 	 * @return string|null Cache key, or null when the response must not be cached.
 	 */
 	private static function build_cache_key( $prefix, $request, $allowed ) {
-		$search = $request->get_param( 'search' );
-		if ( null !== $search && '' !== (string) $search ) {
-			return null;
-		}
-
-		$parts = array();
-		foreach ( $allowed as $param ) {
+		$params = array_merge( array( 'search' ), $allowed );
+		foreach ( $params as $param ) {
 			$value = $request->get_param( $param );
-			if ( null === $value || '' === (string) $value ) {
-				continue;
+			if ( null !== $value && '' !== (string) $value ) {
+				return null;
 			}
-			$parts[ $param ] = is_numeric( $value ) ? (string) absint( $value ) : sanitize_key( (string) $value );
 		}
-		ksort( $parts );
 
-		return $prefix . md5( wp_json_encode( $parts ) );
+		return $prefix . 'all';
 	}
 
 	// =========== PUBLIC ENDPOINTS ===========

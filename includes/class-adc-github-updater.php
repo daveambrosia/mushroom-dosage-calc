@@ -168,24 +168,30 @@ class ADC_GitHub_Updater {
 					isset( $asset['name'], $asset['browser_download_url'] ) &&
 					$asset['name'] === $expected_asset
 				) {
-					$url  = (string) $asset['browser_download_url'];
-					$host = wp_parse_url( $url, PHP_URL_HOST );
+					$url    = (string) $asset['browser_download_url'];
+					$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
+					$host   = wp_parse_url( $url, PHP_URL_HOST );
+					$path   = (string) wp_parse_url( $url, PHP_URL_PATH );
 					// The release JSON is cached in a plain transient, which
 					// anything able to write an option could tamper with to
 					// point `package` at an attacker host — WordPress would
-					// then install and activate arbitrary PHP. Only GitHub's
-					// own download hosts may serve the package.
+					// then install and activate arbitrary PHP. Require HTTPS
+					// (no MITM downgrade), a GitHub download host, AND that the
+					// path belongs to this exact repo's release downloads, so
+					// a same-host asset from an attacker's own repo is refused.
 					$allowed_hosts = array(
 						'github.com',
 						'objects.githubusercontent.com',
 						'release-assets.githubusercontent.com',
 						'codeload.github.com',
 					);
-					if ( in_array( $host, $allowed_hosts, true ) ) {
+					$repo_prefix   = '/' . $this->github_user . '/' . $this->github_repo . '/releases/';
+					$path_ok       = ( 'github.com' !== $host ) || ( 0 === strpos( $path, $repo_prefix ) );
+					if ( 'https' === $scheme && in_array( $host, $allowed_hosts, true ) && $path_ok ) {
 						return $url;
 					}
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- security-relevant refusal worth a trace.
-					error_log( '[ADC Updater] Refusing update package from unexpected host: ' . (string) $host );
+					error_log( '[ADC Updater] Refusing update package from unexpected URL: ' . $url );
 					return '';
 				}
 			}

@@ -19,9 +19,13 @@ global $wpdb;
 /**
  * Remove this plugin's data for the current site.
  *
+ * Guarded against a fatal redeclare if another plugin happens to define the
+ * same global during a bulk uninstall.
+ *
  * @param wpdb $wpdb WordPress database object.
  * @return void
  */
+if ( ! function_exists( 'adc_uninstall_site' ) ) :
 function adc_uninstall_site( $wpdb ) {
 	// 1. Unschedule the auto-sync cron. Normally cleared on deactivation,
 	// but a forced/CLI removal (or a deactivation where the importer class
@@ -52,6 +56,7 @@ function adc_uninstall_site( $wpdb ) {
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc\_%'" );
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_adc\_%'" );
 }
+endif;
 
 if ( is_multisite() ) {
 	// Uninstall runs once for the network; walk every site so per-blog

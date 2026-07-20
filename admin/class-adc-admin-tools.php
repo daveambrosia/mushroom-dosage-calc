@@ -395,7 +395,12 @@ class ADC_Admin_Tools {
 				$name       = sanitize_text_field( wp_unslash( $_POST['pt_name'] ) );
 				$slug       = isset( $_POST['pt_slug'] ) ? sanitize_key( wp_unslash( $_POST['pt_slug'] ) ) : sanitize_title( $name );
 				$sort_order = isset( $_POST['pt_sort_order'] ) ? intval( $_POST['pt_sort_order'] ) : 0;
-				$unit_name  = isset( $_POST['pt_unit_name'] ) ? sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) ) : 'pieces';
+				// Restrict to a plain unit word: letters, spaces, hyphens. The
+				// value is interpolated into the calculator's result markup, so
+				// this keeps HTML-significant characters out at the only path
+				// that writes unit_name. Empty after stripping falls back.
+				$unit_name  = isset( $_POST['pt_unit_name'] ) ? preg_replace( '/[^A-Za-z \-]/', '', sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) ) ) : 'pieces';
+				$unit_name  = '' !== trim( $unit_name ) ? $unit_name : 'pieces';
 
 				$wpdb->insert(
 					$table,
@@ -414,7 +419,8 @@ class ADC_Admin_Tools {
 			} elseif ( 'update' === $action && ! empty( $_POST['pt_id'] ) ) {
 				$update_data = array();
 				if ( isset( $_POST['pt_unit_name'] ) ) {
-					$update_data['unit_name'] = sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) );
+					$clean_unit               = preg_replace( '/[^A-Za-z \-]/', '', sanitize_text_field( wp_unslash( $_POST['pt_unit_name'] ) ) );
+					$update_data['unit_name'] = '' !== trim( $clean_unit ) ? $clean_unit : 'pieces';
 				}
 				if ( isset( $_POST['pt_name'] ) ) {
 					$update_data['name'] = sanitize_text_field( wp_unslash( $_POST['pt_name'] ) );

@@ -172,6 +172,29 @@ class Test_ADC_REST_API extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Filter parameters (category, potency bounds) must NOT mint transients:
+	 * only the bare listing is cached, so the keyspace stays at one entry per
+	 * endpoint and cannot be inflated by looping arbitrary filter values.
+	 */
+	public function test_strains_filters_are_not_cached() {
+		global $wpdb;
+		$like   = "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_adc_rest_strains_%'";
+		$before = (int) $wpdb->get_var( $like );
+
+		$probes = array(
+			'category'    => 'probe-' . wp_rand(),
+			'min_potency' => (string) wp_rand( 1, 99999 ),
+		);
+		foreach ( $probes as $param => $value ) {
+			$request = new WP_REST_Request( 'GET', '/adc/v1/strains' );
+			$request->set_param( $param, $value );
+			$this->assertSame( 200, $this->server->dispatch( $request )->get_status() );
+		}
+
+		$this->assertSame( $before, (int) $wpdb->get_var( $like ), 'filtered requests must not create cache transients' );
+	}
+
+	/**
 	 * Test cache invalidation on create.
 	 */
 	public function test_cache_invalidation() {
