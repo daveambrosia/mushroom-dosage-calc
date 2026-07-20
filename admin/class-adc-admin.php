@@ -279,7 +279,6 @@ class ADC_Admin {
 				<h2>Usage</h2>
 				<p>Use this shortcode to display the calculator on any page or post:</p>
 				<code>[dosage_calculator]</code>
-				<p class="description"><code>[adc_calculator]</code> works identically &mdash; it is an alias for the same calculator.</p>
 
 				<h3>Shortcode Attributes</h3>
 				<table class="widefat">
@@ -307,7 +306,7 @@ class ADC_Admin {
 
 				<h3>Maker QR Code Page</h3>
 				<p>Put this shortcode on its own page to let product makers generate their own QR codes:</p>
-				<code>[adc_maker_qr]</code>
+				<code>[dosage_calculator_qr_maker]</code>
 				<p class="description">
 					Makers enter their product's lab-tested potency and get a QR code that opens this
 					calculator with their data pre-filled. Codes save in the maker's browser, and they

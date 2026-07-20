@@ -364,19 +364,23 @@ class ADC_QR_Handler {
 	 * Get the URL of the calculator page
 	 */
 	public static function get_calculator_page_url() {
-		// Try to find page with calculator shortcode
+		// Try to find page with the calculator shortcode. Matches
+		// [dosage_calculator] and [dosage_calculator_qr_maker] via the shared
+		// prefix; excludes the maker page below so QR destinations resolve to
+		// an actual calculator, not the generator.
 		global $wpdb;
 		$like_dosage = '%' . $wpdb->esc_like( '[dosage_calculator' ) . '%';
-		$like_adc    = '%' . $wpdb->esc_like( '[adc_calculator' ) . '%';
+		$like_maker  = '%' . $wpdb->esc_like( '[dosage_calculator_qr_maker' ) . '%';
 		$page_id     = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts} 
-             WHERE post_type = 'page' 
-             AND post_status = 'publish' 
-             AND (post_content LIKE %s OR post_content LIKE %s)
+				"SELECT ID FROM {$wpdb->posts}
+             WHERE post_type = 'page'
+             AND post_status = 'publish'
+             AND post_content LIKE %s
+             AND post_content NOT LIKE %s
              LIMIT 1",
 				$like_dosage,
-				$like_adc
+				$like_maker
 			)
 		);
 

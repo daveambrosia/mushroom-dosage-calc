@@ -27,7 +27,6 @@ class ADC_Shortcode {
 	 */
 	public static function register() {
 		add_shortcode( 'dosage_calculator', array( __CLASS__, 'render' ) );
-		add_shortcode( 'adc_calculator', array( __CLASS__, 'render' ) );
 	}
 
 	/**

@@ -1,5 +1,14 @@
 # Changelog — Ambrosia Dosage Calculator
 
+## 2.26.1 — 2026-07-19
+
+### Changed
+- Shortcode naming cleaned up. The maker QR page shortcode is now
+  `[dosage_calculator_qr_maker]` (was `[adc_maker_qr]`, which still works as a
+  deprecated alias so existing pages do not break). The redundant
+  `[adc_calculator]` alias was removed; use `[dosage_calculator]`.
+- Admin dashboard Usage section documents the maker QR shortcode.
+
 ## 2.26.0 — 2026-07-19
 
 Large release: the maker QR feature plus a full remediation pass across security,

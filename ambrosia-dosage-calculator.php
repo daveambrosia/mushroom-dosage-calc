@@ -460,10 +460,10 @@ window.addEventListener('resize', function() {
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'dosage_calculator' ) ) {
 			$should_load = true;
 		}
-		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'adc_calculator' ) ) {
-			$should_load = true;
-		}
-		$has_maker_qr = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'adc_maker_qr' );
+		$has_maker_qr = is_a( $post, 'WP_Post' ) && (
+			has_shortcode( $post->post_content, ADC_Maker_QR_Shortcode::TAG ) ||
+			has_shortcode( $post->post_content, ADC_Maker_QR_Shortcode::LEGACY_TAG )
+		);
 		if ( $has_maker_qr ) {
 			$should_load = true;
 		}
@@ -725,8 +725,8 @@ window.addEventListener('resize', function() {
 			global $post;
 			$has_calc = is_a( $post, 'WP_Post' ) && (
 				has_shortcode( $post->post_content, 'dosage_calculator' ) ||
-				has_shortcode( $post->post_content, 'adc_calculator' ) ||
-				has_shortcode( $post->post_content, 'adc_maker_qr' )
+				has_shortcode( $post->post_content, ADC_Maker_QR_Shortcode::TAG ) ||
+				has_shortcode( $post->post_content, ADC_Maker_QR_Shortcode::LEGACY_TAG )
 			);
 			if ( ! $has_calc ) {
 				return;

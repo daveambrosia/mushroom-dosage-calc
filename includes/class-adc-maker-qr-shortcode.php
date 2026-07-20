@@ -16,10 +16,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ADC_Maker_QR_Shortcode {
 
 	/**
-	 * Register the [adc_maker_qr] shortcode.
+	 * Canonical shortcode tag for the maker QR page.
+	 *
+	 * @var string
+	 */
+	const TAG = 'dosage_calculator_qr_maker';
+
+	/**
+	 * Deprecated tag the feature shipped under in 2.26.0. Kept as a silent
+	 * alias so pages created with it do not break; not documented anywhere.
+	 *
+	 * @var string
+	 */
+	const LEGACY_TAG = 'adc_maker_qr';
+
+	/**
+	 * Register the [dosage_calculator_qr_maker] shortcode (and its legacy alias).
 	 */
 	public static function register() {
-		add_shortcode( 'adc_maker_qr', array( __CLASS__, 'render' ) );
+		add_shortcode( self::TAG, array( __CLASS__, 'render' ) );
+		add_shortcode( self::LEGACY_TAG, array( __CLASS__, 'render' ) );
 	}
 
 	/**
@@ -29,7 +45,7 @@ class ADC_Maker_QR_Shortcode {
 	 * @return string HTML.
 	 */
 	public static function render( $atts = array() ) {
-		$atts = shortcode_atts( array(), $atts, 'adc_maker_qr' );
+		$atts = shortcode_atts( array(), $atts, self::TAG );
 		// Render-time enqueue: covers shortcode placements that
 		// has_shortcode(post_content) cannot see (widgets, blocks, FSE
 		// templates). Idempotent when the wp_enqueue_scripts pass already ran.
