@@ -60,21 +60,18 @@ sed -i.bak "s/Version: [0-9.]*/Version: $NEW_VERSION/" "$PLUGIN_FILE"
 sed -i.bak "s/define( 'ADC_VERSION', '[0-9.]*' );/define( 'ADC_VERSION', '$NEW_VERSION' );/" "$PLUGIN_FILE"
 rm -f "$PLUGIN_FILE.bak"
 
-sed -i.bak "s/^Stable tag: .*/Stable tag: $NEW_VERSION/" "$PLUGIN_DIR/readme.txt"
-rm -f "$PLUGIN_DIR/readme.txt.bak"
-
 sed -i.bak "s/\"version\": \"[0-9.]*\"/\"version\": \"$NEW_VERSION\"/" "$PLUGIN_DIR/package.json"
 rm -f "$PLUGIN_DIR/package.json.bak"
 
-# Verify every version carrier agrees before packaging.
+# Verify every version carrier agrees before packaging. Three carriers since
+# readme.txt was dropped in favor of README.md (which is not versioned).
 HEADER_VER=$(grep "Version:" "$PLUGIN_FILE" | head -1 | sed 's/.*Version: //' | tr -d ' *')
 CONST_VER=$(grep "define.*ADC_VERSION" "$PLUGIN_FILE" | sed "s/.*'\([0-9.]*\)'.*/\1/")
-STABLE_VER=$(grep "^Stable tag:" "$PLUGIN_DIR/readme.txt" | sed 's/^Stable tag: //' | tr -d ' ')
 PKG_VER=$(grep '"version"' "$PLUGIN_DIR/package.json" | head -1 | sed 's/.*"version": "\([0-9.]*\)".*/\1/')
 
-echo "Header: $HEADER_VER | Constant: $CONST_VER | Stable tag: $STABLE_VER | package.json: $PKG_VER"
+echo "Header: $HEADER_VER | Constant: $CONST_VER | package.json: $PKG_VER"
 if [ "$HEADER_VER" != "$NEW_VERSION" ] || [ "$CONST_VER" != "$NEW_VERSION" ] || \
-   [ "$STABLE_VER" != "$NEW_VERSION" ] || [ "$PKG_VER" != "$NEW_VERSION" ]; then
+   [ "$PKG_VER" != "$NEW_VERSION" ]; then
     echo "ERROR: version mismatch across files — aborting." >&2
     exit 1
 fi

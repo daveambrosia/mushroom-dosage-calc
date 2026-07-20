@@ -36,6 +36,22 @@ For educational and spiritual purposes only.
   submission queue.
 - Self-updates from GitHub Releases.
 
+## How dosing works
+
+A target dose in micrograms is derived from body weight and the selected experience
+level, then adjusted for tolerance and personal sensitivity:
+
+```
+mcg_needed = mcg_per_lb x weight_lbs x tolerance_multiplier x sensitivity_multiplier
+```
+
+- Mushrooms: `grams = mcg_needed / (psilocybin + psilocin per gram)`.
+- Edibles: `units = mcg_needed / (psilocybin + psilocin per piece)`, rounded to eighths.
+
+Tolerance ramps from 100% at 28 or more days since the last dose up to 200% at one day.
+Psilocybin and psilocin drive the calculation; norpsilocin, baeocystin, norbaeocystin,
+and aeruginascin are tracked for display.
+
 ## Shortcodes
 
 | Shortcode | Purpose |
