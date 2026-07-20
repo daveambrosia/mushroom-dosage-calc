@@ -111,6 +111,7 @@ rsync -a "$PLUGIN_DIR/" "$STAGING/" \
     --exclude "composer.json" \
     --exclude "composer.lock" \
     --exclude "README-DEV.md" \
+    --exclude "README.md" \
     --exclude "CHANGELOG.md" \
     --exclude "REMEDIATION-PLAN.md" \
     --exclude "public/js/build-js.sh" \
