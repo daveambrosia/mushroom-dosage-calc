@@ -1,18 +1,38 @@
 # Changelog — Ambrosia Dosage Calculator
 
-## 2.26.0 — 2026-04-28
+## 2.26.0 — 2026-07-19
+
+Large release: the maker QR feature plus a full remediation pass across security,
+dosage correctness, WordPress integration, accessibility, and the build/release chain.
 
 ### Added
-- New `[adc_maker_qr]` shortcode: dedicated page where edible and powdered-mushroom makers can generate QR codes from their own product data, save them in browser localStorage, and optionally submit to the church.
-- Generate-QR button inside the existing Add Custom Strain and Add Custom Edible modals — one-shot QR + download without leaving the modal.
-- `public/js/modules/adc-maker-qr.js` shared module: legacy + compact URL builders, localStorage list management, validation, fetch-based submit, QR canvas rendering.
-- Compact maker-QR URL format `?d=t_s~n_Name~pb_10000~...` to keep QR codes small without a URL shortener. Strain and edible records both supported, with optional `brand`, `batch`, `lab` fields. Legacy `?data=...` and `?type=edible&pname=...` URLs still parse for back-compat.
-- Vitest + jsdom setup with unit tests for the URL builders, local-list helpers, validation, and submit flow.
+- New `[adc_maker_qr]` shortcode: a public page where edible and powdered-mushroom makers generate a QR code from their own product data, save it in browser localStorage, and optionally submit it to the church. Generate-QR buttons also added inside the Add Custom Strain and Add Custom Edible modals.
+- Compact maker-QR URL format `?d=t_s~n_Name~pb_10000~...` to keep codes small without a URL shortener; strain and edible records, with optional `brand`, `batch`, `lab`. Legacy `?data=...` and `?type=edible&pname=...` URLs still parse for back-compat.
+- Product-specific edible unit names: doses read "5 gummies", "6 capsules", drink mix in packets, granola in bars, tea in cups, tincture in droppers — instead of "pieces" everywhere. Editable per type in the Product Types admin page.
+- Continuous integration (GitHub Actions) running PHPUnit, PHPCS, PHPStan, ESLint, a build-drift check, and a tagged-release workflow that publishes the updater-compatible zip. JS test suite (Vitest) covering the dosage math, URL builders, validation, and submit flow.
+
+### Fixed — dosage & data correctness
+- CSV edible export now emits package totals, matching what the importer expects; previously an export → re-import silently divided every compound by the piece count (a 10-piece product lost 90% of stated potency per round trip, and the calculator then recommended ~10x too many pieces).
+- Importers no longer truncate potency values containing thousands separators (`6,200` had parsed as `6`), and the Google Sheets importer now converts percent columns correctly (`0.62%` had imported as zero potency).
+- Dry-weight doses between 1 g and 10 g now show two decimals (1.12 g, not 1.1 g). Piece quantities of one or less read singular ("½ gummy", not "½ gummies").
+- Scanned maker-QR products display their brand and lab in the strain/edible list ("Brand: Name (Lab)").
+
+### Fixed — reliability & platform
+- The public dialog system (confirm/prompt/error/success) was completely broken in shipped code — a formatter had mangled its HTML template — leaving delete actions, validation messages, and submission feedback dead. Restored.
+- The automatic database migration on plugin update never ran (its hook was registered too late to fire) and the schema defeated `dbDelta` on every table. Both fixed; this release carries a DB migration (2.1.0) that seeds product-type unit names and backfills missing types.
+- Frontend assets now load when the shortcode is placed in a widget, block, or template — not only in post content — so the calculator is no longer silently inert in those placements. Rewrite-rule flushing on activation and short-URL-path changes fixed so QR short URLs resolve immediately.
+
+### Fixed — security
+- `short_code` is now format-validated server-side and escaped in the calculator, closing a stored-XSS path reachable through the public submission queue.
+- The legacy QR GET path is rate-limited (its own counter, so it cannot exhaust members' submission budget from a shared IP), and REST list responses cache only the bare listing so the transient keyspace cannot be inflated by anonymous requests.
+- The GitHub self-updater verifies the download is served over HTTPS from this exact repository and refuses source-zipball fallbacks, and installs with a backup-and-restore instead of deleting the live plugin first.
+
+### Fixed — accessibility
+- Modals are announced to screen readers (they were hidden inside an `aria-hidden` ancestor); dose recalculation announces a concise summary instead of re-reading every card; dialogs trap focus and restore it on close; toasts are announced.
 
 ### Notes
-- Compact format uses `~` as field separator and `_` between key and value; both characters are forbidden in name/brand/batch/lab so values cannot collide with the separator grammar. Dashes and dots are preserved verbatim in values.
-- No DB migrations, no new REST endpoints — submission reuses `/adc/v1/submit` with its existing honeypot and rate limiting.
-- Compact `?d=` maker QRs never auto-submit on scan, regardless of the `auto_submit_unknown_qr` setting: the PHP QR handler only recognizes the legacy `data`/`strain`/`type=edible` parameters, so `?d=` scans are invisible to it. Submissions from maker QRs happen only through the explicit Submit to Church button. (An earlier version of this note claimed the opposite.)
+- The DB migration is idempotent and never overwrites a unit name an admin has customized.
+- Compact `?d=` maker QRs never auto-submit on scan regardless of the `auto_submit_unknown_qr` setting; submissions from maker QRs happen only through the explicit Submit to Church button.
 
 ## 2.25.4 — 2026-04-28
 

@@ -52,7 +52,9 @@ The Ambrosia Dosage Calculator is a full-featured WordPress plugin for calculati
 Recent releases (full history in CHANGELOG.md on GitHub):
 
 = 2.26.0 =
-* Maker QR codes: public generator page ([adc_maker_qr]), compact ?d= URL format, Generate-QR buttons in the custom strain/edible modals, JS test suite (Vitest).
+* Maker QR codes: public generator page ([adc_maker_qr]), compact ?d= URL format, Generate-QR buttons in the custom strain/edible modals.
+* Product-specific edible unit names (gummies, capsules, packets, bars, cups, droppers) instead of "pieces".
+* Fixes: CSV export unit conversion, importer number/percent parsing, two-decimal gram doses, restored dialog system, working DB migration on update, security hardening (short_code XSS, QR rate limiting, updater), and screen-reader accessibility. Continuous integration added.
 
 = 2.25.x =
 * GitHub self-updater; fixes for edible unit handling (mcg per piece vs per package), cron auto-sync rate limiting, and admin form labels.
