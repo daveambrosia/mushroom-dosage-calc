@@ -54,24 +54,90 @@ and aeruginascin are tracked for display.
 
 ## Shortcodes
 
-| Shortcode | Purpose |
-| --- | --- |
-| `[dosage_calculator]` | The dosage calculator. |
-| `[dosage_calculator_qr_maker]` | A page where makers generate QR codes for their products. |
+There are two shortcodes. Put each one on its own page.
 
-The attributes for `[dosage_calculator]` (template, default tab, pre-selected product,
-and so on) are documented in the admin dashboard under **Dosage Calc**.
+### `[dosage_calculator]`
+
+The calculator itself. With no attributes it uses the defaults from the settings page:
+
+```
+[dosage_calculator]
+```
+
+All attributes are optional:
+
+| Attribute | Default | Description |
+| --- | --- | --- |
+| `template` | `default` | Visual template: `default`, `brutal`, `minimal`, `dark`, `nature`, `glass`, `neon`, `paper`, `terminal`, `retro`, `flat`. Custom templates from the Template Builder can also be used by slug. |
+| `default_tab` | `mushrooms` | Which tab opens first: `mushrooms` or `edibles`. |
+| `default_strain` | (none) | Pre-select a strain by its short code (for example `ZD-GOL-001`). |
+| `default_edible` | (none) | Pre-select an edible by its short code. |
+| `show_mushrooms` | `true` | Show the mushrooms tab. |
+| `show_edibles` | `true` | Show the edibles tab. |
+| `show_quick_converter` | `true` | Show the mcg-to-grams quick converter. |
+| `show_compound_breakdown` | `true` | Show the per-compound breakdown on each dose card. |
+| `show_safety_warning` | `true` | Show the safety information panel. |
+| `allow_custom` | `true` | Let visitors enter a custom strain or edible not in the database. |
+| `allow_submit` | `true` | Let visitors submit a custom product to the review queue. |
+
+Examples:
+
+```
+[dosage_calculator default_tab="edibles" template="dark"]
+[dosage_calculator default_strain="ZD-GOL-001" show_quick_converter="false"]
+```
+
+The URL can also open a specific tab: add `?t=e` for edibles or `?t=m` for mushrooms.
+
+### `[dosage_calculator_qr_maker]`
+
+A public page where a product maker enters their own lab-tested potency and gets a QR
+code that opens the calculator pre-filled with that product. Codes are saved in the
+maker's browser, and they can optionally submit the product to the church for review.
+Takes no attributes:
+
+```
+[dosage_calculator_qr_maker]
+```
 
 ## Installation
 
 1. Download the latest `ambrosia-dosage-calculator-vX.Y.Z.zip` from the
    [Releases](https://github.com/daveambrosia/mushroom-dosage-calc/releases) page.
 2. In WordPress, go to **Plugins, Add New, Upload Plugin**, choose the zip, and activate.
-3. Configure under **Dosage Calc** in the admin menu, then add `[dosage_calculator]` to a
-   page.
+3. Create a page, add `[dosage_calculator]` to it, and publish.
 
 Once installed, the plugin checks GitHub Releases for new versions and offers updates on
 the WordPress Plugins screen like any other plugin.
+
+## Managing the calculator
+
+Everything is under **Dosage Calc** in the WordPress admin menu.
+
+- **Dashboard**: totals, quick actions, and the shortcode reference.
+- **Strains** and **Edibles**: add, edit, activate, and deactivate products. Each has a
+  short code (auto-generated: `ZD-GOL-001` for strains, `ZD-E-GUM-005` for edibles) used by QR codes and the
+  `default_strain` / `default_edible` attributes. Mushroom potency is entered in
+  micrograms per gram; edible potency is entered per piece.
+- **Taxonomies**: strain categories and edible product types. Each product type carries
+  the **unit name** shown in results (gummies, capsules, packets, bars, cups, droppers).
+- **Template Builder**: create custom visual templates, usable by slug in the `template`
+  attribute.
+- **Import / Export**: bulk-import strains and edibles from a CSV file or a Google Sheet
+  (with optional scheduled auto-sync), and export the database as CSV or JSON. For CSV
+  and Sheets, edible compound values are the package total and are divided by the piece
+  count on import; mushroom values are micrograms per gram.
+- **Generate QR Codes**: print QR codes for church products. These use short URLs of the
+  form `https://your-site/c/SHORT_CODE` (the `/c/` prefix is configurable in Settings).
+- **Submissions**: review, approve, or reject products submitted by members and makers.
+  Approved submissions become real strains or edibles.
+
+### Settings
+
+Under **Dosage Calc, Settings** you can set the calculator title, subtitle, disclaimer,
+and safety text; toggle whether visitors may submit products; set a notification email
+for new submissions; choose the short-URL path; and configure the default template and
+the Google Sheets sync.
 
 ## Development
 
